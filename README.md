@@ -11,4 +11,5 @@ Currently, two official plugins are available:
 ## Usage
 ```bash
 npm run dev
+npm run deploy
 ```
