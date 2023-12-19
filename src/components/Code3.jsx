@@ -70,20 +70,22 @@ function Timeline(props) {
     <ol class="m-10 relative border-s border-gray-200 dark:border-gray-700 text-left">                  
     <li class="mb-7 ms-6">            
         <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-        <span className='text-blue-800'>■</span>
+            <span className='text-black'>■</span>
         </span>
         <h3 class="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">North</h3>
         <time class="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">21:13</time>
-        <span class="bg-blue-100 text-blue-800 text-sm font-medium  px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">Bryon</span>
-        <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">Jenna</span>
-        <span class="me-3">«</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Mike</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Brigitte</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Scott</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">JP</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Chris</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Kim</span>
-        <span class="bg-white border border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Bill</span>
+        <div className="mb-4">
+        <div class="inline-flex bg-blue-100 text-blue-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">Bryon</div>
+        <div class="inline-flex bg-blue-100 text-blue-800 text-sm my-0.5 font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">Jenna</div>
+        <div class="inline-flex text-gray-300 text-sm my-0.5 font-medium px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">⇄</div>
+        </div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Mike</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Brigitte</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Scott</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">JP</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Chris</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Kim</div>
+        <div class="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">Bill</div>
     </li>
     <li class="mb-7 ms-6">            
         <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
