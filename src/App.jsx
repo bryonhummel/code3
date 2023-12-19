@@ -4,7 +4,9 @@ import Code3 from './components/Code3'
 
 function NewCode(props) {
   return(
-    <div><button onClick={props.onClick}>New Code 3</button></div>
+    <div>
+    <div className='cursor-pointer border border-dashed border-blue-200 bg-white m-auto px-4 pb-4 pt-4 rounded-b-md max-w-fit font-extrabold text-lg hover:bg-blue-100 text-blue-800'><button onClick={props.onClick}>+Code 3</button></div>
+    </div>
   )
 }
 

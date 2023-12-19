@@ -45,7 +45,7 @@ function RunButton(props){
 
     return(
         <div className='py-1'>
-            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md'>{symb} {props.name}</button>
+            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md hover:bg-blue-100'>{symb} {props.name}</button>
         </div>
     )
 }
@@ -53,9 +53,9 @@ function RunButton(props){
 function TimelineToolbar(props) {
 
     return(
-        <div className='p-7 mt-7 border border-dashed rounded-md bg-white grid sm:grid-cols-2 md:grid-cols-3 gap-6'>
+        <div className='p-7 grid sm:grid-cols-2 md:grid-cols-3 gap-6'>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-blue-100 text-blue-800 mr-2 my-1 rounded-md'>
+                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>Tenderfoot</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -67,7 +67,7 @@ function TimelineToolbar(props) {
                 </ul>
             </div>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-blue-100 text-blue-800 mr-2 my-1 rounded-md'>
+                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>North</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -78,7 +78,7 @@ function TimelineToolbar(props) {
                 </ul>
             </div>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-blue-100 text-blue-800 mr-2 my-1 rounded-md'>
+                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>Applebowl</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -105,55 +105,70 @@ function TimelineToolbar(props) {
 
 function Timeline(props) {
 
+    const [showTeamList, setShowTeamList] = useState(false)
     const teamList = ['Mike', 'Bryon', 'Brigitte', 'Scott', 'JP', 'Chris', 'Kim', 'Bill', 'Jenna']
-    console.log(`Timeline.props.firstOn: ${props.firstOn}`)
     var filteredTeamList = teamList.filter(function(e) { return !props.firstOn.includes(e) })
-    console.log(`filteredTeamList: ${filteredTeamList}`)
+
+    function handleShowTeamList() {
+        console.log(`toggling: ${showTeamList}`)
+        setShowTeamList(!showTeamList===true)
+    }
+
+    var displayTeamList = showTeamList || props.firstOn.length === 0
+    var displayTeamListToggle = props.firstOn.length > 0
 
     return(
-    <div  className='border border-dashed mt-4 rounded-md bg-white'>
-    <ol className="m-10 relative border-s border-gray-200 dark:border-gray-700 text-left">                  
-    <li className="mb-7 ms-7">            
-        <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
-            <RunSymbol difficulty={props.runInfo.difficulty}/>
-        </span>
-        <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{props.runInfo.name}</h3>
-        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.runInfo.timestamp}</time>
-        <div className="mb-4">
-            {props.firstOn.map((name) => (
-            <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-blue-100 text-blue-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3">{name}</div>
-            ))}
-        </div>
-        {
-            filteredTeamList.map((name) => (
-                <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">{name}</div>
-            ))
-        }
-    </li>
-    <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-slate-100" onClick={props.handleOnSceneClick}>
-        <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.onSceneTs ? 'bg-blue-100' : ''} rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
-        <span className='text-blue-800'>⏲</span>
-        </span>
-        <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">On Scene</h4>
-        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.onSceneTs !== null ? props.onSceneTs : '--:--'}</time>
-    </li>
+    <div>
+        <ol className="m-10 relative border-s border-gray-200 dark:border-gray-700 text-left">                  
+            <li className="mb-7 ms-7">            
+                <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                    <RunSymbol difficulty={props.runInfo.difficulty}/>
+                </span>
+                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{props.runInfo.name}</h3>
+                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.runInfo.timestamp}</time>
+                <div className="">
+                    {props.firstOn.map((name) => (
+                    <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-blue-100 text-blue-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3 hover:bg-white border border-blue-100 hover:border hover:border-dashed hover:border-blue-100 cursor-pointer">{name}</div>
+                    ))}
+                    { 
+                        displayTeamListToggle &&
+                        <div onClick={(e) => handleShowTeamList()} className='inline-flex border rounded text-sm px-2.5 py-0.5 text-gray-400 hover:bg-blue-100 hover:text-blue-900 cursor-pointer'>{showTeamList? '-': '+'}</div>
+                    }
+                    {
+                        <div></div>
+                    }
+                    {
+                        displayTeamList &&
+                            filteredTeamList.map((name) => (
+                                <div key={name} onClick={(e) => {props.handleFirstOnToggle(name); setShowTeamList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-100 cursor-pointer">{name}</div>
+                            ))
+                    }
+                </div>
+            </li>
+            <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-blue-100" onClick={props.handleOnSceneClick}>
+                <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.onSceneTs ? 'bg-blue-100' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
+                <span className='text-blue-800'>⏲</span>
+                </span>
+                <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">On Scene</h4>
+                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.onSceneTs !== null ? props.onSceneTs : '--:--'}</time>
+            </li>
 
-    <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-slate-100" onClick={props.handleSceneClearClick}>
-        <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.sceneClearTs ? 'bg-blue-100' : ''} rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
-            <span className='text-blue-800'>⏲</span>
-        </span>
-        <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Scene Clear</h3>
-        <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.sceneClearTs !== null ? props.sceneClearTs : '--:--'}</time>
-        
-    </li>
-    </ol>
+            <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-blue-100" onClick={props.handleSceneClearClick}>
+                <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.sceneClearTs ? 'bg-blue-100' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
+                    <span className='text-blue-800'>⏲</span>
+                </span>
+                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Scene Clear</h3>
+                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.sceneClearTs !== null ? props.sceneClearTs : '--:--'}</time>
+                
+            </li>
+        </ol>
     </div>
     )
 }
 
 function getTimestamp() {
     var ts = new Date()
-    ts = `${ts.getHours()}:${ts.getMinutes()}`
+    ts = `${ts.getHours()}:${ts.getMinutes().toString().padStart(2,'0')}`
     return ts
 }
 
@@ -195,7 +210,7 @@ function Code3(props) {
     }
 
     return ( 
-        <div>
+        <div className='border border-dashed mt-4 rounded-md bg-white'>
             { run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
             { run !== null && <Timeline runInfo={run} 
                 onSceneTs={onSceneTs}
@@ -204,7 +219,7 @@ function Code3(props) {
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
                 handleFirstOnToggle={handleFirstOnToggle} /> }
-            <button onClick={props.handleDelete}>delete</button>
+            <button className='bg-white border border-gray-300 text-gray-300 hover:text-red-600 hover:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button>
         </div>
      );
 }
