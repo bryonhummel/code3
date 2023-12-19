@@ -8,5 +8,8 @@ export default {
     extend: {},
   },
   plugins: [],
+  includeLanguages: {
+    "plaintext": "javascript"
+  }
 }
 
