@@ -6,7 +6,7 @@ function BlueSquare() {
     return ( <span className='text-blue-800'>■</span>  );
 }
 function BlackDiamond() {
-    return ( <span className='text-black text-lg'>◆</span>  );
+    return ( <span className='text-black'>◆</span>  );
 }
 function GreenCircle() {
     return ( <span className='text-green-600'>●</span>  );
@@ -45,7 +45,7 @@ function RunButton(props){
 
     return(
         <div className='py-1'>
-            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md hover:bg-blue-100'>{symb} {props.name}</button>
+            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md hover:bg-gray-100'>{symb} {props.name}</button>
         </div>
     )
 }
@@ -103,6 +103,22 @@ function TimelineToolbar(props) {
     )
 }
 
+function TimelineEntry(props) {
+    const timestamp = props.timestamp
+    const text = props.text
+    const handleOnClick = props.handleOnClick
+
+    return(
+    <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp === null ? 'cursor-pointer hover:bg-gray-100 border border-gray-200':'border border-white'}`} onClick={handleOnClick}>
+        <span className={`absolute flex items-center justify-center w-6 h-6 ${ timestamp ? 'bg-gray-200' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white`}>
+        <span className='text-gray-800'>⏲</span>
+        </span>
+        <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{text}</h4>
+        <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{timestamp !== null ? timestamp : '--:--'}</time>
+    </li>
+    )
+}
+
 function Timeline(props) {
 
     const [showTeamList, setShowTeamList] = useState(false)
@@ -119,20 +135,20 @@ function Timeline(props) {
 
     return(
     <div>
-        <ol className="m-10 relative border-s border-gray-200 dark:border-gray-700 text-left">                  
+        <ol className="m-10 relative border-s border-gray-200 text-left">                  
             <li className="mb-7 ms-7">            
-                <span className="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900">
+                <span className="absolute flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full -start-3 ring-8 ring-white ">
                     <RunSymbol difficulty={props.runInfo.difficulty}/>
                 </span>
-                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">{props.runInfo.name}</h3>
-                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.runInfo.timestamp}</time>
+                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{props.runInfo.name}</h3>
+                <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{props.runInfo.timestamp}</time>
                 <div className="">
                     {props.firstOn.map((name) => (
-                    <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-blue-100 text-blue-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 me-3 hover:bg-white border border-blue-100 hover:border hover:border-dashed hover:border-blue-100 cursor-pointer">{name}</div>
+                    <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-gray-200 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded me-3 hover:bg-gray-100 border border-gray-200 cursor-pointer">{name}</div>
                     ))}
                     { 
                         displayTeamListToggle &&
-                        <div onClick={(e) => handleShowTeamList()} className='inline-flex border rounded text-sm px-2.5 py-0.5 text-gray-400 hover:bg-blue-100 hover:text-blue-900 cursor-pointer'>{showTeamList? '-': '+'}</div>
+                        <div onClick={(e) => handleShowTeamList()} className='inline-flex border rounded text-sm px-2.5 py-0.5 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'>{showTeamList? '-': '+'}</div>
                     }
                     {
                         <div></div>
@@ -140,27 +156,13 @@ function Timeline(props) {
                     {
                         displayTeamList &&
                             filteredTeamList.map((name) => (
-                                <div key={name} onClick={(e) => {props.handleFirstOnToggle(name); setShowTeamList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-blue-100 text-blue-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 hover:bg-blue-100 cursor-pointer">{name}</div>
+                                <div key={name} onClick={(e) => {props.handleFirstOnToggle(name); setShowTeamList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded hover:bg-gray-100 cursor-pointer">{name}</div>
                             ))
                     }
                 </div>
             </li>
-            <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-blue-100" onClick={props.handleOnSceneClick}>
-                <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.onSceneTs ? 'bg-blue-100' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
-                <span className='text-blue-800'>⏲</span>
-                </span>
-                <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">On Scene</h4>
-                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.onSceneTs !== null ? props.onSceneTs : '--:--'}</time>
-            </li>
-
-            <li className="ml-5 p-4 rounded-md cursor-pointer hover:bg-blue-100" onClick={props.handleSceneClearClick}>
-                <span className={`absolute flex items-center justify-center w-6 h-6 ${ props.sceneClearTs ? 'bg-blue-100' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white dark:ring-gray-900 dark:bg-blue-900`}>
-                    <span className='text-blue-800'>⏲</span>
-                </span>
-                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900 dark:text-white">Scene Clear</h3>
-                <time className="block mb-2 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">{props.sceneClearTs !== null ? props.sceneClearTs : '--:--'}</time>
-                
-            </li>
+            <TimelineEntry handleOnClick={props.handleOnSceneClick} text='On Scene' timestamp={props.onSceneTs} />
+            <TimelineEntry handleOnClick={props.handleSceneClearClick} text='Scene Clear' timestamp={props.sceneClearTs} />
         </ol>
     </div>
     )
@@ -210,7 +212,7 @@ function Code3(props) {
     }
 
     return ( 
-        <div className='border border-dashed mt-4 rounded-md bg-white'>
+        <div className='border border-gray-200 my-4 rounded-md bg-white'>
             { run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
             { run !== null && <Timeline runInfo={run} 
                 onSceneTs={onSceneTs}

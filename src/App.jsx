@@ -4,8 +4,8 @@ import Code3 from './components/Code3'
 
 function NewCode(props) {
   return(
-    <div>
-    <div className='cursor-pointer border border-dashed border-blue-200 bg-white m-auto px-4 pb-4 pt-4 rounded-b-md max-w-fit font-extrabold text-lg hover:bg-blue-100 text-blue-800'><button onClick={props.onClick}>+Code 3</button></div>
+    <div className='fixed bottom-4 right-4'>
+      <div className='rounded-full cursor-pointer bg-red-600 w-10 h-10 pb-0.5 flex items-center justify-center text-4xl hover:bg-red-500 text-white'><button onClick={props.onClick}>+</button></div>
     </div>
   )
 }
