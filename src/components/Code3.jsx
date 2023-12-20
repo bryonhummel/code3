@@ -6,7 +6,7 @@ function BlueSquare() {
     return ( <span className='text-blue-800'>■</span>  );
 }
 function BlackDiamond() {
-    return ( <span className='text-black'>◆</span>  );
+    return ( <span className='text-black pb-0.5'>◆</span>  );
 }
 function GreenCircle() {
     return ( <span className='text-green-600'>●</span>  );
