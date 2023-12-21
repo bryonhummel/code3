@@ -147,9 +147,11 @@ function Timeline(props) {
                 <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{props.runInfo.name}</h3>
                 <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{props.runInfo.timestamp}</time>
                 <div className="">
-                    {props.firstOn.map((name) => (
-                    <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-gray-200 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded me-3 hover:bg-gray-100 border border-gray-200 cursor-pointer">{name}</div>
-                    ))}
+                    {
+                        props.firstOn.map((name) => (
+                            <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-gray-200 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded me-3 hover:bg-gray-100 border border-gray-200 cursor-pointer">{name}</div>
+                        ))
+                    }
                     { 
                         displayTeamListToggle &&
                         <div onClick={(e) => handleShowTeamList()} className='inline-flex border rounded text-sm px-2.5 py-0.5 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'>{showTeamList? '-': '+'}</div>
