@@ -125,17 +125,18 @@ function TimelineEntry(props) {
 
 function Timeline(props) {
 
-    const [showTeamList, setShowTeamList] = useState(false)
-    const teamList = ['Mike', 'Bryon', 'Brigitte', 'Scott', 'JP', 'Chris', 'Kim', 'Bill', 'Jenna']
-    var filteredTeamList = teamList.filter(function(e) { return !props.firstOn.includes(e) })
+    const [showTagList, setShowTagList] = useState(false)
+    //const tagList = ['Mike', 'Bryon', 'Brigitte', 'Scott', 'JP', 'Chris', 'Kim', 'Bill', 'Jenna']
+    const tagList = ['top', 'middle', 'bottom', 'left', 'right', 'lift' ]
+    var filteredTagList = tagList.filter(function(e) { return !props.tagList.includes(e) })
 
-    function handleShowTeamList() {
-        console.log(`toggling: ${showTeamList}`)
-        setShowTeamList(!showTeamList===true)
+    function handleShowTagList() {
+        console.log(`toggling: ${showTagList}`)
+        setShowTagList(!showTagList===true)
     }
 
-    var displayTeamList = showTeamList || props.firstOn.length === 0
-    var displayTeamListToggle = props.firstOn.length > 0
+    var displayTagList = showTagList || props.tagList.length === 0
+    var displayTagListToggle = props.tagList.length > 0
 
     return(
     <div>
@@ -148,21 +149,21 @@ function Timeline(props) {
                 <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{props.runInfo.timestamp}</time>
                 <div className="">
                     {
-                        props.firstOn.map((name) => (
-                            <div key={name} onClick={(e) => props.handleFirstOnToggle(name)} className="inline-flex bg-gray-200 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded me-3 hover:bg-gray-100 border border-gray-200 cursor-pointer">{name}</div>
+                        props.tagList.map((name) => (
+                            <div key={name} onClick={(e) => props.handleTagListToggle(name)} className="inline-flex bg-gray-100 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded-full me-3 hover:bg-gray-50 border border-gray-200 cursor-pointer">{name}</div>
                         ))
                     }
                     { 
-                        displayTeamListToggle &&
-                        <div onClick={(e) => handleShowTeamList()} className='inline-flex border rounded text-sm px-2.5 py-0.5 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'>{showTeamList? '-': '+'}</div>
+                        displayTagListToggle &&
+                        <div onClick={(e) => handleShowTagList()} className='inline-flex border rounded-full text-sm px-2.5 py-0.5 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'>{showTagList? '-': '+'}</div>
                     }
                     {
                         <div></div>
                     }
                     {
-                        displayTeamList &&
-                            filteredTeamList.map((name) => (
-                                <div key={name} onClick={(e) => {props.handleFirstOnToggle(name); setShowTeamList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded hover:bg-gray-100 cursor-pointer">{name}</div>
+                        displayTagList &&
+                            filteredTagList.map((name) => (
+                                <div key={name} onClick={(e) => {props.handleTagListToggle(name); setShowTagList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded-full hover:bg-gray-100 cursor-pointer">{name}</div>
                             ))
                     }
                 </div>
@@ -209,17 +210,17 @@ function Code3(props) {
         setCode3State(newState)
     }
 
-    function handleFirstOnToggle(name) {
+    function handleTagListToggle(name) {
         var filteredArray = []
-        if (code3State?.firstOn && code3State.firstOn.includes(name)) {
-            filteredArray = code3State.firstOn.filter(function(e) { return e !== name })
+        if (code3State?.tagList && code3State.tagList.includes(name)) {
+            filteredArray = code3State.tagList.filter(function(e) { return e !== name })
         } else {
-            filteredArray = code3State?.firstOn != null ? [...code3State.firstOn] : []
+            filteredArray = code3State?.tagList != null ? [...code3State.tagList] : []
             filteredArray.push(name)
         }
         const persistedState = window.localStorage.getItem("code3_"+props.codeId)
         var newState = persistedState != null ? JSON.parse(persistedState) : {}
-        newState.firstOn = filteredArray
+        newState.tagList = filteredArray
         window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
         setCode3State(newState)
     }
@@ -230,10 +231,10 @@ function Code3(props) {
             { code3State?.run != null && <Timeline runInfo={code3State?.run} 
                 onSceneTs={code3State?.onSceneTs}
                 sceneClearTs={code3State?.sceneClearTs}
-                firstOn={code3State?.firstOn != null ? code3State?.firstOn : [] }
+                tagList={code3State?.tagList != null ? code3State?.tagList : [] }
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
-                handleFirstOnToggle={handleFirstOnToggle} /> }
+                handleTagListToggle={handleTagListToggle} /> }
             <button className='bg-white border border-gray-300 text-gray-300 hover:text-red-600 hover:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button>
         </div>
      );
