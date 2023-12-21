@@ -53,7 +53,7 @@ function RunButton(props){
 function TimelineToolbar(props) {
 
     return(
-        <div className='p-7 grid sm:grid-cols-2 md:grid-cols-3 gap-6'>
+        <div className='p-7 grid sm:grid-cols-2 gap-6'>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>Tenderfoot</span>
@@ -92,13 +92,13 @@ function TimelineToolbar(props) {
             <div className=''>
                 <ul className="text-left">
                     <li><RunButton onClick={props.handleRunClick} difficulty="na" name="Chalet"/></li>
-                </ul>
-            </div>
-            <div className=''>
-                <ul className="text-left">
                     <li><RunButton onClick={props.handleRunClick} difficulty="na" name="Other"/></li>
                 </ul>
             </div>
+            {/* <div className=''>
+                <ul className="text-left">
+                </ul>
+            </div> */}
         </div>
     )
 }
@@ -226,7 +226,7 @@ function Code3(props) {
     }
 
     return ( 
-        <div className='border border-gray-200 my-4 rounded-md bg-white'>
+        <div className='flex-1 border-t border-x border-gray-200 rounded-t-2xl bg-white pb-1'>
             { code3State?.run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
             { code3State?.run != null && <Timeline runInfo={code3State?.run} 
                 onSceneTs={code3State?.onSceneTs}
@@ -235,7 +235,7 @@ function Code3(props) {
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
                 handleTagListToggle={handleTagListToggle} /> }
-            <button className='bg-white border border-gray-300 text-gray-300 md:hover:text-red-600 active:text-red-600 md:hover:border-red-600 active:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button>
+                {/* <button className='bg-white border border-gray-300 text-gray-300 md:hover:text-red-600 active:text-red-600 md:hover:border-red-600 active:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button> */}
         </div>
      );
 }

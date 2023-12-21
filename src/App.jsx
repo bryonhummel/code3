@@ -43,17 +43,28 @@ function App() {
     setCodes(filteredCodes)
   }
 
-  return (
-    <div className='max-w-3xl m-auto'>
-      <NewCode onClick={handleNewCode}/>
-      {codes.length === 0 && <NoCodes />}
-      {
-        codes.map((code) => (
-          <Code3 key={code} codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
-        ))
-      }
-    </div>
-  )
+  if (codes.length === 0) {
+    return(
+      <div>
+        <NoCodes />
+        <NewCode onClick={handleNewCode}/>
+      </div>
+    )
+  } else {
+    return (
+      <div className='grid lg:grid-cols-2 gap-6 mt-6'>
+        <NewCode onClick={handleNewCode}/>
+        {
+          codes.map((code) => (
+            <div key={code} className='w-full flex flex-col items-stretch'>
+              <Code3 codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
+              <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-600 md:hover:bg-red-600 md:hover:text-white active:border-red-600 active:bg-red-600 px-3 py-2 mb-4 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
+            </div>
+          ))
+        }
+      </div>
+    )
+  }
 }
 
 export default App
