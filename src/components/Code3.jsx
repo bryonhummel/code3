@@ -235,7 +235,7 @@ function Code3(props) {
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
                 handleTagListToggle={handleTagListToggle} /> }
-            <button className='bg-white border border-gray-300 text-gray-300 hover:text-red-600 hover:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button>
+            <button className='bg-white border border-gray-300 text-gray-300 md:hover:text-red-600 active:text-red-600 md:hover:border-red-600 active:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button>
         </div>
      );
 }
