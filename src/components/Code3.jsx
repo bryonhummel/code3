@@ -45,7 +45,7 @@ function RunButton(props){
 
     return(
         <div className='py-1'>
-            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md hover:bg-gray-100'>{symb} {props.name}</button>
+            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md md:hover:bg-gray-100 active:bg-gray-100'>{symb} {props.name}</button>
         </div>
     )
 }
@@ -109,7 +109,7 @@ function TimelineEntry(props) {
     const handleOnClick = props.handleOnClick
 
     return(
-    <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp == null ? 'cursor-pointer hover:bg-gray-100 border border-gray-200':'border border-white'}`} onClick={handleOnClick}>
+    <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp == null ? 'cursor-pointer md:hover:bg-gray-100 border active:bg-gray-100 border-gray-200':'border border-white'}`} onClick={handleOnClick}>
         <span className={`absolute flex items-center justify-center w-6 h-6 ${ timestamp ? 'bg-gray-200' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white`}>
         <span className='text-gray-800'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" data-slot="icon" className="w-4 h-4">
@@ -150,12 +150,12 @@ function Timeline(props) {
                 <div className="">
                     {
                         props.tagList.map((name) => (
-                            <div key={name} onClick={(e) => props.handleTagListToggle(name)} className="inline-flex bg-gray-100 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded-full me-3 hover:bg-gray-50 border border-gray-200 cursor-pointer">{name}</div>
+                            <div key={name} onClick={(e) => props.handleTagListToggle(name)} className="inline-flex bg-gray-100 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded-full me-3 md:hover:bg-gray-50 active:bg-gray-50 border border-gray-200 cursor-pointer">{name}</div>
                         ))
                     }
                     { 
                         displayTagListToggle &&
-                        <div onClick={(e) => handleShowTagList()} className='inline-flex border rounded-full text-sm px-2.5 py-0.5 text-gray-800 hover:bg-gray-100 hover:text-gray-800 cursor-pointer'>{showTagList? '-': '+'}</div>
+                        <div onClick={(e) => handleShowTagList()} className='inline-flex border rounded-full text-sm px-2.5 py-0.5 text-gray-800 md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer'>{showTagList? '-': '+'}</div>
                     }
                     {
                         <div></div>
@@ -163,7 +163,7 @@ function Timeline(props) {
                     {
                         displayTagList &&
                             filteredTagList.map((name) => (
-                                <div key={name} onClick={(e) => {props.handleTagListToggle(name); setShowTagList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded-full hover:bg-gray-100 cursor-pointer">{name}</div>
+                                <div key={name} onClick={(e) => {props.handleTagListToggle(name); setShowTagList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded-full md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer">{name}</div>
                             ))
                     }
                 </div>
