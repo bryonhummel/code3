@@ -109,7 +109,7 @@ function TimelineEntry(props) {
     const handleOnClick = props.handleOnClick
 
     return(
-    <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp === null ? 'cursor-pointer hover:bg-gray-100 border border-gray-200':'border border-white'}`} onClick={handleOnClick}>
+    <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp == null ? 'cursor-pointer hover:bg-gray-100 border border-gray-200':'border border-white'}`} onClick={handleOnClick}>
         <span className={`absolute flex items-center justify-center w-6 h-6 ${ timestamp ? 'bg-gray-200' : 'bg-white'} border rounded-full -start-3 ring-8 ring-white`}>
         <span className='text-gray-800'>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" data-slot="icon" className="w-4 h-4">
@@ -118,7 +118,7 @@ function TimelineEntry(props) {
         </span>
         </span>
         <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{text}</h4>
-        <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{timestamp !== null ? timestamp : '--:--'}</time>
+        <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{timestamp != null ? timestamp : '--:--'}</time>
     </li>
     )
 }
@@ -167,8 +167,8 @@ function Timeline(props) {
                     }
                 </div>
             </li>
-            <TimelineEntry handleOnClick={props.handleOnSceneClick} text='On Scene' timestamp={props.onSceneTs} />
-            <TimelineEntry handleOnClick={props.handleSceneClearClick} text='Scene Clear' timestamp={props.sceneClearTs} />
+            <TimelineEntry handleOnClick={props.handleOnSceneClick} text='On Scene' timestamp={props?.onSceneTs} />
+            <TimelineEntry handleOnClick={props.handleSceneClearClick} text='Scene Clear' timestamp={props?.sceneClearTs} />
         </ol>
     </div>
     )
@@ -181,49 +181,56 @@ function getTimestamp() {
 }
 
 function Code3(props) {
-    const [run, setRun] = useState(null);
-    const [onSceneTs, setOnSceneTs] = useState(null);
-    const [sceneClearTs, setSceneClearTs] = useState(null);
-    const [firstOn, setFirstOn] = useState([])
+    const [code3State, setCode3State] = useState(() => {
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        return persistedState !== null ? JSON.parse(persistedState) : {}
+    })
 
     function handleRunClick(name, difficulty) {
-        setRun({name: name, difficulty: difficulty, timestamp: getTimestamp()})
+        var newCode3State = JSON.parse(JSON.stringify(code3State));
+        newCode3State.run = {name: name, difficulty: difficulty, timestamp: getTimestamp()}
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newCode3State))
+        setCode3State(newCode3State)
     }
 
     function handleOnSceneClick(){
-        if (onSceneTs === null) {
-            setOnSceneTs(getTimestamp())
-        }
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        var newState = persistedState != null ? JSON.parse(persistedState) : {}
+        newState.onSceneTs = getTimestamp()
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
+        setCode3State(newState)
     }
 
     function handleSceneClearClick(){
-        if (sceneClearTs === null) {
-            setSceneClearTs(getTimestamp())
-        }
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        var newState = persistedState != null ? JSON.parse(persistedState) : {}
+        newState.sceneClearTs = getTimestamp()
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
+        setCode3State(newState)
     }
 
     function handleFirstOnToggle(name) {
         var filteredArray = []
-        if (firstOn.includes(name)) {
-            filteredArray = firstOn.filter(function(e) { return e !== name })
+        if (code3State?.firstOn && code3State.firstOn.includes(name)) {
+            filteredArray = code3State.firstOn.filter(function(e) { return e !== name })
         } else {
-            console.log(name)
-            filteredArray = [...firstOn]
+            filteredArray = code3State?.firstOn != null ? [...code3State.firstOn] : []
             filteredArray.push(name)
-            
         }
-        console.log(filteredArray)
-        console.log(`setFirstOn ${firstOn} ${name} ${filteredArray}`)
-        setFirstOn(filteredArray)
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        var newState = persistedState != null ? JSON.parse(persistedState) : {}
+        newState.firstOn = filteredArray
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
+        setCode3State(newState)
     }
 
     return ( 
         <div className='border border-gray-200 my-4 rounded-md bg-white'>
-            { run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
-            { run !== null && <Timeline runInfo={run} 
-                onSceneTs={onSceneTs}
-                sceneClearTs={sceneClearTs}
-                firstOn={firstOn}
+            { code3State?.run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
+            { code3State?.run != null && <Timeline runInfo={code3State?.run} 
+                onSceneTs={code3State?.onSceneTs}
+                sceneClearTs={code3State?.sceneClearTs}
+                firstOn={code3State?.firstOn != null ? code3State?.firstOn : [] }
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
                 handleFirstOnToggle={handleFirstOnToggle} /> }

@@ -20,16 +20,26 @@ function NoCodes(props) {
 }
 
 function App() {
-  const [codes, setCodes] = useState([])
+  const [codes, setCodes] = useState(() => {
+    const persistedState = window.localStorage.getItem("code3List")
+    return persistedState !== null
+      ? JSON.parse(persistedState)
+      : []
+  })
 
   function handleNewCode() {
-    var updatedCodes = [ new Date(), ...codes]
+    const d = new Date()
+    const id = d.getTime()
+    var updatedCodes = [ id, ...codes]
+    window.localStorage.setItem("code3List", JSON.stringify(updatedCodes))
     setCodes(updatedCodes)
   }
 
   function handleDeleteCode(codeKey) {
     console.log(`handleDelete ${codeKey}`)
     var filteredCodes = codes.filter(function(c) { return c !== codeKey })
+    window.localStorage.removeItem("code3_"+codeKey)
+    window.localStorage.setItem("code3List", JSON.stringify(filteredCodes))
     setCodes(filteredCodes)
   }
 
@@ -39,7 +49,7 @@ function App() {
       {codes.length === 0 && <NoCodes />}
       {
         codes.map((code) => (
-          <Code3 key={code} handleDelete={(e) => handleDeleteCode(code)} />
+          <Code3 key={code} codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
         ))
       }
     </div>
