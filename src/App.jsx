@@ -5,7 +5,7 @@ import Code3 from './components/Code3'
 function NewCode(props) {
   return(
     <div className='fixed bottom-4 right-4'>
-      <div className='rounded-full cursor-pointer bg-red-600 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-500 active:bg-red-500 text-white'><button onClick={props.onClick}>+</button></div>
+      <div className='rounded-full cursor-pointer bg-red-600 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-500 active:bg-red-500 text-white '><button onClick={props.onClick}>+</button></div>
     </div>
   )
 }
@@ -13,8 +13,8 @@ function NewCode(props) {
 function NoCodes(props) {
   return(
     <div>
-      <div className='m-auto p-4 px-8 mt-16 w-fit  text-white bg-red-600 font-extrabold rounded-lg'>CODE 3</div>
-      <div className='mt-4 text-gray-500 text-xs'>Click <span className='border border-gray-500 rounded-full w-4 h-4  justify-center items-center inline-flex'>+</span> to Start</div>
+      <div className='m-auto p-4 px-12 mt-16 w-fit text-2xl  text-white bg-red-600 font-extrabold rounded-lg'><h1>CODE 3</h1></div>
+      <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-4 h-4  justify-center items-center inline-flex'>+</span> to Start</div>
     </div>
   )
 }

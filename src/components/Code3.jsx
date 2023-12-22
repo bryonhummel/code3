@@ -127,7 +127,7 @@ function Timeline(props) {
 
     const [showTagList, setShowTagList] = useState(false)
     //const tagList = ['Mike', 'Bryon', 'Brigitte', 'Scott', 'JP', 'Chris', 'Kim', 'Bill', 'Jenna']
-    const tagList = ['top', 'middle', 'bottom', 'left', 'right', 'chairlift' ]
+    const tagList = ['top', 'middle', 'bottom', 'left', 'right', 'chairlift', 'glades' ]
     var filteredTagList = tagList.filter(function(e) { return !props.tagList.includes(e) })
 
     function handleShowTagList() {
