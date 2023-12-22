@@ -12,9 +12,11 @@ function NewCode(props) {
 
 function NoCodes(props) {
   return(
-    <div>
-      <div className='m-auto p-4 px-12 mt-16 w-fit text-2xl  text-white bg-red-600 font-extrabold rounded-lg'><h1>CODE 3</h1></div>
-      <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-4 h-4  justify-center items-center inline-flex'>+</span> to Start</div>
+    <div className='flex h-screen'>
+      <div className='m-auto '>
+        <div className='p-4 px-12 max-w-xs text-2xl font-extrabold'><img className="rounded-3xl" src="./favicon.ico"></img><h1 className='mt-3'>CODE 3</h1></div>
+        <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-4 h-4  justify-center items-center inline-flex'>+</span> to Start</div>
+      </div>
     </div>
   )
 }
