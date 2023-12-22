@@ -36,7 +36,6 @@ function App() {
   }
 
   function handleDeleteCode(codeKey) {
-    console.log(`handleDelete ${codeKey}`)
     var filteredCodes = codes.filter(function(c) { return c !== codeKey })
     window.localStorage.removeItem("code3_"+codeKey)
     window.localStorage.setItem("code3List", JSON.stringify(filteredCodes))
