@@ -72,21 +72,21 @@ function TimelineToolbar(props) {
                 </div>
                 <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Camels Hump"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Easyrider"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Easy Rider"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="North"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Mic Mac"/></li>
                 </ul>
             </div>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>Applebowl</span>
+                    <span className='rotate-90'>Apple&nbsp;Bowl</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
 
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Chicane"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Roughshod"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Applebowl"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Racers Alley"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Roughshod"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Apple Bowl"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Racer's Alley"/></li>
                 </ul>
             </div>
             <div className=''>
@@ -95,10 +95,6 @@ function TimelineToolbar(props) {
                     <li><RunButton onClick={props.handleRunClick} difficulty="na" name="Other"/></li>
                 </ul>
             </div>
-            {/* <div className=''>
-                <ul className="text-left">
-                </ul>
-            </div> */}
         </div>
     )
 }
@@ -148,12 +144,12 @@ function Timeline(props) {
                 <div className="">
                     {
                         props.tagList.map((name) => (
-                            <div key={name} onClick={(e) => props.handleTagListToggle(name)} className="inline-flex bg-gray-100 text-gray-800 text-sm my-0.5 font-medium  px-2.5 py-0.5 rounded-full me-3 md:hover:bg-gray-50 active:bg-gray-50 border border-gray-200 cursor-pointer">{name}</div>
+                            <div key={name} onClick={(e) => props.handleTagListToggle(name)} className="inline-flex bg-gray-100 text-gray-800 text-sm my-2 font-medium  px-4 py-1.5 rounded-full me-3 md:hover:bg-gray-50 active:bg-gray-50 border border-gray-200 cursor-pointer">{name}</div>
                         ))
                     }
                     { 
                         displayTagListToggle &&
-                        <div onClick={(e) => handleShowTagList()} className='inline-flex border rounded-full text-sm px-2.5 py-0.5 text-gray-800 md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer'>{showTagList? '-': '+'}</div>
+                        <div onClick={(e) => handleShowTagList()} className='inline-flex border rounded-full text-sm px-4 py-1.5 text-gray-800 md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer'>{showTagList? '-': '+'}</div>
                     }
                     {
                         <div></div>
@@ -161,7 +157,7 @@ function Timeline(props) {
                     {
                         displayTagList &&
                             filteredTagList.map((name) => (
-                                <div key={name} onClick={(e) => {props.handleTagListToggle(name); setShowTagList(false)}} className="inline-flex bg-white border border-dashed my-0.5 border-gray-200 text-gray-800 text-sm font-medium me-3 px-2.5 py-0.5 rounded-full md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer">{name}</div>
+                                <div key={name} onClick={(e) => {props.handleTagListToggle(name); setShowTagList(false)}} className="inline-flex bg-white border border-dashed my-2 border-gray-200 text-gray-800 text-sm font-medium me-3 px-4 py-1.5 rounded-full md:hover:bg-gray-100 active:bg-gray-100 cursor-pointer">{name}</div>
                             ))
                     }
                 </div>
