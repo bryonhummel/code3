@@ -5,7 +5,7 @@ import Code3 from './components/Code3'
 function NewCode(props) {
   return(
     <div className='fixed bottom-4 right-4'>
-      <div className='rounded-full cursor-pointer bg-red-600 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-500 active:bg-red-500 text-white '><button onClick={props.onClick}>+</button></div>
+      <div onClick={props.onClick} className='rounded-full cursor-pointer bg-red-600 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-500 active:bg-red-500 text-white '><span>+</span></div>
     </div>
   )
 }
@@ -33,6 +33,7 @@ function App() {
     var updatedCodes = [ id, ...codes]
     window.localStorage.setItem("code3List", JSON.stringify(updatedCodes))
     setCodes(updatedCodes)
+    console.log('Code added')
   }
 
   function handleDeleteCode(codeKey) {
@@ -40,6 +41,7 @@ function App() {
     window.localStorage.removeItem("code3_"+codeKey)
     window.localStorage.setItem("code3List", JSON.stringify(filteredCodes))
     setCodes(filteredCodes)
+    console.log('Code deleted')
   }
 
   if (codes.length === 0) {
