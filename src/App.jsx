@@ -53,7 +53,7 @@ function App() {
     )
   } else {
     return (
-      <div className='grid lg:grid-cols-2 gap-6 mt-6'>
+      <div className='grid lg:grid-cols-2 sm:gap-6 gap-2 sm:mt-6 mt-2'>
         <NewCode onClick={handleNewCode}/>
         {
           codes.map((code) => (
