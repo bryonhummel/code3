@@ -82,8 +82,8 @@ function TimelineToolbar(props) {
                     <span className='rotate-90'>Apple&nbsp;Bowl</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
-
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Chicane"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Terrain Park"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Roughshod"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Apple Bowl"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Racer's Alley"/></li>
@@ -119,10 +119,26 @@ function TimelineEntry(props) {
     )
 }
 
+const tagLists = {
+    "default" : ['top', 'middle', 'bottom', 'left', 'right', 'glades' ],
+    "Kids Zone" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
+    "Littlefoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
+    "Rabbitsfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
+    "Bearsfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
+    "Tenderfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'glades', 'chairlift' ],
+    "North" : ['top', 'middle', 'bottom', 'left', 'right', 'glades', 'chairlift' ],
+    "Roughshod" : ['top', 'middle', 'bottom', 'left', 'right', 'moguls' ],
+    "Apple Bowl" : ['top', 'middle', 'bottom', 'left', 'right', 'chairlift' ],
+    "Terrain Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
+    "Chalet": ['front lobby', 'rental shop', 'cafeteria', 'silvertip lounge', 'kitchen', 'offices', 'other' ],
+    "Other": ['out of bounds', 'lot 1', 'lot 2', 'maintenance shop', 'other'],
+}
+
 function Timeline(props) {
 
     const [showTagList, setShowTagList] = useState(false)
-    const tagList = ['top', 'middle', 'bottom', 'left', 'right', 'chairlift', 'glades' ]
+
+    const tagList = tagLists?.[props.runInfo.name] || tagLists.default
     var filteredTagList = tagList.filter(function(e) { return !props.tagList.includes(e) })
 
     function handleShowTagList() {
