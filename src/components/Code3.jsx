@@ -130,8 +130,16 @@ const tagLists = {
     "Roughshod" : ['top', 'middle', 'bottom', 'left', 'right', 'moguls' ],
     "Apple Bowl" : ['top', 'middle', 'bottom', 'left', 'right', 'chairlift' ],
     "Terrain Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
-    "Chalet": ['front lobby', 'rental shop', 'cafeteria', 'silvertip lounge', 'kitchen', 'offices', 'other' ],
+    "Chalet": ['lobby', 'rentals', 'cafeteria', 'silvertip', 'kitchen', 'offices', 'other' ],
     "Other": ['out of bounds', 'lot 1', 'lot 2', 'maintenance shop', 'other'],
+}
+
+function EditButton(props) {
+    return( <button className='border border-white rounded-md px-2 py-1.5 text-gray-200 sm:hover:bg-gray-100 active:bg-gray-100' onClick={props.handleClick}>
+        <svg className='w-4 h-4 stroke-current text-gray-200' viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fillRule="evenodd" clipRule="evenodd" d="M21.1213 2.70705C19.9497 1.53548 18.0503 1.53547 16.8787 2.70705L15.1989 4.38685L7.29289 12.2928C7.16473 12.421 7.07382 12.5816 7.02986 12.7574L6.02986 16.7574C5.94466 17.0982 6.04451 17.4587 6.29289 17.707C6.54127 17.9554 6.90176 18.0553 7.24254 17.9701L11.2425 16.9701C11.4184 16.9261 11.5789 16.8352 11.7071 16.707L19.5556 8.85857L21.2929 7.12126C22.4645 5.94969 22.4645 4.05019 21.2929 2.87862L21.1213 2.70705ZM18.2929 4.12126C18.6834 3.73074 19.3166 3.73074 19.7071 4.12126L19.8787 4.29283C20.2692 4.68336 20.2692 5.31653 19.8787 5.70705L18.8622 6.72357L17.3068 5.10738L18.2929 4.12126ZM15.8923 6.52185L17.4477 8.13804L10.4888 15.097L8.37437 15.6256L8.90296 13.5112L15.8923 6.52185ZM4 7.99994C4 7.44766 4.44772 6.99994 5 6.99994H10C10.5523 6.99994 11 6.55223 11 5.99994C11 5.44766 10.5523 4.99994 10 4.99994H5C3.34315 4.99994 2 6.34309 2 7.99994V18.9999C2 20.6568 3.34315 21.9999 5 21.9999H16C17.6569 21.9999 19 20.6568 19 18.9999V13.9999C19 13.4477 18.5523 12.9999 18 12.9999C17.4477 12.9999 17 13.4477 17 13.9999V18.9999C17 19.5522 16.5523 19.9999 16 19.9999H5C4.44772 19.9999 4 19.5522 4 18.9999V7.99994Z" fill="#000000"/>
+        </svg>
+        </button>)
 }
 
 function Timeline(props) {
@@ -155,7 +163,7 @@ function Timeline(props) {
                 <span className="absolute flex items-center justify-center w-6 h-6 bg-gray-200 rounded-full -start-3 ring-8 ring-white ">
                     <RunSymbol difficulty={props.runInfo.difficulty}/>
                 </span>
-                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{props.runInfo.name}</h3>
+                <h3 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{props.runInfo.name}&nbsp;<EditButton handleClick={props.handleEditRunClick}/></h3>
                 <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{props.runInfo.timestamp}</time>
                 <div className="">
                     {
@@ -199,7 +207,14 @@ function Code3(props) {
 
     function handleRunClick(name, difficulty) {
         var newCode3State = JSON.parse(JSON.stringify(code3State));
-        newCode3State.run = {name: name, difficulty: difficulty, timestamp: getTimestamp()}
+        newCode3State.run = {name: name, difficulty: difficulty, timestamp: code3State?.run?.timestamp || getTimestamp()}
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newCode3State))
+        setCode3State(newCode3State)
+    }
+
+    function handleEditRunClick() {
+        var newCode3State = JSON.parse(JSON.stringify(code3State));
+        newCode3State.run = {timestamp: code3State.run.timestamp}
         window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newCode3State))
         setCode3State(newCode3State)
     }
@@ -237,14 +252,15 @@ function Code3(props) {
 
     return ( 
         <div className='flex-1 border-t border-x border-gray-200 rounded-t-2xl bg-white pb-1'>
-            { code3State?.run == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
-            { code3State?.run != null && <Timeline runInfo={code3State?.run} 
+            { code3State?.run?.name == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
+            { code3State?.run?.name != null && <Timeline runInfo={code3State?.run} 
                 onSceneTs={code3State?.onSceneTs}
                 sceneClearTs={code3State?.sceneClearTs}
                 tagList={code3State?.tagList != null ? code3State?.tagList : [] }
                 handleOnSceneClick={handleOnSceneClick}
                 handleSceneClearClick={handleSceneClearClick}
-                handleTagListToggle={handleTagListToggle} /> }
+                handleTagListToggle={handleTagListToggle}
+                handleEditRunClick={handleEditRunClick} /> }
                 {/* <button className='bg-white border border-gray-300 text-gray-300 md:hover:text-red-600 active:text-red-600 md:hover:border-red-600 active:border-red-600 px-3 py-1 mb-4 rounded-md' onClick={props.handleDelete}>Delete</button> */}
         </div>
      );
