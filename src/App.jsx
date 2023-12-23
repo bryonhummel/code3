@@ -15,7 +15,7 @@ function NoCodes(props) {
     <div className='flex absolute inset-0'>
       <div className='m-auto '>
         <div className='p-4 px-12 max-w-xs text-2xl font-extrabold'><img className="rounded-3xl" src="./favicon.ico"></img><h1 className='mt-3'>CODE 3</h1></div>
-        <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-4 h-4  justify-center items-center inline-flex'>+</span> to Start</div>
+        <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-6 h-6 text-2xl translate-y-0.5 tracking-tighter justify-center items-center inline-flex'>+</span> to Start</div>
       </div>
     </div>
   )
