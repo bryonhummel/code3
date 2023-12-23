@@ -102,7 +102,7 @@ function TimelineToolbar(props) {
 function TimelineEntry(props) {
     const timestamp = props.timestamp
     const text = props.text
-    const handleOnClick = props.handleOnClick
+    const handleOnClick = timestamp != null ? null : props.handleOnClick
 
     return(
     <li className={`ml-5 mb-2 p-2 rounded-md ${timestamp == null ? 'cursor-pointer md:hover:bg-gray-100 border active:bg-gray-100 border-gray-200':'border border-white'}`} onClick={handleOnClick}>
