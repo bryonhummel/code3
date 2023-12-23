@@ -30,7 +30,7 @@ function RunSymbol(props){
 
 function RunButton(props){
 
-    var symb = '--'
+    var symb = NoneRun()
     if (props.difficulty === "green") {
         symb = GreenCircle()
     } else if (props.difficulty === "blue") {
@@ -45,7 +45,7 @@ function RunButton(props){
 
     return(
         <div className='py-1'>
-            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md md:hover:bg-gray-100 active:bg-gray-100'>{symb} {props.name}</button>
+            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md md:hover:bg-gray-100 active:bg-gray-100'><span className='w-5 inline-block'>{symb}</span>{props.name}</button>
         </div>
     )
 }
