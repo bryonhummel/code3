@@ -5,7 +5,7 @@ import Code3 from './components/Code3'
 function NewCode(props) {
   return(
     <div className='fixed bottom-4 right-4 z-50'>
-      <div onClick={props.onClick} className='rounded-full cursor-pointer bg-red-600 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-500 active:bg-red-500 text-white '><span>+</span></div>
+      <div onClick={props.onClick} className='rounded-full cursor-pointer bg-red-700 w-12 h-12 pb-0.5 flex items-center justify-center text-4xl md:hover:bg-red-600 active:bg-red-600 text-white '><span>+</span></div>
     </div>
   )
 }
@@ -61,7 +61,7 @@ function App() {
           codes.map((code) => (
             <div key={code} className='w-full flex flex-col items-stretch'>
               <Code3 codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
-              <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-600 md:hover:bg-red-600 md:hover:text-white active:border-red-600 active:bg-red-600 px-3 py-2 mb-4 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
+              <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-700 md:hover:bg-red-700 md:hover:text-white active:border-red-700 active:bg-red-700 px-3 py-2 mb-4 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
             </div>
           ))
         }
