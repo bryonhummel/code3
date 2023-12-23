@@ -113,7 +113,7 @@ function TimelineEntry(props) {
             </svg>
         </span>
         </span>
-        <h4 className="flex items-center mb-1 text-lg font-semibold text-gray-900">{text}</h4>
+        <h4 className="flex items-center mb-1 text-md font-semibold text-gray-900">{text}</h4>
         <time className="block mb-2 text-sm font-normal leading-none text-gray-700">{timestamp != null ? timestamp : '--:--'}</time>
     </li>
     )
