@@ -17,27 +17,19 @@ function NoneRun() {
 
 
 function RunSymbol(props){
-    var symb = NoneRun()
-    if (props.difficulty === "green") {
-        symb = GreenCircle()
-    } else if (props.difficulty === "blue") {
-        symb = BlueSquare()
-    } else if (props.difficulty === "black") {
-        symb = BlackDiamond()
+    switch(props.difficulty) {
+        case "green":
+            return <GreenCircle />
+        case "blue":
+            return <BlueSquare />
+        case "black":
+            return <BlackDiamond />
+        default:
+            return <NoneRun />
     }
-    return symb
 }
 
 function RunButton(props){
-
-    var symb = NoneRun()
-    if (props.difficulty === "green") {
-        symb = GreenCircle()
-    } else if (props.difficulty === "blue") {
-        symb = BlueSquare()
-    } else if (props.difficulty === "black") {
-        symb = BlackDiamond()
-    }
 
     function handleClick() {
         props.onClick(props.name, props.difficulty)
@@ -45,7 +37,12 @@ function RunButton(props){
 
     return(
         <div className='py-1'>
-            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md md:hover:bg-gray-100 active:bg-gray-100'><span className='w-5 inline-block'>{symb}</span>{props.name}</button>
+            <button onClick={handleClick} className='border w-full text-left px-3 py-1 rounded-md md:hover:bg-gray-100 active:bg-gray-100'>
+                <span className='w-5 inline-block'>
+                    <RunSymbol difficulty={props.difficulty} />
+                </span>
+                {props.name}
+            </button>
         </div>
     )
 }
@@ -203,9 +200,7 @@ function Timeline(props) {
         entries["emsCalledTs"] = props?.emsCalledTs ? props.emsCalledTs.replaceAll(':',"") : 10000003
         entries["emsArrivedTs"] = props?.emsArrivedTs ? props.emsArrivedTs.replaceAll(':',"") : 10000004
     }
-    console.log(`Entries: ${JSON.stringify(entries)}`)
     var orderedEntries = Object.entries(entries).sort((a,b) => a[1] - b[1]).map(el=>el[0])
-    console.log(`Sorted: ${orderedEntries}`)
 
     return(
     <div>
