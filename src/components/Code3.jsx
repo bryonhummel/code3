@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // https://flowbite.com/docs/components/timeline/
 
@@ -257,6 +257,10 @@ function Code3(props) {
         return persistedState !== null ? JSON.parse(persistedState) : {}
     })
 
+    useEffect(() => {
+        window.scrollTo({top: document.getElementById(props.id).offsetTop-44, behavior: "smooth"})
+    },[code3State])
+
     function handleRunClick(name, difficulty) {
         var newCode3State = JSON.parse(JSON.stringify(code3State));
         newCode3State.run = {name: name, difficulty: difficulty, timestamp: code3State?.run?.timestamp || getTimestamp()}
@@ -319,7 +323,7 @@ function Code3(props) {
     }
 
     return ( 
-        <div className='flex-1 border-t border-x border-gray-200 rounded-t-2xl bg-white pb-1'>
+        <div id={props.id} className='flex-1 border-t border-x border-gray-200 rounded-t-2xl bg-white pb-1'>
             { code3State?.run?.name == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
             { code3State?.run?.name != null && <Timeline runInfo={code3State?.run} 
                 onSceneTs={code3State?.onSceneTs}

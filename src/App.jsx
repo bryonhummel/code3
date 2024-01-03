@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Code3 from './components/Code3'
 
@@ -46,6 +46,12 @@ function App() {
     console.log('Code deleted')
   }
 
+  // when we initially load, scroll to the top to 'undo' any scrolling that the
+  // creation of each of the <code3>'s below did by themselves
+  useEffect( () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [])
+
   if (codes.length === 0) {
     return(
       <div>
@@ -55,13 +61,13 @@ function App() {
     )
   } else {
     return (
-      <div className='grid lg:grid-cols-2 sm:gap-6 gap-2 sm:mt-6 mt-2'>
+      <div className='grid lg:grid-cols-2 py-6 gap-6'>
         <NewCode onClick={handleNewCode}/>
         {
           codes.map((code) => (
             <div key={code} className='w-full flex flex-col items-stretch'>
-              <Code3 codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
-              <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-700 md:hover:bg-red-700 md:hover:text-white active:border-red-700 active:bg-red-700 px-3 py-2 mb-4 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
+              <Code3 id={"code-"+code.toString()} codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
+              <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-700 md:hover:bg-red-700 md:hover:text-white active:border-red-700 active:bg-red-700 px-3 py-2 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
             </div>
           ))
         }
