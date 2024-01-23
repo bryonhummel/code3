@@ -65,7 +65,7 @@ function App() {
         <NewCode onClick={handleNewCode}/>
         {
           codes.map((code) => (
-            <div key={code} className='w-full flex flex-col items-stretch'>
+            <div key={code} className='w-full flex flex-col items-stretch rounded-2xl shadow-sm '>
               <Code3 id={"code-"+code.toString()} codeId={code} handleDelete={(e) => handleDeleteCode(code)} />
               <button className='bg-white border border-gray-200 text-gray-300 active:text-white md:hover:border-red-700 md:hover:bg-red-700 md:hover:text-white active:border-red-700 active:bg-red-700 px-3 py-2 rounded-b-2xl w-full' onClick={(e) => handleDeleteCode(code)}>Delete</button>
             </div>
