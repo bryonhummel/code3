@@ -10,11 +10,11 @@ function NewCode(props) {
   )
 }
 
-function NoCodes(props) {
+function NoCodes({onClick}) {
   return(
     <div className='flex absolute inset-0'>
       <div className='m-auto '>
-        <div className='p-4 px-12 max-w-xs text-4xl font-extrabold'><img className="rounded-3xl" src="./favicon.ico"></img><h1 className='mt-3'>CODE 3</h1></div>
+        <div className='p-4 px-12 max-w-xs text-4xl font-extrabold'><img className="rounded-3xl hover:cursor-pointer" src="./favicon.ico" onClick={onClick}></img><h1 className='mt-3'>CODE 3</h1></div>
         <div className='mt-12 text-gray-500 text-lg'>Click <span className='border border-gray-500 rounded-full w-6 h-6 text-2xl translate-y-0.5 tracking-tighter justify-center items-center inline-flex'>+</span> to Start</div>
       </div>
     </div>
@@ -55,7 +55,7 @@ function App() {
   if (codes.length === 0) {
     return(
       <div>
-        <NoCodes />
+        <NoCodes onClick={handleNewCode} />
         <NewCode onClick={handleNewCode}/>
       </div>
     )
