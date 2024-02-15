@@ -174,7 +174,7 @@ function Timeline(props) {
         },
         "sceneClearTs": {
             timestamp: props.sceneClearTs,
-            text: "Scene Clear",
+            text: "Transport from Scene",
             handleOnClick: props.handleSceneClearClick,
         },
         "emsCalledTs": {
