@@ -59,8 +59,8 @@ function TimelineToolbar(props) {
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Discover"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Adventure"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="The Park"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Moonstone Way"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Wishbone"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Moonstone Way"/></li>
                 </ul>
             </div>
             <div className='flex'>
