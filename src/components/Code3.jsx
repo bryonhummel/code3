@@ -11,6 +11,9 @@ function BlackDiamond() {
 function GreenCircle() {
     return ( <span className='text-green-600'>●</span>  );
 }
+function ParkCircle() {
+    return ( <span className='text-orange-400'>●</span>  );
+}
 function NoneRun() {
     return ( <span className='text-black'>-</span>  );
 }
@@ -24,6 +27,8 @@ function RunSymbol(props){
             return <BlueSquare />
         case "black":
             return <BlackDiamond />
+        case "park":
+            return <ParkCircle />
         default:
             return <NoneRun />
     }
@@ -58,7 +63,7 @@ function TimelineToolbar(props) {
                 <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Discover"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Adventure"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="The Park"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="park" name="The Park"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Moonstone Way"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Wishbone"/></li>
                 </ul>
