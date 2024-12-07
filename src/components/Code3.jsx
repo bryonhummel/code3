@@ -53,37 +53,35 @@ function TimelineToolbar(props) {
         <div className='p-7 grid sm:grid-cols-2 gap-6'>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>Tenderfoot</span>
+                    <span className='rotate-90'>Red&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
-                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Kids Zone"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Littlefoot"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Tenderfoot"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Rabbitsfoot"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Bearsfoot"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Discover"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Adventure"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="The Park"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Wishbone"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Moonstone Way"/></li>
                 </ul>
             </div>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>North</span>
+                    <span className='rotate-90'>North&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
-                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Camels Hump"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Easy Rider"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Easy Rider"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="North"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Mic Mac"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Mic Mac"/></li>
                 </ul>
             </div>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>Apple&nbsp;Bowl</span>
+                    <span className='rotate-90'>Apple&nbsp;Bowl&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Chicane"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Terrain Park"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Chicane"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Roughshod"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Apple Bowl"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Racer's Alley"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Racer's Alley"/></li>
                 </ul>
             </div>
             <div className=''>
