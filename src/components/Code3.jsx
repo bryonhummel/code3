@@ -75,12 +75,12 @@ function TimelineToolbar(props) {
             </div>
             <div className='flex'>
                 <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>Apple&nbsp;Bowl&nbsp;Lift</span>
+                    <span className='rotate-90'>Applebowl&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Chicane"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="black" name="Roughshod"/></li>
-                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Apple Bowl"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Applebowl"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Racer's Alley"/></li>
                 </ul>
             </div>
