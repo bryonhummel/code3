@@ -52,7 +52,7 @@ function TimelineToolbar(props) {
     return(
         <div className='p-7 grid sm:grid-cols-2 gap-6'>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                <div onClick={() => {props.handleRunClick("Red Lift", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>Red&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -64,7 +64,7 @@ function TimelineToolbar(props) {
                 </ul>
             </div>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                <div onClick={() => {props.handleRunClick("North Lift", "na")}} className='w-8 flex items-center justify-center cursor-pointer hover:bg-gray-100 bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>North&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -74,7 +74,7 @@ function TimelineToolbar(props) {
                 </ul>
             </div>
             <div className='flex'>
-                <div className='w-8 flex items-center justify-center bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                <div onClick={() => {props.handleRunClick("Applebowl Lift", "na")}} className='w-8 flex items-center justify-center cursor-pointer hover:bg-gray-100 bg-gray-200 font-bold text-gray-500 mr-2 my-1 rounded-md'>
                     <span className='rotate-90'>Applebowl&nbsp;Lift</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
@@ -116,15 +116,18 @@ function TimelineEntry(props) {
 
 const tagLists = {
     "default" : ['top', 'middle', 'bottom', 'left', 'right', 'glades' ],
-    "Kids Zone" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
-    "Littlefoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
-    "Rabbitsfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
-    "Bearsfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'carpet' ],
-    "Tenderfoot" : ['top', 'middle', 'bottom', 'left', 'right', 'glades', 'chairlift' ],
-    "North" : ['top', 'middle', 'bottom', 'left', 'right', 'glades', 'chairlift' ],
+    // Lifts
+    "Red Lift" : ['top', 'bottom', 'lines' ],
+    "North Lift" : ['top', 'bottom', 'lines' ],
+    "Applebowl Lift" : ['top', 'bottom', 'lines' ],
+    "Adventure" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift' ],
+    "Discover" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift' ],
+    // Runs
+    "The Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
+    "Moonstone Way" : ['top', 'middle', 'bottom', 'left', 'right' ],
     "Roughshod" : ['top', 'middle', 'bottom', 'left', 'right', 'moguls' ],
-    "Apple Bowl" : ['top', 'middle', 'bottom', 'left', 'right', 'chairlift' ],
-    "Terrain Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
+    "Applebowl" : ['top', 'middle', 'bottom', 'left', 'right' ],
+    // Other
     "Chalet": ['lobby', 'rentals', 'cafeteria', 'silvertip', 'kitchen', 'offices', 'other' ],
     "Other": ['out of bounds', 'lot 1', 'lot 2', 'maintenance shop', 'other'],
 }
