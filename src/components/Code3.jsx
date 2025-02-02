@@ -125,8 +125,8 @@ const tagLists = {
     "Red Lift" : ['top', 'bottom', 'lines' ],
     "North Lift" : ['top', 'bottom', 'lines' ],
     "Applebowl Lift" : ['top', 'bottom', 'lines' ],
-    "Adventure" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift' ],
-    "Discover" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift' ],
+    "Adventure" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
+    "Discover" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
     // Runs
     "The Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
     "Moonstone Way" : ['top', 'middle', 'bottom', 'left', 'right' ],
