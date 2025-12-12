@@ -63,6 +63,8 @@ function TimelineToolbar(props) {
                 <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Discover"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Adventure"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Freedom"/></li>
+                    <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Bridge"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="park" name="The Park"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Moonstone Way"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Wishbone"/></li>
@@ -127,6 +129,7 @@ const tagLists = {
     "Applebowl Lift" : ['top', 'bottom', 'lines' ],
     "Adventure" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
     "Discover" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
+    "Freedom" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 3' ],
     // Runs
     "The Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
     "Moonstone Way" : ['top', 'middle', 'bottom', 'left', 'right' ],
