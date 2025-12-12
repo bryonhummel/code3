@@ -57,14 +57,31 @@ function TimelineToolbar(props) {
     return(
         <div className='p-7 grid sm:grid-cols-2 gap-6'>
             <div className='flex'>
-                <div onClick={() => {props.handleRunClick("Red Lift", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
-                    <span className='rotate-90'>Red&nbsp;Lift</span>
+                <div onClick={() => {props.handleRunClick("Surface Lift 1", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                    <span className='rotate-90'>SL&nbsp;1</span>
+                </div>
+                <div onClick={() => {props.handleRunClick("Surface Lift 2", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                    <span className='rotate-90'>SL&nbsp;2</span>
                 </div>
                 <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Discover"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Adventure"/></li>
+                </ul>
+            </div>
+            <div className='flex'>
+                <div onClick={() => {props.handleRunClick("Surface Lift 3", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                    <span className='rotate-90'>SL&nbsp;3</span>
+                </div>
+                <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Freedom"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Bridge"/></li>
+                </ul>
+            </div>
+            <div className='flex'>
+                <div onClick={() => {props.handleRunClick("Red Lift", "na")}} className='w-8 flex items-center justify-center cursor-pointer bg-gray-200 hover:bg-gray-100 font-bold text-gray-500 mr-2 my-1 rounded-md'>
+                    <span className='rotate-90'>Red&nbsp;Lift</span>
+                </div>
+                <ul className="text-left flex-1 flex-col">
                     <li><RunButton onClick={props.handleRunClick} difficulty="park" name="The Park"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="green" name="Moonstone Way"/></li>
                     <li><RunButton onClick={props.handleRunClick} difficulty="blue" name="Wishbone"/></li>
@@ -124,13 +141,16 @@ function TimelineEntry(props) {
 const tagLists = {
     "default" : ['top', 'middle', 'bottom', 'left', 'right', 'glades' ],
     // Lifts
-    "Red Lift" : ['top', 'bottom', 'lines' ],
-    "North Lift" : ['top', 'bottom', 'lines' ],
-    "Applebowl Lift" : ['top', 'bottom', 'lines' ],
-    "Adventure" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
-    "Discover" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 1', 'surface lift 2' ],
-    "Freedom" : ['top', 'middle', 'bottom', 'left', 'right', 'surface lift 3' ],
+    "Red Lift" : ['top', 'onboard', 'bottom', 'lines' ],
+    "North Lift" : ['top', 'onboard', 'bottom', 'lines' ],
+    "Applebowl Lift" : ['top', 'onboard', 'bottom', 'lines' ],
+    "Surface Lift 1" : ['top', 'onboard', 'bottom', 'lines' ],
+    "Surface Lift 2" : ['top', 'onboard', 'bottom', 'lines' ],
+    "Surface Lift 3" : ['top', 'onboard', 'bottom', 'lines' ],
     // Runs
+    "Adventure" : ['top', 'middle', 'bottom', 'left', 'right' ],
+    "Discover" : ['top', 'middle', 'bottom', 'left', 'right' ],
+    "Freedom" : ['top', 'middle', 'bottom', 'left', 'right' ],
     "The Park": ['top', 'bottom', 'middle', 'large jump', 'small jump', 'rail', 'box', 'other'],
     "Moonstone Way" : ['top', 'middle', 'bottom', 'left', 'right' ],
     "Roughshod" : ['top', 'middle', 'bottom', 'left', 'right', 'moguls' ],

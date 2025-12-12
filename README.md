@@ -11,5 +11,5 @@ Currently, two official plugins are available:
 ## Usage
 ```bash
 npm run dev
-npm run deploy
+npm run deploy  # https://bryonhummel.github.io/code3/
 ```
