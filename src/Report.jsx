@@ -124,6 +124,24 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       : 'bg-yellow-100 text-yellow-800'
   }
 
+  const calculateCompletion = (report) => {
+    const requiredFields = [
+      'dateOfIncident',
+      'timeOfIncident',
+      'location',
+      'description',
+      'reporterName',
+      'reporterContact'
+    ]
+
+    const completedFields = requiredFields.filter(field => {
+      const value = report[field]
+      return value && value.trim() !== ''
+    })
+
+    return Math.round((completedFields.length / requiredFields.length) * 100)
+  }
+
   return (
     <div className='bg-white rounded-2xl shadow-sm p-8'>
       <div className='flex justify-between items-center mb-6'>
@@ -154,35 +172,55 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
         </div>
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {reports.map(report => (
-            <div
-              key={report.id}
-              onClick={() => onOpenReport(report)}
-              className='border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer bg-gray-50 hover:bg-gray-100'
-            >
-              <div className='flex justify-between items-start mb-3'>
-                <div className='font-mono text-sm text-gray-600 font-semibold'>
-                  {report.id}
+          {reports.map(report => {
+            const completionPercentage = calculateCompletion(report)
+            return (
+              <div
+                key={report.id}
+                onClick={() => onOpenReport(report)}
+                className='border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 cursor-pointer bg-gray-50 hover:bg-gray-100'
+              >
+                <div className='flex justify-between items-start mb-3'>
+                  <div className='font-mono text-sm text-gray-600 font-semibold'>
+                    {report.id}
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(report.status)}`}>
+                    {report.status.toUpperCase()}
+                  </span>
                 </div>
-                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(report.status)}`}>
-                  {report.status.toUpperCase()}
-                </span>
+                <div className='text-sm text-gray-500 mb-3'>
+                  Created: {formatDate(report.dateCreated)}
+                </div>
+                
+                {/* Completion Progress */}
+                <div className='mb-3'>
+                  <div className='flex justify-between items-center mb-1'>
+                    <span className='text-xs font-semibold text-gray-600'>Completion</span>
+                    <span className='text-xs font-semibold text-gray-600'>{completionPercentage}%</span>
+                  </div>
+                  <div className='w-full bg-gray-200 rounded-full h-2 overflow-hidden'>
+                    <div
+                      className={`h-full transition-all duration-300 ${
+                        completionPercentage === 100 ? 'bg-green-500' : 'bg-blue-500'
+                      }`}
+                      style={{ width: `${completionPercentage}%` }}
+                    />
+                  </div>
+                </div>
+
+                {report.location && (
+                  <div className='text-sm text-gray-700 mb-1'>
+                    <span className='font-semibold'>Location:</span> {report.location}
+                  </div>
+                )}
+                {report.dateOfIncident && (
+                  <div className='text-sm text-gray-700'>
+                    <span className='font-semibold'>Incident:</span> {report.dateOfIncident}
+                  </div>
+                )}
               </div>
-              <div className='text-sm text-gray-500 mb-2'>
-                Created: {formatDate(report.dateCreated)}
-              </div>
-              {report.location && (
-                <div className='text-sm text-gray-700 mb-1'>
-                  <span className='font-semibold'>Location:</span> {report.location}
-                </div>
-              )}
-              {report.dateOfIncident && (
-                <div className='text-sm text-gray-700'>
-                  <span className='font-semibold'>Incident:</span> {report.dateOfIncident}
-                </div>
-              )}
-            </div>
-          ))}
+            )
+          })}
         </div>
       )}
     </div>
@@ -192,6 +230,34 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
 // Report Form View Component
 function ReportFormView({ report, onSave, onBack, onDelete }) {
   const [formData, setFormData] = useState(report)
+  const [touched, setTouched] = useState({})
+
+  // Auto-save whenever formData changes
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onSave(formData)
+    }, 500) // Debounce auto-save by 500ms
+
+    return () => clearTimeout(timeoutId)
+  }, [formData, onSave])
+
+  // Calculate completion status
+  const requiredFields = [
+    'dateOfIncident',
+    'timeOfIncident',
+    'location',
+    'description',
+    'reporterName',
+    'reporterContact'
+  ]
+
+  const completedFields = requiredFields.filter(field => {
+    const value = formData[field]
+    return value && value.trim() !== ''
+  })
+
+  const completionPercentage = Math.round((completedFields.length / requiredFields.length) * 100)
+  const pendingCount = requiredFields.length - completedFields.length
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -201,20 +267,69 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     }))
   }
 
+  const handleBlur = (fieldName) => {
+    setTouched(prev => ({
+      ...prev,
+      [fieldName]: true
+    }))
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSave(formData)
-    alert('Report saved successfully!')
+    // Mark all fields as touched for validation display
+    const allTouched = {}
+    requiredFields.forEach(field => {
+      allTouched[field] = true
+    })
+    setTouched(allTouched)
   }
 
   const handleStatusChange = (newStatus) => {
     const updatedData = { ...formData, status: newStatus }
     setFormData(updatedData)
-    onSave(updatedData)
+  }
+
+  const isFieldValid = (fieldName) => {
+    const value = formData[fieldName]
+    return value && value.trim() !== ''
+  }
+
+  const showError = (fieldName) => {
+    return touched[fieldName] && !isFieldValid(fieldName)
   }
 
   return (
     <div className='bg-white rounded-2xl shadow-sm p-8'>
+      {/* Completion Status Bar */}
+      <div className='mb-6'>
+        <div className='flex justify-between items-center mb-2'>
+          <span className='text-sm font-semibold text-gray-700'>
+            Form Completion
+          </span>
+          <span className='text-sm font-semibold text-gray-700'>
+            {completionPercentage}%
+          </span>
+        </div>
+        <div className='w-full bg-gray-200 rounded-full h-3 overflow-hidden'>
+          <div
+            className={`h-full transition-all duration-300 ${
+              completionPercentage === 100 ? 'bg-green-500' : 'bg-blue-500'
+            }`}
+            style={{ width: `${completionPercentage}%` }}
+          />
+        </div>
+        {pendingCount > 0 && (
+          <p className='text-sm text-gray-600 mt-2'>
+            {pendingCount} required field{pendingCount !== 1 ? 's' : ''} remaining
+          </p>
+        )}
+        {completionPercentage === 100 && (
+          <p className='text-sm text-green-600 mt-2 font-semibold'>
+            ✓ All required fields completed
+          </p>
+        )}
+      </div>
+
       <div className='flex justify-between items-center mb-6'>
         <div className='flex items-center gap-4'>
           <button
@@ -284,9 +399,15 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
               name='dateOfIncident'
               value={formData.dateOfIncident}
               onChange={handleChange}
+              onBlur={() => handleBlur('dateOfIncident')}
               required
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                showError('dateOfIncident') ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {showError('dateOfIncident') && (
+              <p className='text-red-500 text-sm mt-1'>This field is required</p>
+            )}
           </div>
           <div>
             <label htmlFor='timeOfIncident' className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -298,9 +419,15 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
               name='timeOfIncident'
               value={formData.timeOfIncident}
               onChange={handleChange}
+              onBlur={() => handleBlur('timeOfIncident')}
               required
-              className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                showError('timeOfIncident') ? 'border-red-500' : 'border-gray-300'
+              }`}
             />
+            {showError('timeOfIncident') && (
+              <p className='text-red-500 text-sm mt-1'>This field is required</p>
+            )}
           </div>
         </div>
 
@@ -315,10 +442,16 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             name='location'
             value={formData.location}
             onChange={handleChange}
+            onBlur={() => handleBlur('location')}
             required
             placeholder='e.g., 123 Main St, City, State'
-            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+              showError('location') ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {showError('location') && (
+            <p className='text-red-500 text-sm mt-1'>This field is required</p>
+          )}
         </div>
 
         {/* Description */}
@@ -331,11 +464,17 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             name='description'
             value={formData.description}
             onChange={handleChange}
+            onBlur={() => handleBlur('description')}
             required
             rows={6}
             placeholder='Provide a detailed description of what happened...'
-            className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none'
+            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+              showError('description') ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {showError('description') && (
+            <p className='text-red-500 text-sm mt-1'>This field is required</p>
+          )}
         </div>
 
         {/* Reporter Information */}
@@ -352,10 +491,16 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 name='reporterName'
                 value={formData.reporterName}
                 onChange={handleChange}
+                onBlur={() => handleBlur('reporterName')}
                 required
                 placeholder='Full name'
-                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  showError('reporterName') ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
+              {showError('reporterName') && (
+                <p className='text-red-500 text-sm mt-1'>This field is required</p>
+              )}
             </div>
             <div>
               <label htmlFor='reporterContact' className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -367,22 +512,30 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 name='reporterContact'
                 value={formData.reporterContact}
                 onChange={handleChange}
+                onBlur={() => handleBlur('reporterContact')}
                 required
                 placeholder='Phone or email'
-                className='w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent'
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  showError('reporterContact') ? 'border-red-500' : 'border-gray-300'
+                }`}
               />
+              {showError('reporterContact') && (
+                <p className='text-red-500 text-sm mt-1'>This field is required</p>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className='flex justify-end pt-4'>
-          <button
-            type='submit'
-            className='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors duration-200 shadow-sm'
-          >
-            Save Report
-          </button>
+        {/* Auto-save indicator */}
+        <div className='flex justify-between items-center pt-4 border-t border-gray-200'>
+          <div className='text-sm text-gray-500 italic'>
+            Changes are automatically saved
+          </div>
+          {completionPercentage === 100 && (
+            <div className='text-sm text-green-600 font-semibold'>
+              ✓ Form complete
+            </div>
+          )}
         </div>
       </form>
     </div>
