@@ -45,9 +45,18 @@ function Report() {
     }
   }, [reports])
 
-  // Generate unique ID
+  // Generate unique ID in format YYYYMMDD-<9 random alphanumeric characters>
   const generateId = () => {
-    return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    const now = new Date()
+    const year = now.getFullYear()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const day = String(now.getDate()).padStart(2, '0')
+    const datePrefix = `${year}${month}${day}`
+    
+    // Generate 9 random alphanumeric characters
+    const randomChars = Math.random().toString(36).substr(2, 7)
+    
+    return `RPT-${datePrefix}-${randomChars}`
   }
 
   // Create new report
