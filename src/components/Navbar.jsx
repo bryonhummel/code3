@@ -27,7 +27,7 @@ function Navbar() {
               }`
             }
           >
-            Report
+            NSAA Reports
           </NavLink>
         </div>
       </div>
