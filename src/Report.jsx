@@ -143,7 +143,7 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
   }
 
   return (
-    <div className='bg-white rounded-2xl shadow-sm p-8'>
+    <div className='bg-white rounded-2xl shadow-sm p-6'>
       <div className='flex justify-between items-center mb-6'>
         <h1 className='text-4xl font-extrabold text-gray-900'>Accident Reports</h1>
         <button
@@ -377,15 +377,15 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         </div>
       </div>
 
-      <h1 className='text-4xl font-extrabold text-gray-900 mb-6 no-print'>Accident Report Form</h1>
+      <h1 className='text-4xl font-extrabold text-gray-900 mb-4 no-print'>Accident Report Form</h1>
 
-      <form onSubmit={handleSubmit} className='space-y-6'>
+      <form onSubmit={handleSubmit} className='space-y-3'>
         {/* Status */}
-        <div>
-          <label className='block text-sm font-semibold text-gray-700 mb-2'>
+        <div className='flex items-center gap-4'>
+          <label className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 text-right'>
             Report Status
           </label>
-          <div className='flex gap-3 no-print'>
+          <div className='flex gap-3 no-print flex-1'>
             <button
               type='button'
               onClick={() => handleStatusChange('draft')}
@@ -414,141 +414,143 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
           </div>
         </div>
 
-        {/* Date and Time of Incident */}
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div>
-            <label htmlFor='dateOfIncident' className='block text-sm font-semibold text-gray-700 mb-2'>
-              Date of Incident *
-            </label>
-            <input
-              type='date'
-              id='dateOfIncident'
-              name='dateOfIncident'
-              value={formData.dateOfIncident}
-              onChange={handleChange}
-              onBlur={() => handleBlur('dateOfIncident')}
-              required
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                showError('dateOfIncident') ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {showError('dateOfIncident') && (
-              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-            )}
-          </div>
-          <div>
-            <label htmlFor='timeOfIncident' className='block text-sm font-semibold text-gray-700 mb-2'>
-              Time of Incident *
-            </label>
-            <input
-              type='time'
-              id='timeOfIncident'
-              name='timeOfIncident'
-              value={formData.timeOfIncident}
-              onChange={handleChange}
-              onBlur={() => handleBlur('timeOfIncident')}
-              required
-              className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                showError('timeOfIncident') ? 'border-red-500' : 'border-gray-300'
-              }`}
-            />
-            {showError('timeOfIncident') && (
-              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-            )}
+        {/* Date and Time of Incident - Combined Row */}
+        <div className='flex items-start gap-4'>
+          <label htmlFor='dateOfIncident' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
+            Date & Time *
+          </label>
+          <div className='flex-1 flex gap-4'>
+            <div className='flex-1'>
+              <input
+                type='date'
+                id='dateOfIncident'
+                name='dateOfIncident'
+                value={formData.dateOfIncident}
+                onChange={handleChange}
+                onBlur={() => handleBlur('dateOfIncident')}
+                required
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  showError('dateOfIncident') ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {showError('dateOfIncident') && (
+                <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
+              )}
+            </div>
+            <div className='flex-1'>
+              <input
+                type='time'
+                id='timeOfIncident'
+                name='timeOfIncident'
+                value={formData.timeOfIncident}
+                onChange={handleChange}
+                onBlur={() => handleBlur('timeOfIncident')}
+                required
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  showError('timeOfIncident') ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {showError('timeOfIncident') && (
+                <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Location */}
-        <div>
-          <label htmlFor='location' className='block text-sm font-semibold text-gray-700 mb-2'>
+        <div className='flex items-start gap-4'>
+          <label htmlFor='location' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
             Location *
           </label>
-          <input
-            type='text'
-            id='location'
-            name='location'
-            value={formData.location}
-            onChange={handleChange}
-            onBlur={() => handleBlur('location')}
-            required
-            placeholder='e.g., 123 Main St, City, State'
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-              showError('location') ? 'border-red-500' : 'border-gray-300'
-            }`}
-          />
-          {showError('location') && (
-            <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-          )}
+          <div className='flex-1'>
+            <input
+              type='text'
+              id='location'
+              name='location'
+              value={formData.location}
+              onChange={handleChange}
+              onBlur={() => handleBlur('location')}
+              required
+              placeholder='e.g., 123 Main St, City, State'
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                showError('location') ? 'border-red-500' : 'border-gray-300'
+              }`}
+            />
+            {showError('location') && (
+              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
+            )}
+          </div>
         </div>
 
         {/* Description */}
-        <div>
-          <label htmlFor='description' className='block text-sm font-semibold text-gray-700 mb-2'>
-            Description of Incident *
+        <div className='flex items-start gap-4'>
+          <label htmlFor='description' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
+            Description *
           </label>
-          <textarea
-            id='description'
-            name='description'
-            value={formData.description}
-            onChange={handleChange}
-            onBlur={() => handleBlur('description')}
-            required
-            rows={6}
-            placeholder='Provide a detailed description of what happened...'
-            className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
-              showError('description') ? 'border-red-500' : 'border-gray-300'
-            }`}
-          />
-          {showError('description') && (
-            <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-          )}
+          <div className='flex-1'>
+            <textarea
+              id='description'
+              name='description'
+              value={formData.description}
+              onChange={handleChange}
+              onBlur={() => handleBlur('description')}
+              required
+              rows={4}
+              placeholder='Provide a detailed description of what happened...'
+              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+                showError('description') ? 'border-red-500' : 'border-gray-300'
+              }`}
+            />
+            {showError('description') && (
+              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
+            )}
+          </div>
         </div>
 
         {/* Reporter Information */}
-        <div className='border-t border-gray-200 pt-6'>
-          <h2 className='text-xl font-bold text-gray-800 mb-4'>Reporter Information</h2>
-          <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-            <div>
-              <label htmlFor='reporterName' className='block text-sm font-semibold text-gray-700 mb-2'>
-                Reporter Name *
-              </label>
-              <input
-                type='text'
-                id='reporterName'
-                name='reporterName'
-                value={formData.reporterName}
-                onChange={handleChange}
-                onBlur={() => handleBlur('reporterName')}
-                required
-                placeholder='Full name'
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  showError('reporterName') ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {showError('reporterName') && (
-                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-              )}
-            </div>
-            <div>
-              <label htmlFor='reporterContact' className='block text-sm font-semibold text-gray-700 mb-2'>
-                Contact Information *
-              </label>
-              <input
-                type='text'
-                id='reporterContact'
-                name='reporterContact'
-                value={formData.reporterContact}
-                onChange={handleChange}
-                onBlur={() => handleBlur('reporterContact')}
-                required
-                placeholder='Phone or email'
-                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  showError('reporterContact') ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {showError('reporterContact') && (
-                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-              )}
+        <div className='border-t border-gray-200 pt-4'>
+          <h2 className='text-xl font-bold text-gray-800 mb-3'>Reporter Information</h2>
+          <div className='flex items-start gap-4'>
+            <label htmlFor='reporterName' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
+              Reporter *
+            </label>
+            <div className='flex-1 flex gap-4'>
+              <div className='flex-1'>
+                <input
+                  type='text'
+                  id='reporterName'
+                  name='reporterName'
+                  value={formData.reporterName}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('reporterName')}
+                  required
+                  placeholder='Full name'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    showError('reporterName') ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {showError('reporterName') && (
+                  <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
+                )}
+              </div>
+              <div className='flex-1'>
+                <input
+                  type='text'
+                  id='reporterContact'
+                  name='reporterContact'
+                  value={formData.reporterContact}
+                  onChange={handleChange}
+                  onBlur={() => handleBlur('reporterContact')}
+                  required
+                  placeholder='Phone or email'
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    showError('reporterContact') ? 'border-red-500' : 'border-gray-300'
+                  }`}
+                />
+                {showError('reporterContact') && (
+                  <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
