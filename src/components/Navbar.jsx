@@ -2,7 +2,7 @@ import { NavLink } from 'react-router-dom'
 
 function Navbar() {
   return (
-    <nav className='bg-gray-100 border-b border-gray-300 sticky top-0 z-40'>
+    <nav className='bg-gray-100 border-b border-gray-300 sticky top-0 z-40 no-print'>
       <div className='max-w-7xl mx-auto px-4'>
         <div className='flex space-x-8 py-4'>
           <NavLink

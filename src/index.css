@@ -5,3 +5,72 @@
 body {
   @apply bg-gray-100 font-mono
 }
+
+/* Print Styles */
+@media print {
+  /* Hide elements that shouldn't be printed */
+  .no-print,
+  nav,
+  header {
+    display: none !important;
+  }
+
+  /* Show elements only when printing */
+  .print-only {
+    display: block !important;
+  }
+
+  /* Reset body background for printing */
+  body {
+    background: white !important;
+  }
+
+  /* Ensure form fields display their values clearly */
+  input[type="date"],
+  input[type="time"],
+  input[type="text"],
+  textarea {
+    border: 1px solid #d1d5db !important;
+    background: white !important;
+    color: black !important;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  /* Remove focus styles for print */
+  input:focus,
+  textarea:focus {
+    outline: none !important;
+    ring: none !important;
+    border-color: #d1d5db !important;
+  }
+
+  /* Ensure proper spacing and layout */
+  .bg-white {
+    box-shadow: none !important;
+  }
+
+  /* Make sure text is black for printing */
+  * {
+    color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove rounded corners for cleaner print */
+  input,
+  textarea {
+    border-radius: 4px !important;
+  }
+
+  /* Ensure page breaks are handled properly */
+  .space-y-6 > * {
+    page-break-inside: avoid;
+  }
+}
+
+/* Hide print-only elements by default */
+.print-only {
+  display: none;
+}

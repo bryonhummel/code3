@@ -298,10 +298,14 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     return touched[fieldName] && !isFieldValid(fieldName)
   }
 
+  const handlePrint = () => {
+    window.print()
+  }
+
   return (
     <div className='bg-white rounded-2xl shadow-sm p-8'>
       {/* Completion Status Bar */}
-      <div className='mb-6'>
+      <div className='mb-6 no-print'>
         <div className='flex justify-between items-center mb-2'>
           <span className='text-sm font-semibold text-gray-700'>
             Form Completion
@@ -330,7 +334,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         )}
       </div>
 
-      <div className='flex justify-between items-center mb-6'>
+      <div className='flex justify-between items-center mb-6 no-print'>
         <div className='flex items-center gap-4'>
           <button
             onClick={onBack}
@@ -345,15 +349,35 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             <span className='font-mono text-sm text-gray-600 font-semibold'>{formData.id}</span>
           </div>
         </div>
-        <button
-          onClick={() => onDelete(formData.id)}
-          className='text-red-600 hover:text-red-700 font-semibold'
-        >
-          Delete Report
-        </button>
+        <div className='flex items-center gap-3'>
+          <button
+            onClick={handlePrint}
+            className='bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2'
+          >
+            <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z' />
+            </svg>
+            Print Report
+          </button>
+          <button
+            onClick={() => onDelete(formData.id)}
+            className='text-red-600 hover:text-red-700 font-semibold'
+          >
+            Delete Report
+          </button>
+        </div>
       </div>
 
-      <h1 className='text-4xl font-extrabold text-gray-900 mb-6'>Accident Report Form</h1>
+      {/* Print-only header */}
+      <div className='print-only mb-6'>
+        <div className='text-center mb-4'>
+          <h1 className='text-3xl font-bold text-gray-900 mb-2'>Accident Report</h1>
+          <p className='text-sm text-gray-600'>Report ID: {formData.id}</p>
+          <p className='text-sm text-gray-600'>Status: {formData.status.toUpperCase()}</p>
+        </div>
+      </div>
+
+      <h1 className='text-4xl font-extrabold text-gray-900 mb-6 no-print'>Accident Report Form</h1>
 
       <form onSubmit={handleSubmit} className='space-y-6'>
         {/* Status */}
@@ -361,7 +385,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
           <label className='block text-sm font-semibold text-gray-700 mb-2'>
             Report Status
           </label>
-          <div className='flex gap-3'>
+          <div className='flex gap-3 no-print'>
             <button
               type='button'
               onClick={() => handleStatusChange('draft')}
@@ -385,6 +409,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
               Submitted
             </button>
           </div>
+          <div className='print-only'>
+            <p className='text-gray-900 font-semibold'>{formData.status.toUpperCase()}</p>
+          </div>
         </div>
 
         {/* Date and Time of Incident */}
@@ -406,7 +433,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
               }`}
             />
             {showError('dateOfIncident') && (
-              <p className='text-red-500 text-sm mt-1'>This field is required</p>
+              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
             )}
           </div>
           <div>
@@ -426,7 +453,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
               }`}
             />
             {showError('timeOfIncident') && (
-              <p className='text-red-500 text-sm mt-1'>This field is required</p>
+              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
             )}
           </div>
         </div>
@@ -450,7 +477,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             }`}
           />
           {showError('location') && (
-            <p className='text-red-500 text-sm mt-1'>This field is required</p>
+            <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
           )}
         </div>
 
@@ -473,7 +500,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             }`}
           />
           {showError('description') && (
-            <p className='text-red-500 text-sm mt-1'>This field is required</p>
+            <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
           )}
         </div>
 
@@ -499,7 +526,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 }`}
               />
               {showError('reporterName') && (
-                <p className='text-red-500 text-sm mt-1'>This field is required</p>
+                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
               )}
             </div>
             <div>
@@ -520,14 +547,14 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 }`}
               />
               {showError('reporterContact') && (
-                <p className='text-red-500 text-sm mt-1'>This field is required</p>
+                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
               )}
             </div>
           </div>
         </div>
 
         {/* Auto-save indicator */}
-        <div className='flex justify-between items-center pt-4 border-t border-gray-200'>
+        <div className='flex justify-between items-center pt-4 border-t border-gray-200 no-print'>
           <div className='text-sm text-gray-500 italic'>
             Changes are automatically saved
           </div>
