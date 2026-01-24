@@ -10,11 +10,13 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter basename="/code3">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Navigate to="/radiocall" replace />} />
-        <Route path="/radiocall" element={<App />} />
-        <Route path="/report" element={<Report />} />
-      </Routes>
+      <div className="nav-content mx-auto">
+        <Routes>
+          <Route path="/" element={<Navigate to="/radiocall" replace />} />
+          <Route path="/radiocall" element={<App />} />
+          <Route path="/report" element={<Report />} />
+        </Routes>
+      </div>
     </BrowserRouter>
   </React.StrictMode>,
 )
