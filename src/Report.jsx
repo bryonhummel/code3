@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react'
+import ReportHeader from './components/report/ReportHeader'
+import FormStatusPanel from './components/report/FormStatusPanel'
+import FormSection from './components/report/FormSection'
+import FormFieldRow from './components/report/FormFieldRow'
+import TextInput from './components/report/fields/TextInput'
+import DateTimeInput from './components/report/fields/DateTimeInput'
+import TextArea from './components/report/fields/TextArea'
+import SelectInput from './components/report/fields/SelectInput'
 
-// Single source of truth for required fields
+// Single source of truth for required fields - updated for ski patrol
 const REQUIRED_FIELDS = [
   'dateOfIncident',
   'timeOfIncident',
   'location',
-  'description',
-  'reporterName',
-  'reporterContact',
+  'patientName',
+  'patientAge',
+  'injuryDescription',
+  'patrollerName',
   'signature'
 ]
 
@@ -243,7 +252,24 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
 
 // Report Form View Component
 function ReportFormView({ report, onSave, onBack, onDelete }) {
-  const [formData, setFormData] = useState(report)
+  const [formData, setFormData] = useState(() => ({
+    ...report,
+    // Initialize new ski patrol fields if they don't exist
+    patientName: report.patientName || '',
+    patientAge: report.patientAge || '',
+    patientContact: report.patientContact || '',
+    emergencyContact: report.emergencyContact || '',
+    injuryType: report.injuryType || '',
+    injuryDescription: report.injuryDescription || '',
+    bodyPart: report.bodyPart || '',
+    injurySeverity: report.injurySeverity || '',
+    treatmentProvided: report.treatmentProvided || '',
+    weatherConditions: report.weatherConditions || '',
+    snowConditions: report.snowConditions || '',
+    visibility: report.visibility || '',
+    trailDifficulty: report.trailDifficulty || '',
+    patrollerName: report.patrollerName || ''
+  }))
   const [touched, setTouched] = useState({})
 
   // Auto-save whenever formData changes
@@ -320,294 +346,313 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
   }
 
   return (
-    <div className='bg-white rounded-2xl shadow-sm p-8'>
-      {/* Completion Status Bar */}
-      <div className='mb-6 no-print'>
-        <div className='flex justify-between items-center mb-2'>
-          <span className='text-sm font-semibold text-gray-700'>
-            Form Completion
-          </span>
-          <span className='text-sm font-semibold text-gray-700'>
-            {completionPercentage}%
-          </span>
-        </div>
-        <div className='w-full bg-gray-200 rounded-full h-3 overflow-hidden'>
-          <div
-            className={`h-full transition-all duration-300 ${
-              completionPercentage === 100 ? 'bg-green-500' : 'bg-blue-500'
-            }`}
-            style={{ width: `${completionPercentage}%` }}
-          />
-        </div>
-        {pendingCount > 0 && (
-          <p className='text-sm text-gray-600 mt-2'>
-            {pendingCount} required field{pendingCount !== 1 ? 's' : ''} remaining
-          </p>
-        )}
-        {completionPercentage === 100 && (
-          <p className='text-sm text-green-600 mt-2 font-semibold'>
-            ✓ All required fields completed
-          </p>
-        )}
-      </div>
+    <div>
+                <h1 className='text-3xl font-bold text-gray-900 mb-2'>Ski Patrol Incident Report</h1>
 
-      <div className='flex justify-between items-center mb-6 no-print'>
-        <div className='flex items-center gap-4'>
-          <button
-            onClick={onBack}
-            className='text-gray-600 hover:text-gray-900 font-semibold flex items-center gap-2'
-          >
-            <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
-            </svg>
-            Back to List
-          </button>
-          <div className='border-l border-gray-300 pl-4'>
-            <span className='font-mono text-sm text-gray-600 font-semibold'>{formData.id}</span>
-          </div>
-        </div>
-        <div className='flex items-center gap-3'>
-          <button
-            onClick={handlePrint}
-            className='bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 flex items-center gap-2'
-          >
-            <svg className='w-5 h-5' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z' />
-            </svg>
-            Print Report
-          </button>
-          <button
-            onClick={() => onDelete(formData.id)}
-            className='text-red-600 hover:text-red-700 font-semibold'
-          >
-            Delete Report
-          </button>
-        </div>
-      </div>
+    <div className='bg-white rounded-2xl shadow-sm p-8'>
+      {/* Report Header */}
+      <ReportHeader reportId={formData.id} onBack={onBack} />
 
       {/* Print-only header */}
       <div className='print-only mb-6'>
         <div className='text-center mb-4'>
-          <h1 className='text-3xl font-bold text-gray-900 mb-2'>Accident Report</h1>
           <p className='text-sm text-gray-600'>Report ID: {formData.id}</p>
           <p className='text-sm text-gray-600'>Status: {formData.status.toUpperCase()}</p>
         </div>
       </div>
 
-      <h1 className='text-4xl font-extrabold text-gray-900 mb-4 no-print'>Accident Report Form</h1>
+      {/* Form Status Panel */}
+      <FormStatusPanel
+        status={formData.status}
+        onStatusChange={handleStatusChange}
+        completionPercentage={completionPercentage}
+        pendingCount={pendingCount}
+        onPrint={handlePrint}
+        onDelete={() => onDelete(formData.id)}
+        formData={formData}
+      />
 
-      <form onSubmit={handleSubmit} className='space-y-3'>
-        {/* Status */}
-        <div className='flex items-center gap-4'>
-          <label className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 text-right'>
-            Report Status
-          </label>
-          <div className='flex gap-3 no-print flex-1'>
-            <button
-              type='button'
-              onClick={() => handleStatusChange('draft')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                formData.status === 'draft'
-                  ? 'bg-yellow-100 text-yellow-800 border-2 border-yellow-400'
-                  : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
-              }`}
-            >
-              Draft
-            </button>
-            <button
-              type='button'
-              onClick={() => handleStatusChange('submitted')}
-              className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
-                formData.status === 'submitted'
-                  ? 'bg-green-100 text-green-800 border-2 border-green-400'
-                  : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
-              }`}
-            >
-              Submitted
-            </button>
-          </div>
-          <div className='print-only'>
-            <p className='text-gray-900 font-semibold'>{formData.status.toUpperCase()}</p>
-          </div>
-        </div>
+      <form onSubmit={handleSubmit}>
+        {/* Incident Details Section */}
+        <FormSection title='Incident Details'>
+          <FormFieldRow label='Date & Time' required>
+            <DateTimeInput
+              dateId='dateOfIncident'
+              dateName='dateOfIncident'
+              dateValue={formData.dateOfIncident}
+              timeId='timeOfIncident'
+              timeName='timeOfIncident'
+              timeValue={formData.timeOfIncident}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              showDateError={showError('dateOfIncident')}
+              showTimeError={showError('timeOfIncident')}
+            />
+          </FormFieldRow>
 
-        {/* Date and Time of Incident - Combined Row */}
-        <div className='flex items-start gap-4'>
-          <label htmlFor='dateOfIncident' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
-            Date & Time *
-          </label>
-          <div className='flex-1 flex gap-4'>
-            <div className='flex-1'>
-              <input
-                type='date'
-                id='dateOfIncident'
-                name='dateOfIncident'
-                value={formData.dateOfIncident}
-                onChange={handleChange}
-                onBlur={() => handleBlur('dateOfIncident')}
-                required
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  showError('dateOfIncident') ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {showError('dateOfIncident') && (
-                <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
-              )}
-            </div>
-            <div className='flex-1'>
-              <input
-                type='time'
-                id='timeOfIncident'
-                name='timeOfIncident'
-                value={formData.timeOfIncident}
-                onChange={handleChange}
-                onBlur={() => handleBlur('timeOfIncident')}
-                required
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  showError('timeOfIncident') ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {showError('timeOfIncident') && (
-                <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Location */}
-        <div className='flex items-start gap-4'>
-          <label htmlFor='location' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
-            Location *
-          </label>
-          <div className='flex-1'>
-            <input
-              type='text'
+          <FormFieldRow label='Location' required>
+            <TextInput
               id='location'
               name='location'
               value={formData.location}
               onChange={handleChange}
               onBlur={() => handleBlur('location')}
               required
-              placeholder='e.g., 123 Main St, City, State'
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                showError('location') ? 'border-red-500' : 'border-gray-300'
-              }`}
+              placeholder='e.g., Main Street Run, Lift 3'
+              showError={showError('location')}
             />
-            {showError('location') && (
-              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-            )}
-          </div>
-        </div>
+          </FormFieldRow>
+        </FormSection>
 
-        {/* Description */}
-        <div className='flex items-start gap-4'>
-          <label htmlFor='description' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
-            Description *
-          </label>
-          <div className='flex-1'>
-            <textarea
-              id='description'
-              name='description'
-              value={formData.description}
+        {/* Patient Information Section */}
+        <FormSection title='Patient Information'>
+          <FormFieldRow label='Patient Name' required>
+            <TextInput
+              id='patientName'
+              name='patientName'
+              value={formData.patientName}
               onChange={handleChange}
-              onBlur={() => handleBlur('description')}
+              onBlur={() => handleBlur('patientName')}
               required
-              rows={4}
-              placeholder='Provide a detailed description of what happened...'
-              className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
-                showError('description') ? 'border-red-500' : 'border-gray-300'
-              }`}
+              placeholder='Full name'
+              showError={showError('patientName')}
             />
-            {showError('description') && (
-              <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-            )}
-          </div>
-        </div>
+          </FormFieldRow>
 
-        {/* Reporter Information */}
-        <div className='border-t border-gray-200 pt-4'>
-          <h2 className='text-xl font-bold text-gray-800 mb-3'>Reporter Information</h2>
-          <div className='flex items-start gap-4'>
-            <label htmlFor='reporterName' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
-              Reporter *
-            </label>
-            <div className='flex-1 flex gap-4'>
-              <div className='flex-1'>
-                <input
-                  type='text'
-                  id='reporterName'
-                  name='reporterName'
-                  value={formData.reporterName}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur('reporterName')}
-                  required
-                  placeholder='Full name'
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    showError('reporterName') ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                />
-                {showError('reporterName') && (
-                  <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
-                )}
-              </div>
-              <div className='flex-1'>
-                <input
-                  type='text'
-                  id='reporterContact'
-                  name='reporterContact'
-                  value={formData.reporterContact}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur('reporterContact')}
-                  required
-                  placeholder='Phone or email'
-                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                    showError('reporterContact') ? 'border-red-500' : 'border-gray-300'
-                  }`}
-                />
-                {showError('reporterContact') && (
-                  <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+          <FormFieldRow label='Age' required>
+            <TextInput
+              id='patientAge'
+              name='patientAge'
+              value={formData.patientAge}
+              onChange={handleChange}
+              onBlur={() => handleBlur('patientAge')}
+              required
+              placeholder='Age'
+              showError={showError('patientAge')}
+            />
+          </FormFieldRow>
 
-        {/* Signature */}
-        <div className='border-t border-gray-200 pt-4'>
-          <h2 className='text-xl font-bold text-gray-800 mb-3'>Signature</h2>
-          <div className='flex items-start gap-4'>
-            <label htmlFor='signature' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
-              Signature *
-            </label>
-            <div className='flex-1'>
-              <input
-                type='text'
-                id='signature'
-                name='signature'
-                value={formData.signature}
-                onChange={handleChange}
-                onBlur={() => handleBlur('signature')}
-                required
-                placeholder='Type your full name to sign'
-                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-serif italic text-lg ${
-                  showError('signature') ? 'border-red-500' : 'border-gray-300'
-                }`}
-              />
-              {showError('signature') && (
-                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
-              )}
-              {formData.signature && formData.signatureDate && (
-                <p className='text-sm text-gray-600 mt-2'>
+          <FormFieldRow label='Contact Info'>
+            <TextInput
+              id='patientContact'
+              name='patientContact'
+              value={formData.patientContact}
+              onChange={handleChange}
+              onBlur={() => handleBlur('patientContact')}
+              placeholder='Phone number'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Emergency Contact'>
+            <TextInput
+              id='emergencyContact'
+              name='emergencyContact'
+              value={formData.emergencyContact}
+              onChange={handleChange}
+              onBlur={() => handleBlur('emergencyContact')}
+              placeholder='Name and phone number'
+              showError={false}
+            />
+          </FormFieldRow>
+        </FormSection>
+
+        {/* Patient Injuries Section */}
+        <FormSection title='Patient Injuries'>
+          <FormFieldRow label='Injury Type'>
+            <SelectInput
+              id='injuryType'
+              name='injuryType'
+              value={formData.injuryType}
+              onChange={handleChange}
+              onBlur={() => handleBlur('injuryType')}
+              options={[
+                { value: 'fracture', label: 'Fracture' },
+                { value: 'sprain', label: 'Sprain/Strain' },
+                { value: 'laceration', label: 'Laceration' },
+                { value: 'head', label: 'Head Injury' },
+                { value: 'other', label: 'Other' }
+              ]}
+              placeholder='Select injury type'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Description' required>
+            <TextArea
+              id='injuryDescription'
+              name='injuryDescription'
+              value={formData.injuryDescription}
+              onChange={handleChange}
+              onBlur={() => handleBlur('injuryDescription')}
+              required
+              placeholder='Detailed description of the injury and how it occurred...'
+              rows={4}
+              showError={showError('injuryDescription')}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Body Part Affected'>
+            <TextInput
+              id='bodyPart'
+              name='bodyPart'
+              value={formData.bodyPart}
+              onChange={handleChange}
+              onBlur={() => handleBlur('bodyPart')}
+              placeholder='e.g., Left knee, Right wrist'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Severity'>
+            <SelectInput
+              id='injurySeverity'
+              name='injurySeverity'
+              value={formData.injurySeverity}
+              onChange={handleChange}
+              onBlur={() => handleBlur('injurySeverity')}
+              options={[
+                { value: 'minor', label: 'Minor' },
+                { value: 'moderate', label: 'Moderate' },
+                { value: 'severe', label: 'Severe' }
+              ]}
+              placeholder='Select severity'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Treatment Provided'>
+            <TextArea
+              id='treatmentProvided'
+              name='treatmentProvided'
+              value={formData.treatmentProvided}
+              onChange={handleChange}
+              onBlur={() => handleBlur('treatmentProvided')}
+              placeholder='First aid and treatment provided...'
+              rows={3}
+              showError={false}
+            />
+          </FormFieldRow>
+        </FormSection>
+
+        {/* Ski Conditions Section */}
+        <FormSection title='Ski Conditions'>
+          <FormFieldRow label='Weather'>
+            <SelectInput
+              id='weatherConditions'
+              name='weatherConditions'
+              value={formData.weatherConditions}
+              onChange={handleChange}
+              onBlur={() => handleBlur('weatherConditions')}
+              options={[
+                { value: 'clear', label: 'Clear' },
+                { value: 'cloudy', label: 'Cloudy' },
+                { value: 'snowing', label: 'Snowing' },
+                { value: 'fog', label: 'Fog' }
+              ]}
+              placeholder='Select weather'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Snow Conditions'>
+            <SelectInput
+              id='snowConditions'
+              name='snowConditions'
+              value={formData.snowConditions}
+              onChange={handleChange}
+              onBlur={() => handleBlur('snowConditions')}
+              options={[
+                { value: 'powder', label: 'Powder' },
+                { value: 'packed', label: 'Packed' },
+                { value: 'icy', label: 'Icy' },
+                { value: 'slushy', label: 'Slushy' }
+              ]}
+              placeholder='Select snow conditions'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Visibility'>
+            <SelectInput
+              id='visibility'
+              name='visibility'
+              value={formData.visibility}
+              onChange={handleChange}
+              onBlur={() => handleBlur('visibility')}
+              options={[
+                { value: 'excellent', label: 'Excellent' },
+                { value: 'good', label: 'Good' },
+                { value: 'fair', label: 'Fair' },
+                { value: 'poor', label: 'Poor' }
+              ]}
+              placeholder='Select visibility'
+              showError={false}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Trail Difficulty'>
+            <SelectInput
+              id='trailDifficulty'
+              name='trailDifficulty'
+              value={formData.trailDifficulty}
+              onChange={handleChange}
+              onBlur={() => handleBlur('trailDifficulty')}
+              options={[
+                { value: 'green', label: 'Green Circle (Beginner)' },
+                { value: 'blue', label: 'Blue Square (Intermediate)' },
+                { value: 'black', label: 'Black Diamond (Advanced)' },
+                { value: 'double-black', label: 'Double Black Diamond (Expert)' }
+              ]}
+              placeholder='Select trail difficulty'
+              showError={false}
+            />
+          </FormFieldRow>
+        </FormSection>
+
+        {/* Patroller Information Section */}
+        <FormSection title='Patroller Information'>
+          <FormFieldRow label='Patroller Name' required>
+            <TextInput
+              id='patrollerName'
+              name='patrollerName'
+              value={formData.patrollerName}
+              onChange={handleChange}
+              onBlur={() => handleBlur('patrollerName')}
+              required
+              placeholder='Full name'
+              showError={showError('patrollerName')}
+            />
+          </FormFieldRow>
+
+          <FormFieldRow label='Signature' required>
+            <TextInput
+              id='signature'
+              name='signature'
+              value={formData.signature}
+              onChange={handleChange}
+              onBlur={() => handleBlur('signature')}
+              required
+              placeholder='Type your full name to sign'
+              showError={showError('signature')}
+              className='font-serif italic text-lg'
+            />
+          </FormFieldRow>
+
+          {formData.signature && formData.signatureDate && (
+            <FormFieldRow label=''>
+              <div className='flex-1'>
+                <p className='text-sm text-gray-600'>
                   Signed on: {new Date(formData.signatureDate).toLocaleDateString('en-US', { 
                     year: 'numeric', 
                     month: 'long', 
                     day: 'numeric' 
                   })}
                 </p>
-              )}
-            </div>
-          </div>
-        </div>
+              </div>
+            </FormFieldRow>
+          )}
+        </FormSection>
 
         {/* Auto-save indicator */}
         <div className='flex justify-between items-center pt-4 border-t border-gray-200 no-print'>
@@ -622,6 +667,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         </div>
       </form>
     </div>
+  </div>
   )
 }
 
