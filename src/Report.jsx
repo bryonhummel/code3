@@ -1,5 +1,26 @@
 import { useState, useEffect } from 'react'
 
+// Single source of truth for required fields
+const REQUIRED_FIELDS = [
+  'dateOfIncident',
+  'timeOfIncident',
+  'location',
+  'description',
+  'reporterName',
+  'reporterContact',
+  'signature'
+]
+
+// Shared utility function for calculating completion percentage
+const calculateReportCompletion = (report) => {
+  const completedFields = REQUIRED_FIELDS.filter(field => {
+    const value = report[field]
+    return value && value.trim() !== ''
+  })
+
+  return Math.round((completedFields.length / REQUIRED_FIELDS.length) * 100)
+}
+
 function Report() {
   const [reports, setReports] = useState([])
   const [currentView, setCurrentView] = useState('list') // 'list' or 'form'
@@ -40,6 +61,8 @@ function Report() {
       description: '',
       reporterName: '',
       reporterContact: '',
+      signature: '',
+      signatureDate: '',
       status: 'draft'
     }
     setActiveReport(newReport)
@@ -124,24 +147,6 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       : 'bg-yellow-100 text-yellow-800'
   }
 
-  const calculateCompletion = (report) => {
-    const requiredFields = [
-      'dateOfIncident',
-      'timeOfIncident',
-      'location',
-      'description',
-      'reporterName',
-      'reporterContact'
-    ]
-
-    const completedFields = requiredFields.filter(field => {
-      const value = report[field]
-      return value && value.trim() !== ''
-    })
-
-    return Math.round((completedFields.length / requiredFields.length) * 100)
-  }
-
   return (
     <div className='bg-white rounded-2xl shadow-sm p-6'>
       <div className='flex justify-between items-center mb-6'>
@@ -173,7 +178,7 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {reports.map(report => {
-            const completionPercentage = calculateCompletion(report)
+            const completionPercentage = calculateReportCompletion(report)
             return (
               <div
                 key={report.id}
@@ -241,30 +246,33 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     return () => clearTimeout(timeoutId)
   }, [formData, onSave])
 
-  // Calculate completion status
-  const requiredFields = [
-    'dateOfIncident',
-    'timeOfIncident',
-    'location',
-    'description',
-    'reporterName',
-    'reporterContact'
-  ]
-
-  const completedFields = requiredFields.filter(field => {
+  // Calculate completion status using shared utility
+  const completionPercentage = calculateReportCompletion(formData)
+  
+  // Calculate pending count for display
+  const completedFields = REQUIRED_FIELDS.filter(field => {
     const value = formData[field]
     return value && value.trim() !== ''
   })
-
-  const completionPercentage = Math.round((completedFields.length / requiredFields.length) * 100)
-  const pendingCount = requiredFields.length - completedFields.length
+  
+  const pendingCount = REQUIRED_FIELDS.length - completedFields.length
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    
+    setFormData(prev => {
+      const updates = {
+        ...prev,
+        [name]: value
+      }
+      
+      // Auto-fill signature date when signature is entered
+      if (name === 'signature' && value.trim() !== '' && !prev.signatureDate) {
+        updates.signatureDate = new Date().toISOString().split('T')[0]
+      }
+      
+      return updates
+    })
   }
 
   const handleBlur = (fieldName) => {
@@ -278,7 +286,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     e.preventDefault()
     // Mark all fields as touched for validation display
     const allTouched = {}
-    requiredFields.forEach(field => {
+    REQUIRED_FIELDS.forEach(field => {
       allTouched[field] = true
     })
     setTouched(allTouched)
@@ -551,6 +559,43 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                   <p className='text-red-500 text-sm mt-1 no-print'>Required</p>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Signature */}
+        <div className='border-t border-gray-200 pt-4'>
+          <h2 className='text-xl font-bold text-gray-800 mb-3'>Signature</h2>
+          <div className='flex items-start gap-4'>
+            <label htmlFor='signature' className='text-sm font-semibold text-gray-700 w-40 flex-shrink-0 pt-2 text-right'>
+              Signature *
+            </label>
+            <div className='flex-1'>
+              <input
+                type='text'
+                id='signature'
+                name='signature'
+                value={formData.signature}
+                onChange={handleChange}
+                onBlur={() => handleBlur('signature')}
+                required
+                placeholder='Type your full name to sign'
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-serif italic text-lg ${
+                  showError('signature') ? 'border-red-500' : 'border-gray-300'
+                }`}
+              />
+              {showError('signature') && (
+                <p className='text-red-500 text-sm mt-1 no-print'>This field is required</p>
+              )}
+              {formData.signature && formData.signatureDate && (
+                <p className='text-sm text-gray-600 mt-2'>
+                  Signed on: {new Date(formData.signatureDate).toLocaleDateString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </p>
+              )}
             </div>
           </div>
         </div>
