@@ -11,7 +11,7 @@ function ReportHeader({ reportId, onBack }) {
         Back to List
       </button>
       <div className='border-l border-gray-300 pl-4'>
-        <span className='font-mono text-sm text-gray-600 font-semibold'>{reportId}</span>
+        <span className='font-mono text-sm text-gray-600 font-semibold text-red-700'>{reportId}</span>
       </div>
     </div>
   )

@@ -14,8 +14,24 @@ const REMINDER_RULES = [
     condition: (formData) => {
       return formData.injuryType && formData.injuryType.toLowerCase().includes('head')
     },
-    message: '⚠️ Head injury reported - Monitor for concussion symptoms',
+    message: '⚠️ Head injury reported - Provide concussion information card',
     type: 'warning'
+  },
+  {
+    id: 'staff_injury',
+    condition: (formData) => {
+      return formData.guestType === 'staff'
+    },
+    message: '⚠️ Staff injury reported - Notify supervisor',
+    type: 'warning'
+  },
+  {
+    id: 'staff_involved_head_injury',
+    condition: (formData) => {
+      return formData.guestType === 'staff' && formData.injuryType.toLowerCase().includes('head')
+    },
+    message: '🚨 Staff member with head injury - Notify supervisor and Liz',
+    type: 'alert'
   },
   {
     id: 'severe_injury',
@@ -40,9 +56,9 @@ function FormStatusPanel({
   const activeReminders = REMINDER_RULES.filter(rule => rule.condition(formData))
 
   return (
-    <div className='bg-gray-50 rounded-lg p-6 mb-6 border border-gray-200'>
+    <div className='bg-gray-50 rounded-lg p-6 mb-6 border border-gray-200 no-print'>
       {/* Status and Actions Row */}
-      <div className='flex items-center justify-between mb-4 no-print'>
+      <div className='flex items-center justify-between mb-4'>
         <div className='flex items-center gap-4'>
           <span className='text-sm font-semibold text-gray-700'>Status:</span>
           <div className='flex gap-3'>
@@ -124,7 +140,7 @@ function FormStatusPanel({
 
       {/* Smart Reminders */}
       {activeReminders.length > 0 && (
-        <div className='space-y-2 no-print'>
+        <div className='space-y-2'>
           {activeReminders.map(reminder => (
             <div
               key={reminder.id}

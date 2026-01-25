@@ -60,6 +60,7 @@ body {
     color-adjust: exact;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
+    border: 0 !important; /* remove all borders for clearer print */
   }
 
   /* Remove rounded corners for cleaner print */
