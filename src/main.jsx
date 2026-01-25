@@ -1,14 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import App from './App.jsx'
 import Report from './Report.jsx'
 import Navbar from './components/Navbar.jsx'
 import './index.css'
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <BrowserRouter basename="/code3">
+    <HashRouter>
       <Navbar />
       <div className="nav-content mx-auto">
         <Routes>
@@ -17,6 +17,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/report" element={<Report />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   </React.StrictMode>,
-)
+);
