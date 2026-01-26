@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import ReportHeader from './components/report/ReportHeader'
 import FormStatusPanel from './components/report/FormStatusPanel'
 import FormSection from './components/report/FormSection'
-import FormFieldRow from './components/report/FormFieldRow'
-import FormFieldInline from "./components/report/FormFieldInline";
+import FormFieldElement from "./components/report/FormFieldElement";
 import TextInput from './components/report/fields/TextInput'
 import DateTimeInput from './components/report/fields/DateTimeInput'
 import DateInput from "./components/report/fields/DateInput";
@@ -89,7 +88,7 @@ function Report() {
       reporterContact: "",
       signature: "",
       signatureDate: "",
-      status: "draft",
+      status: "in progress",
     };
     setActiveReport(newReport)
     setCurrentView('form')
@@ -168,43 +167,59 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
   }
 
   const getStatusColor = (status) => {
-    return status === 'submitted' 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-yellow-100 text-yellow-800'
+    return status === "completed"
+      ? "bg-green-100 text-green-800"
+      : "bg-yellow-100 text-yellow-800";
   }
 
   return (
-    <div className='bg-white rounded-2xl shadow-sm p-6'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-4xl font-extrabold text-gray-900'>Accident Reports</h1>
+    <div className="bg-white rounded-2xl shadow-sm p-6">
+      <div className="md:flex justify-between items-center mb-6 text-center">
+        <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
+          Accident Reports
+        </h1>
         <button
           onClick={onCreateNew}
-          className='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 shadow-sm'
+          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200 shadow-sm"
         >
           + Create New Report
         </button>
       </div>
 
       {reports.length === 0 ? (
-        <div className='text-center py-12'>
-          <div className='text-gray-400 mb-4'>
-            <svg className='mx-auto h-24 w-24' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1} d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
+        <div className="text-center py-12">
+          <div className="text-gray-400 mb-4">
+            <svg
+              className="mx-auto h-24 w-24"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1}
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
             </svg>
           </div>
-          <h3 className='text-xl font-semibold text-gray-700 mb-2'>No Reports Yet</h3>
-          <p className='text-gray-500 mb-6'>Create your first accident report to get started</p>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            No Reports Yet
+          </h3>
+          <p className="text-gray-500 mb-6">
+            Create your first accident report to get started
+          </p>
           <button
             onClick={onCreateNew}
-            className='bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200'
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors duration-200"
           >
-            Create First Report
+            Create New Report
           </button>
         </div>
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
-          {reports.map(report => {
-            const completionPercentage = calculateReportCompletion(report)
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {reports.map((report) => {
+            const completionPercentage = calculateReportCompletion(report);
             return (
               <div
                 key={report.id}
@@ -260,7 +275,7 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
         </div>
       )}
     </div>
-  )
+  );
 }
 
 // Report Form View Component
@@ -364,10 +379,6 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2 text-center">
-        Ski Patrol Incident Report
-      </h1>
-
       <div className="bg-white rounded-2xl shadow-sm p-8">
         {/* Report Header */}
         <ReportHeader reportId={formData.id} onBack={onBack} />
@@ -386,26 +397,25 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         <form onSubmit={handleSubmit}>
           {/* Incident Details Section */}
           <FormSection title="Incident Details">
-            <div className="grid grid-cols-2">
-              <div />
-              <FormFieldRow label="Report ID">
-                <span className="text-red-700">{formData.id}</span>
-              </FormFieldRow>
-            </div>
-            <div className="grid grid-cols-2">
-              <FormFieldRow label="Location" required>
-                <TextInput
-                  id="location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("location")}
-                  required
-                  placeholder="e.g., Main Street Run, Lift 3"
-                  showError={showError("location")}
-                />
-              </FormFieldRow>
-              <FormFieldRow label="Date & Time" required>
+            <FormFieldElement label="Report ID">
+              <span className="text-red-700 p-2">{formData.id}</span>
+            </FormFieldElement>
+            <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div>
+                <FormFieldElement label="Location" required>
+                  <TextInput
+                    id="location"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("location")}
+                    required
+                    placeholder="e.g., Main Street Run, Lift 3"
+                    showError={showError("location")}
+                  />
+                </FormFieldElement>
+              </div>
+              <FormFieldElement label="Date & Time" required>
                 <DateTimeInput
                   dateId="dateOfIncident"
                   dateName="dateOfIncident"
@@ -418,51 +428,64 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                   showDateError={showError("dateOfIncident")}
                   showTimeError={showError("timeOfIncident")}
                 />
-              </FormFieldRow>
+              </FormFieldElement>
             </div>
           </FormSection>
 
           {/* Patient Information Section */}
           <FormSection title="Patient Information">
-            <FormFieldRow label="Patient Name" required>
-              <TextInput
-                id="patientName"
-                name="patientName"
-                value={formData.patientName}
-                onChange={handleChange}
-                onBlur={() => handleBlur("patientName")}
-                required
-                placeholder="Full name"
-                showError={showError("patientName")}
-              />
-            </FormFieldRow>
-
-            <div className="grid grid-cols-3 gap-2">
-              <FormFieldRow label="Age" required>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+              <FormFieldElement label="Patient Name" required>
                 <TextInput
-                  id="patientAge"
-                  name="patientAge"
-                  value={formData.patientAge}
+                  id="patientName"
+                  name="patientName"
+                  value={formData.patientName}
                   onChange={handleChange}
-                  onBlur={() => handleBlur("patientAge")}
+                  onBlur={() => handleBlur("patientName")}
                   required
-                  placeholder="Age"
-                  showError={showError("patientAge")}
+                  placeholder="Full name"
+                  showError={showError("patientName")}
                 />
-              </FormFieldRow>
-              <FormFieldInline label="Birthdate" required>
-                <DateInput
-                  id="patientBirthdate"
-                  name="patientBirthdate"
-                  value={formData.patientBirthdate}
+              </FormFieldElement>
+              <div className="flex">
+                <FormFieldElement label="Date of Birth" required>
+                  <DateInput
+                    id="patientBirthdate"
+                    name="patientBirthdate"
+                    value={formData.patientBirthdate}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("patientBirthdate")}
+                    required
+                    placeholder="Date of Birth"
+                    showError={showError("patientBirthdate")}
+                  />
+                </FormFieldElement>
+                <FormFieldElement label="Age" required>
+                  <TextInput
+                    id="patientAge"
+                    name="patientAge"
+                    value={formData.patientAge}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("patientAge")}
+                    required
+                    placeholder="Age"
+                    showError={showError("patientAge")}
+                  />
+                </FormFieldElement>
+              </div>
+              <FormFieldElement label="Phone #">
+                <TextInput
+                  id="patientPhoneNumber"
+                  name="patientPhoneNumber"
+                  value={formData.patientPhoneNumber}
                   onChange={handleChange}
-                  onBlur={() => handleBlur("patientBirthdate")}
+                  onBlur={() => handleBlur("patientPhoneNumber")}
                   required
-                  placeholder="Birthdate"
-                  showError={showError("patientBirthdate")}
+                  placeholder="Phone number"
+                  showError={showError("patientPhoneNumber")}
                 />
-              </FormFieldInline>
-              <FormFieldRow label="Gender">
+              </FormFieldElement>
+              <FormFieldElement label="Gender">
                 <SelectInput
                   id="patientGender"
                   name="patientGender"
@@ -478,48 +501,35 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                   required
                   showError={showError("patientGender")}
                 />
-              </FormFieldRow>
-            </div>
-            <div className="grid grid-cols-3 gap-2">
-              <FormFieldRow label="Weight" required>
-                <TextInput
-                  id="patientWeight"
-                  name="patientWeight"
-                  value={formData.patientWeight}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientWeight")}
-                  required
-                  placeholder="Weight"
-                  showError={showError("patientWeight")}
-                />
-              </FormFieldRow>
-              <FormFieldInline label="Height" required>
-                <TextInput
-                  id="patientHeight"
-                  name="patientHeight"
-                  value={formData.patientHeight}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientHeight")}
-                  required
-                  placeholder="Height"
-                  showError={showError("patientHeight")}
-                />
-              </FormFieldInline>
-            </div>
+              </FormFieldElement>
+              <div className="flex">
+                <FormFieldElement label="Weight" required>
+                  <TextInput
+                    id="patientWeight"
+                    name="patientWeight"
+                    value={formData.patientWeight}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("patientWeight")}
+                    required
+                    placeholder="Weight"
+                    showError={showError("patientWeight")}
+                  />
+                </FormFieldElement>
+                <FormFieldElement label="Height" required>
+                  <TextInput
+                    id="patientHeight"
+                    name="patientHeight"
+                    value={formData.patientHeight}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("patientHeight")}
+                    required
+                    placeholder="Height"
+                    showError={showError("patientHeight")}
+                  />
+                </FormFieldElement>
+              </div>
 
-            <div className="grid grid-cols-3">
-              <FormFieldRow label="Phone #">
-                <TextInput
-                  id="patientPhoneNumber"
-                  name="patientPhoneNumber"
-                  value={formData.patientPhoneNumber}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientPhoneNumber")}
-                  placeholder="Phone number"
-                  showError={false}
-                />
-              </FormFieldRow>
-              <FormFieldInline label="Guest Type">
+              <FormFieldElement label="Guest Type">
                 <SelectInput
                   id="guestType"
                   name="guestType"
@@ -538,13 +548,13 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                   required
                   showError={showError("guestType")}
                 />
-              </FormFieldInline>
+              </FormFieldElement>
             </div>
           </FormSection>
 
           {/* Patient Injuries Section */}
           <FormSection title="Patient Injuries">
-            <FormFieldRow label="Injury Type">
+            <FormFieldElement label="Injury Type">
               <SelectInput
                 id="injuryType"
                 name="injuryType"
@@ -561,9 +571,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select injury type"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Description" required>
+            <FormFieldElement label="Description" required>
               <TextArea
                 id="injuryDescription"
                 name="injuryDescription"
@@ -575,9 +585,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 rows={4}
                 showError={showError("injuryDescription")}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Body Part Affected">
+            <FormFieldElement label="Body Part Affected">
               <TextInput
                 id="bodyPart"
                 name="bodyPart"
@@ -587,9 +597,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="e.g., Left knee, Right wrist"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Severity">
+            <FormFieldElement label="Severity">
               <SelectInput
                 id="injurySeverity"
                 name="injurySeverity"
@@ -604,9 +614,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select severity"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Treatment Provided">
+            <FormFieldElement label="Treatment Provided">
               <TextArea
                 id="treatmentProvided"
                 name="treatmentProvided"
@@ -617,12 +627,12 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 rows={3}
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
           </FormSection>
 
           {/* Ski Conditions Section */}
           <FormSection title="Ski Conditions">
-            <FormFieldRow label="Weather">
+            <FormFieldElement label="Weather">
               <SelectInput
                 id="weatherConditions"
                 name="weatherConditions"
@@ -638,9 +648,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select weather"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Snow Conditions">
+            <FormFieldElement label="Snow Conditions">
               <SelectInput
                 id="snowConditions"
                 name="snowConditions"
@@ -656,9 +666,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select snow conditions"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Visibility">
+            <FormFieldElement label="Visibility">
               <SelectInput
                 id="visibility"
                 name="visibility"
@@ -674,9 +684,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select visibility"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Trail Difficulty">
+            <FormFieldElement label="Trail Difficulty">
               <SelectInput
                 id="trailDifficulty"
                 name="trailDifficulty"
@@ -695,12 +705,12 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Select trail difficulty"
                 showError={false}
               />
-            </FormFieldRow>
+            </FormFieldElement>
           </FormSection>
 
           {/* Patroller Information Section */}
           <FormSection title="Patroller Information">
-            <FormFieldRow label="Patroller Name" required>
+            <FormFieldElement label="Patroller Name" required>
               <TextInput
                 id="patrollerName"
                 name="patrollerName"
@@ -711,9 +721,9 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 placeholder="Full name"
                 showError={showError("patrollerName")}
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
-            <FormFieldRow label="Signature" required>
+            <FormFieldElement label="Signature" required>
               <TextInput
                 id="signature"
                 name="signature"
@@ -725,10 +735,10 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                 showError={showError("signature")}
                 className="font-serif italic text-lg"
               />
-            </FormFieldRow>
+            </FormFieldElement>
 
             {formData.signature && formData.signatureDate && (
-              <FormFieldRow label="">
+              <FormFieldElement label="">
                 <div className="flex-1">
                   <p className="text-sm text-gray-600">
                     Signed on:{" "}
@@ -742,7 +752,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
                     )}
                   </p>
                 </div>
-              </FormFieldRow>
+              </FormFieldElement>
             )}
           </FormSection>
 

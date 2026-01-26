@@ -1,17 +1,17 @@
-function SelectInput({ 
-  id, 
-  name, 
-  value, 
-  onChange, 
-  onBlur, 
-  required = false, 
+function SelectInput({
+  id,
+  name,
+  value,
+  onChange,
+  onBlur,
+  required = false,
   options = [],
   showError = false,
-  errorMessage = 'This field is required',
-  placeholder = 'Select an option'
+  errorMessage = "Required",
+  placeholder = "Select an option",
 }) {
   return (
-    <div className='flex-1'>
+    <div className="flex-1">
       <select
         id={id}
         name={name}
@@ -20,10 +20,10 @@ function SelectInput({
         onBlur={onBlur}
         required={required}
         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-          showError ? 'border-red-500' : 'border-gray-300'
+          showError ? "border-red-500" : "border-gray-300"
         }`}
       >
-        <option value=''>{placeholder}</option>
+        <option value="">{placeholder}</option>
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -31,10 +31,10 @@ function SelectInput({
         ))}
       </select>
       {showError && (
-        <p className='text-red-500 text-sm mt-1 no-print'>{errorMessage}</p>
+        <p className="text-red-500 text-sm mt-1 no-print">{errorMessage}</p>
       )}
     </div>
-  )
+  );
 }
 
-export default SelectInput
+export default SelectInput;
