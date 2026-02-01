@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
-import ReportHeader from './components/report/ReportHeader'
-import FormStatusPanel from './components/report/FormStatusPanel'
+import { useState, useEffect } from "react";
+import ReportHeader from "./components/report/ReportHeader";
+import FormStatusPanel from "./components/report/FormStatusPanel";
 import FormRenderer from "./components/report/FormRenderer";
 import PrintRenderer from "./components/report/print/PrintRenderer";
+import ProgressBar from "./components/report/shared/ProgressBar";
 import { useFormData } from "./hooks/useFormData";
 import { useFormValidation } from "./hooks/useFormValidation";
 import { ACCIDENT_REPORT_SCHEMA } from "./config/formSchema";
@@ -142,29 +143,73 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       : "bg-yellow-100 text-yellow-800";
   };
 
-  // Calculate completion percentage for a report based on requiredByPatient fields
-  const calculateCompletion = (report) => {
+  // Calculate completion metrics for a report
+  const calculateCompletionMetrics = (report) => {
+    const unavailableFields = report.unavailableFields || [];
+
+    // Get all fields from schema
+    const allFields = ACCIDENT_REPORT_SCHEMA.sections
+      .flatMap((section) => section.fields)
+      .map((field) => field.name);
+
+    // Get required fields
     const requiredByPatientFields = ACCIDENT_REPORT_SCHEMA.sections
       .flatMap((section) => section.fields)
       .filter((field) => field.requiredByPatient)
       .map((field) => field.name);
 
-    const unavailableFields = report.unavailableFields || [];
-
-    const completed = requiredByPatientFields.filter((fieldName) => {
-      // If field is marked as unavailable, consider it complete
+    // Count completed required fields
+    const completedRequired = requiredByPatientFields.filter((fieldName) => {
       if (unavailableFields.includes(fieldName)) return true;
-
       const value = report[fieldName];
       if (!value) return false;
       if (typeof value === "string" && value.trim() === "") return false;
       if (Array.isArray(value) && value.length === 0) return false;
       return true;
-    });
+    }).length;
 
-    return Math.round(
-      (completed.length / requiredByPatientFields.length) * 100,
+    // Get non-required fields
+    const nonRequiredFields = allFields.filter(
+      (fieldName) => !requiredByPatientFields.includes(fieldName),
     );
+
+    // Count completed non-required fields
+    const completedNonRequired = nonRequiredFields.filter((fieldName) => {
+      if (unavailableFields.includes(fieldName)) return true;
+      const value = report[fieldName];
+      if (!value) return false;
+      if (typeof value === "string" && value.trim() === "") return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      return true;
+    }).length;
+
+    const totalFields = allFields.length;
+    const totalCompleted = completedRequired + completedNonRequired;
+    const overallPercentage = Math.round((totalCompleted / totalFields) * 100);
+
+    const requiredPercentage = Math.round(
+      (completedRequired / totalFields) * 100,
+    );
+    const nonRequiredPercentage = Math.round(
+      (completedNonRequired / totalFields) * 100,
+    );
+
+    const requiredThresholdPercentage = Math.round(
+      (requiredByPatientFields.length / totalFields) * 100,
+    );
+
+    return {
+      overallPercentage,
+      requiredPercentage,
+      nonRequiredPercentage,
+      requiredThresholdPercentage,
+      completedRequired,
+      totalRequired: requiredByPatientFields.length,
+      completedNonRequired,
+      totalNonRequired: nonRequiredFields.length,
+      totalCompleted,
+      totalFields,
+    };
   };
 
   return (
@@ -214,7 +259,7 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {reports.map((report) => {
-            const completionPercentage = calculateCompletion(report);
+            const completionMetrics = calculateCompletionMetrics(report);
             return (
               <div
                 key={report.id}
@@ -244,24 +289,12 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
                 </div>
 
                 <div className="my-3">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-xs font-semibold text-gray-600">
-                      Completion
-                    </span>
-                    <span className="text-xs font-semibold text-gray-600">
-                      {completionPercentage}%
-                    </span>
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                    <div
-                      className={`h-full transition-all duration-300 ${
-                        completionPercentage === 100
-                          ? "bg-green-500"
-                          : "bg-blue-500"
-                      }`}
-                      style={{ width: `${completionPercentage}%` }}
-                    />
-                  </div>
+                  <ProgressBar
+                    completionMetrics={completionMetrics}
+                    showLegend={false}
+                    showPercentage={true}
+                    size="sm"
+                  />
                 </div>
               </div>
             );
@@ -329,7 +362,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     setFormData(updatedData);
     // Save to parent component
     onSave(updatedData);
-  };;
+  };
 
   const handleFieldChange = (e) => {
     const { name } = e.target;
@@ -417,4 +450,4 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
   );
 }
 
-export default Report
+export default Report;
