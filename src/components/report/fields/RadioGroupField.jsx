@@ -15,6 +15,8 @@ function RadioGroupField({
   className = "",
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
   const handleChange = (e) => {
     onChange(e);
@@ -29,6 +31,8 @@ function RadioGroupField({
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
+      isEmpty={isEmpty}
+      isCompleted={isCompleted}
     >
       <div className={`space-y-2 ${className}`}>
         {options.map((option) => (

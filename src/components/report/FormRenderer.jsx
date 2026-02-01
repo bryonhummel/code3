@@ -17,13 +17,23 @@ function FormRenderer({
   errors,
   unavailableFields = [],
   onToggleAvailability,
+  status = "in progress",
 }) {
   const renderField = (field) => {
     const isUnavailable = unavailableFields.includes(field.name);
+    const fieldValue = formData[field.name];
+
+    // Determine if field is empty
+    const isEmpty =
+      !fieldValue ||
+      (typeof fieldValue === "string" && fieldValue.trim() === "") ||
+      (Array.isArray(fieldValue) && fieldValue.length === 0);
+
+    const isCompleted = status === "completed";
 
     const commonProps = {
       name: field.name,
-      value: formData[field.name] || (field.type === "checkbox" ? [] : ""),
+      value: fieldValue || (field.type === "checkbox" ? [] : ""),
       onChange,
       onBlur,
       label: field.label,
@@ -33,6 +43,8 @@ function FormRenderer({
       disabled: field.type === "readonly" || isUnavailable,
       isUnavailable,
       onToggleAvailability: () => onToggleAvailability(field.name),
+      isEmpty,
+      isCompleted,
     };
 
     switch (field.type) {

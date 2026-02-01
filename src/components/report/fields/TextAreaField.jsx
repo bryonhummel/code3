@@ -10,13 +10,15 @@ function TextAreaField({
   placeholder = "",
   required = false,
   maxLength,
-  rows = 4,
+  rows = 3,
   showError = false,
   errorMessage = "This field is required",
   disabled = false,
   className = "",
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
   const handleBlur = (e) => {
     if (onBlur) {
@@ -31,6 +33,8 @@ function TextAreaField({
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
+      isEmpty={isEmpty}
+      isCompleted={isCompleted}
     >
       <textarea
         id={name}

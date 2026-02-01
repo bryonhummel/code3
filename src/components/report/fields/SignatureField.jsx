@@ -15,6 +15,8 @@ function SignatureField({
   className = "",
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -140,7 +142,7 @@ function SignatureField({
         onBlur(name);
       }, 100);
     }
-  };;
+  };
 
   return (
     <FieldWrapper
@@ -149,6 +151,8 @@ function SignatureField({
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
+      isEmpty={isEmpty}
+      isCompleted={isCompleted}
     >
       <div className={`signature-field ${className}`}>
         <div

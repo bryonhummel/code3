@@ -15,6 +15,8 @@ function CheckboxGroupField({
   className = "",
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
   const handleCheckboxChange = (optionValue) => {
     const currentValues = Array.isArray(value) ? value : [];
@@ -50,6 +52,8 @@ function CheckboxGroupField({
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
+      isEmpty={isEmpty}
+      isCompleted={isCompleted}
     >
       <div className={`space-y-2 ${className}`}>
         {options.map((option) => (

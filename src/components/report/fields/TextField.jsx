@@ -16,6 +16,8 @@ function TextField({
   className = "",
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
   const handleBlur = (e) => {
     if (onBlur) {
@@ -30,6 +32,8 @@ function TextField({
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
+      isEmpty={isEmpty}
+      isCompleted={isCompleted}
     >
       <input
         type="text"

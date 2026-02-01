@@ -6,9 +6,16 @@ function FieldWrapper({
   error,
   isUnavailable = false,
   onToggleAvailability,
+  isEmpty = false,
+  isCompleted = false,
 }) {
+  // Determine if we should highlight this field
+  const shouldHighlight = isCompleted && isEmpty && !isUnavailable;
+
   return (
-    <div className="field-wrapper">
+    <div
+      className={`field-wrapper ${shouldHighlight ? "bg-yellow-50 p-3 rounded-lg border-2 border-yellow-300" : ""}`}
+    >
       {label && (
         <label
           htmlFor={name}

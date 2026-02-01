@@ -390,6 +390,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             errors={errors}
             unavailableFields={unavailableFields}
             onToggleAvailability={toggleFieldAvailability}
+            status={formData.status}
           />
 
           <div className="flex justify-between items-center pt-4 border-t border-gray-200">
