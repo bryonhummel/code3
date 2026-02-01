@@ -11,7 +11,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "reportId",
           type: "readonly",
           label: "Report ID",
-          required: false,
+          requiredByPatient: false,
           printable: true,
         },
         {
@@ -19,7 +19,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Location",
           placeholder: "e.g., Main Street Run, Lift 3",
-          required: true,
+          requiredByPatient: true,
           maxLength: 100,
           printable: true,
           validation: {
@@ -31,14 +31,14 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "dateOfIncident",
           type: "date",
           label: "Date of Incident",
-          required: true,
+          requiredByPatient: true,
           printable: true,
         },
         {
           name: "timeOfIncident",
           type: "time",
           label: "Time of Incident",
-          required: true,
+          requiredByPatient: true,
           printable: true,
         },
       ],
@@ -53,7 +53,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Patient Name",
           placeholder: "Full name",
-          required: true,
+          requiredByPatient: true,
           maxLength: 100,
           printable: true,
         },
@@ -61,7 +61,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "patientBirthdate",
           type: "date",
           label: "Date of Birth",
-          required: true,
+          requiredByPatient: true,
           printable: true,
         },
         {
@@ -69,9 +69,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "number",
           label: "Age",
           placeholder: "Age",
-          required: true,
-          min: 0,
-          max: 120,
+          requiredByPatient: true,
           printable: true,
         },
         {
@@ -79,7 +77,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Phone Number",
           placeholder: "(555) 123-4567",
-          required: true,
+          requiredByPatient: true,
           maxLength: 20,
           printable: true,
           validation: {
@@ -91,7 +89,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "patientGender",
           type: "radio",
           label: "Gender",
-          required: true,
+          requiredByPatient: true,
           options: [
             { value: "male", label: "Male" },
             { value: "female", label: "Female" },
@@ -104,9 +102,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "number",
           label: "Weight (lbs)",
           placeholder: "Weight",
-          required: true,
-          min: 0,
-          max: 500,
+          requiredByPatient: true,
           printable: true,
         },
         {
@@ -114,7 +110,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Height",
           placeholder: "e.g., 5'10\"",
-          required: true,
+          requiredByPatient: true,
           maxLength: 20,
           printable: true,
         },
@@ -122,7 +118,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "guestType",
           type: "radio",
           label: "Guest Type",
-          required: true,
+          requiredByPatient: true,
           options: [
             { value: "day-ticket", label: "Day Ticket" },
             { value: "season-pass", label: "Season Pass" },
@@ -138,7 +134,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "textarea",
           label: "Patient Description",
           placeholder: "Patient description of the incident.",
-          required: true,
+          requiredByPatient: true,
           maxLength: 500,
           rows: 4,
           printable: true,
@@ -148,7 +144,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "signatureType",
           type: "radio",
           label: "Signed By",
-          required: true,
+          requiredByPatient: true,
           options: [
             { value: "patient", label: "Patient" },
             { value: "guardian", label: "Guardian" },
@@ -160,7 +156,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "patientSignature",
           type: "signature",
           label: "Signature",
-          required: true,
+          requiredByPatient: true,
           printable: true,
           fullWidth: false,
         },
@@ -175,7 +171,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "injuryTypes",
           type: "checkbox",
           label: "Injury Type(s)",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "fracture", label: "Fracture" },
             { value: "sprain", label: "Sprain/Strain" },
@@ -190,7 +186,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Body Part Affected",
           placeholder: "e.g., Left knee, Right wrist",
-          required: false,
+          requiredByPatient: false,
           maxLength: 100,
           printable: true,
         },
@@ -198,7 +194,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "injurySeverity",
           type: "radio",
           label: "Severity",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "minor", label: "Minor" },
             { value: "moderate", label: "Moderate" },
@@ -212,7 +208,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           label: "Injury Description",
           placeholder:
             "Detailed description of the injury and how it occurred...",
-          required: true,
+          requiredByPatient: true,
           maxLength: 500,
           rows: 4,
           printable: true,
@@ -223,7 +219,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "textarea",
           label: "Treatment Provided",
           placeholder: "First aid and treatment provided...",
-          required: false,
+          requiredByPatient: false,
           maxLength: 500,
           rows: 3,
           printable: true,
@@ -240,7 +236,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "weatherConditions",
           type: "radio",
           label: "Weather",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "clear", label: "Clear" },
             { value: "cloudy", label: "Cloudy" },
@@ -253,7 +249,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "snowConditions",
           type: "radio",
           label: "Snow Conditions",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "powder", label: "Powder" },
             { value: "packed", label: "Packed" },
@@ -266,7 +262,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "visibility",
           type: "radio",
           label: "Visibility",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "excellent", label: "Excellent" },
             { value: "good", label: "Good" },
@@ -279,7 +275,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "trailDifficulty",
           type: "radio",
           label: "Trail Difficulty",
-          required: false,
+          requiredByPatient: false,
           options: [
             { value: "green", label: "Green Circle (Beginner)" },
             { value: "blue", label: "Blue Square (Intermediate)" },
@@ -300,7 +296,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Patroller Name",
           placeholder: "Full name",
-          required: true,
+          requiredByPatient: false,
           maxLength: 100,
           printable: true,
         },
@@ -308,7 +304,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "signature",
           type: "signature",
           label: "Signature",
-          required: true,
+          requiredByPatient: false,
           printable: true,
           fullWidth: true,
         },
@@ -316,7 +312,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "signatureDate",
           type: "readonly",
           label: "Signature Date",
-          required: false,
+          requiredByPatient: false,
           printable: true,
         },
       ],
@@ -324,12 +320,12 @@ export const ACCIDENT_REPORT_SCHEMA = {
   ],
 };
 
-// Helper function to get all required fields
-export const getRequiredFields = () => {
+// Helper function to get all fields required by patient
+export const getRequiredByPatientFields = () => {
   return ACCIDENT_REPORT_SCHEMA.sections
-    .flatMap(section => section.fields)
-    .filter(field => field.required)
-    .map(field => field.name);
+    .flatMap((section) => section.fields)
+    .filter((field) => field.requiredByPatient)
+    .map((field) => field.name);
 };
 
 // Helper function to get field by name

@@ -1,6 +1,6 @@
 function FieldWrapper({
   label,
-  required = false,
+  requiredByPatient = false,
   name,
   children,
   error,
@@ -14,7 +14,7 @@ function FieldWrapper({
 
   return (
     <div
-      className={`field-wrapper ${shouldHighlight ? "bg-yellow-50 p-3 rounded-lg border-2 border-yellow-300" : ""}`}
+      className={`field-wrapper ${shouldHighlight ? "bg-yellow-50 p-3 rounded-lg border-2 border-yellow-300" : isEmpty && !isUnavailable ? (requiredByPatient ? "bg-blue-50 rounded-lg border-2 border-blue-100 p-3" : " bg-gray-50 rounded-lg border-2 border-gray-200 p-3") : " border-2 border-white p-3"}`}
     >
       {label && (
         <label
@@ -30,9 +30,6 @@ function FieldWrapper({
           }
         >
           {label}
-          {required && !isUnavailable && (
-            <span className="text-red-500 ml-1">*</span>
-          )}
         </label>
       )}
       {children}

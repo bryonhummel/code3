@@ -37,7 +37,7 @@ function FormRenderer({
       onChange,
       onBlur,
       label: field.label,
-      required: field.required,
+      requiredByPatient: field.requiredByPatient,
       showError: touched[field.name] && !!errors[field.name],
       errorMessage: errors[field.name],
       disabled: field.type === "readonly" || isUnavailable,

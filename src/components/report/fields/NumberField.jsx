@@ -8,7 +8,7 @@ function NumberField({
   onBlur,
   label,
   placeholder = "",
-  required = false,
+  requiredByPatient = false,
   min,
   max,
   showError = false,
@@ -29,7 +29,7 @@ function NumberField({
   return (
     <FieldWrapper
       label={label}
-      required={required}
+      requiredByPatient={requiredByPatient}
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
@@ -47,7 +47,6 @@ function NumberField({
           placeholder={placeholder}
           min={min}
           max={max}
-          required={required}
           disabled={disabled}
           className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
             showError ? "border-red-500" : "border-gray-300"

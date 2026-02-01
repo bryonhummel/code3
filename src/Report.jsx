@@ -142,16 +142,16 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       : "bg-yellow-100 text-yellow-800";
   };
 
-  // Calculate completion percentage for a report
+  // Calculate completion percentage for a report based on requiredByPatient fields
   const calculateCompletion = (report) => {
-    const requiredFields = ACCIDENT_REPORT_SCHEMA.sections
+    const requiredByPatientFields = ACCIDENT_REPORT_SCHEMA.sections
       .flatMap((section) => section.fields)
-      .filter((field) => field.required)
+      .filter((field) => field.requiredByPatient)
       .map((field) => field.name);
 
     const unavailableFields = report.unavailableFields || [];
 
-    const completed = requiredFields.filter((fieldName) => {
+    const completed = requiredByPatientFields.filter((fieldName) => {
       // If field is marked as unavailable, consider it complete
       if (unavailableFields.includes(fieldName)) return true;
 
@@ -162,7 +162,9 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       return true;
     });
 
-    return Math.round((completed.length / requiredFields.length) * 100);
+    return Math.round(
+      (completed.length / requiredByPatientFields.length) * 100,
+    );
   };
 
   return (

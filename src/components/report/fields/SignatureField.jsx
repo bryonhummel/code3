@@ -8,7 +8,7 @@ function SignatureField({
   onChange,
   onBlur,
   label,
-  required = false,
+  requiredByPatient = false,
   showError = false,
   errorMessage = "Signature is required",
   disabled = false,
@@ -30,7 +30,7 @@ function SignatureField({
 
     // Set canvas size
     canvas.width = canvas.offsetWidth;
-    canvas.height = 150;
+    canvas.height = 100;
 
     // Load existing signature if present
     if (value) {
@@ -147,7 +147,7 @@ function SignatureField({
   return (
     <FieldWrapper
       label={label}
-      required={required}
+      requiredByPatient={requiredByPatient}
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}

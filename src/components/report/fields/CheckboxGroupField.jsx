@@ -8,7 +8,7 @@ function CheckboxGroupField({
   onBlur,
   label,
   options = [],
-  required = false,
+  requiredByPatient = false,
   showError = false,
   errorMessage = "Please select at least one option",
   disabled = false,
@@ -48,7 +48,7 @@ function CheckboxGroupField({
   return (
     <FieldWrapper
       label={label}
-      required={required}
+      requiredByPatient={requiredByPatient}
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
@@ -59,10 +59,8 @@ function CheckboxGroupField({
         {options.map((option) => (
           <label
             key={option.value}
-            className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer ${
-              isChecked(option.value)
-                ? "bg-blue-50 border-blue-500"
-                : "bg-white border-gray-300 hover:bg-gray-50"
+            className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer bg-white ${
+              isChecked(option.value) ? " " : "  hover:bg-gray-50"
             } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <input
@@ -81,11 +79,6 @@ function CheckboxGroupField({
         ))}
       </div>
       {showError && <ValidationMessage message={errorMessage} type="error" />}
-      {Array.isArray(value) && value.length > 0 && (
-        <div className="text-xs text-gray-500 mt-1">
-          {value.length} selected
-        </div>
-      )}
     </FieldWrapper>
   );
 }

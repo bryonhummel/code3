@@ -8,7 +8,7 @@ function RadioGroupField({
   onBlur,
   label,
   options = [],
-  required = false,
+  requiredByPatient = false,
   showError = false,
   errorMessage = "Please select an option",
   disabled = false,
@@ -27,7 +27,7 @@ function RadioGroupField({
   return (
     <FieldWrapper
       label={label}
-      required={required}
+      requiredByPatient={requiredByPatient}
       name={name}
       isUnavailable={isUnavailable}
       onToggleAvailability={onToggleAvailability}
@@ -38,10 +38,8 @@ function RadioGroupField({
         {options.map((option) => (
           <label
             key={option.value}
-            className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer ${
-              value === option.value
-                ? "bg-blue-50 border-blue-500"
-                : "bg-white border-gray-300 hover:bg-gray-50"
+            className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer bg-white border-gray-300 ${
+              value === option.value ? "" : " hover:bg-gray-50"
             } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <input

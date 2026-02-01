@@ -4,11 +4,11 @@ import { validatePhoneNumber } from '../utils/validation';
 export function useFormValidation(formData, schema, unavailableFields = []) {
   const [errors, setErrors] = useState({});
 
-  // Get all required fields from schema
-  const requiredFields = useMemo(() => {
+  // Get all fields required by patient from schema
+  const requiredByPatientFields = useMemo(() => {
     return schema.sections
       .flatMap((section) => section.fields)
-      .filter((field) => field.required)
+      .filter((field) => field.requiredByPatient)
       .map((field) => field.name);
   }, [schema]);
 
@@ -21,17 +21,18 @@ export function useFormValidation(formData, schema, unavailableFields = []) {
 
       if (!field) return null;
 
-      // Required field validation
-      if (field.required) {
-        if (!value || (typeof value === "string" && value.trim() === "")) {
-          return field.validation?.message || `${field.label} is required`;
-        }
+      // Required field validation - all fields are technically required, so don't display this special warning for empty fields.
+      // all we care about is an error message for specific form data validation (not empty)
+      // if (field.required) {
+      //   if (!value || (typeof value === "string" && value.trim() === "")) {
+      //     return field.validation?.message || `${field.label} is required`;
+      //   }
 
-        // For arrays (checkboxes), check if at least one is selected
-        if (Array.isArray(value) && value.length === 0) {
-          return field.validation?.message || `${field.label} is required`;
-        }
-      }
+      //   // For arrays (checkboxes), check if at least one is selected
+      //   if (Array.isArray(value) && value.length === 0) {
+      //     return field.validation?.message || `${field.label} is required`;
+      //   }
+      // }
 
       // Phone number validation
       if (field.validation?.type === "phone" && value) {
@@ -71,9 +72,9 @@ export function useFormValidation(formData, schema, unavailableFields = []) {
     return Object.keys(newErrors).length === 0;
   }, [schema, formData, validateField]);
 
-  // Calculate completion percentage
+  // Calculate completion percentage based on requiredByPatient fields
   const calculateCompletion = useCallback(() => {
-    const completed = requiredFields.filter((fieldName) => {
+    const completed = requiredByPatientFields.filter((fieldName) => {
       // If field is marked as unavailable, consider it complete
       if (unavailableFields.includes(fieldName)) return true;
 
@@ -87,12 +88,14 @@ export function useFormValidation(formData, schema, unavailableFields = []) {
       return true;
     });
 
-    return Math.round((completed.length / requiredFields.length) * 100);
-  }, [formData, requiredFields, unavailableFields]);
+    return Math.round(
+      (completed.length / requiredByPatientFields.length) * 100,
+    );
+  }, [formData, requiredByPatientFields, unavailableFields]);
 
-  // Get list of incomplete required fields
+  // Get list of incomplete requiredByPatient fields
   const getIncompleteFields = useCallback(() => {
-    return requiredFields
+    return requiredByPatientFields
       .filter((fieldName) => {
         // If field is marked as unavailable, don't consider it incomplete
         if (unavailableFields.includes(fieldName)) return false;
@@ -114,7 +117,7 @@ export function useFormValidation(formData, schema, unavailableFields = []) {
           label: field?.label || fieldName,
         };
       });
-  }, [formData, requiredFields, schema, unavailableFields]);
+  }, [formData, requiredByPatientFields, schema, unavailableFields]);
 
   // Validate single field on blur
   const validateOnBlur = useCallback(
@@ -142,6 +145,6 @@ export function useFormValidation(formData, schema, unavailableFields = []) {
     validateOnBlur,
     calculateCompletion,
     getIncompleteFields,
-    requiredFields,
+    requiredByPatientFields,
   };
 }
