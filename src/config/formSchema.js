@@ -19,7 +19,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           type: "text",
           label: "Location",
           placeholder: "e.g., Main Street Run, Lift 3",
-          requiredByPatient: true,
+          requiredByPatient: false,
           maxLength: 100,
           printable: true,
           validation: {
@@ -31,7 +31,7 @@ export const ACCIDENT_REPORT_SCHEMA = {
           name: "dateOfIncident",
           type: "date",
           label: "Date of Incident",
-          requiredByPatient: true,
+          requiredByPatient: false,
           printable: true,
         },
         {
