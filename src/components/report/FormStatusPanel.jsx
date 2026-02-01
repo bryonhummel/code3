@@ -8,7 +8,7 @@ const REMINDER_RULES = [
       const age = parseInt(formData.patientAge);
       return !isNaN(age) && age < 18;
     },
-    message: "⚠️ Patient is a minor - Remember to contact parent/guardian",
+    message: "⚠️ Patient is a minor - Contact parent/guardian",
     type: "warning",
   },
   {
