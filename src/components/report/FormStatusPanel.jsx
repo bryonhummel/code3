@@ -12,7 +12,11 @@ const REMINDER_RULES = [
   {
     id: 'head_injury',
     condition: (formData) => {
-      return formData.injuryType && formData.injuryType.toLowerCase().includes('head')
+      return (
+        formData.injuryTypes &&
+        Array.isArray(formData.injuryTypes) &&
+        formData.injuryTypes.includes("head")
+      );
     },
     message: '⚠️ Head injury reported - Provide concussion information card',
     type: 'warning'
@@ -20,7 +24,10 @@ const REMINDER_RULES = [
   {
     id: 'staff_injury',
     condition: (formData) => {
-      return formData.guestType === 'staff'
+      return (
+        formData.guestType === "staff" ||
+        formData.guestType === "staff-off-duty"
+      );
     },
     message: '⚠️ Staff injury reported - Notify supervisor',
     type: 'warning'
@@ -28,7 +35,14 @@ const REMINDER_RULES = [
   {
     id: 'staff_involved_head_injury',
     condition: (formData) => {
-      return formData.guestType === 'staff' && formData.injuryType.toLowerCase().includes('head')
+      const isStaff =
+        formData.guestType === "staff" ||
+        formData.guestType === "staff-off-duty";
+      const hasHeadInjury =
+        formData.injuryTypes &&
+        Array.isArray(formData.injuryTypes) &&
+        formData.injuryTypes.includes("head");
+      return isStaff && hasHeadInjury;
     },
     message: '🚨 Staff member with head injury - Notify supervisor and Liz',
     type: 'alert'

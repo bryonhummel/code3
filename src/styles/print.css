@@ -1,0 +1,149 @@
+/* Print-specific styles for the accident report */
+
+/* Hide print renderer on screen, show only when printing */
+.print-renderer {
+  display: none;
+}
+
+@media print {
+  /* Hide everything except print renderer when printing */
+  body * {
+    visibility: hidden;
+  }
+  
+  .print-renderer,
+  .print-renderer * {
+    visibility: visible;
+  }
+  
+  .print-renderer {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Page setup */
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  /* Print header */
+  .print-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #000;
+  }
+
+  .print-title {
+    font-size: 18pt;
+    font-weight: bold;
+    margin: 0 0 5px 0;
+  }
+
+  .print-report-number {
+    font-size: 12pt;
+    font-weight: normal;
+  }
+
+  /* Print sections */
+  .print-section {
+    margin-bottom: 15px;
+    page-break-inside: avoid;
+  }
+
+  .print-section-title {
+    font-size: 12pt;
+    font-weight: bold;
+    background-color: #f0f0f0;
+    padding: 4px 8px;
+    margin-bottom: 8px;
+    border: 1px solid #000;
+  }
+
+  .print-section-content {
+    padding: 0 4px;
+  }
+
+  /* Print fields grid */
+  .print-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    font-size: 9pt;
+  }
+
+  .print-field-full {
+    grid-column: 1 / -1;
+  }
+
+  .print-field-normal {
+    grid-column: span 1;
+  }
+
+  /* Individual print fields */
+  .print-field {
+    border: 1px solid #000;
+    padding: 4px;
+    min-height: 30px;
+    page-break-inside: avoid;
+  }
+
+  .print-field-label {
+    font-size: 7pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 2px;
+  }
+
+  .print-field-value {
+    font-size: 9pt;
+    color: #000;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .print-field-empty {
+    color: #999;
+  }
+
+  .print-field-textarea {
+    white-space: pre-wrap;
+    max-height: 100px;
+    overflow: hidden;
+  }
+
+  /* Signature images */
+  .print-signature-image {
+    max-width: 100%;
+    max-height: 60px;
+    border: 1px solid #ccc;
+  }
+
+  /* Print footer */
+  .print-footer {
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #000;
+    text-align: center;
+  }
+
+  .print-footer-text {
+    font-size: 8pt;
+    color: #666;
+  }
+
+  /* Ensure proper page breaks */
+  .print-section {
+    page-break-after: auto;
+  }
+
+  /* Prevent orphaned section titles */
+  .print-section-title {
+    page-break-after: avoid;
+  }
+}

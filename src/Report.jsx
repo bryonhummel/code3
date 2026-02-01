@@ -1,135 +1,102 @@
 import { useState, useEffect } from 'react'
 import ReportHeader from './components/report/ReportHeader'
 import FormStatusPanel from './components/report/FormStatusPanel'
-import FormSection from './components/report/FormSection'
-import FormFieldElement from "./components/report/FormFieldElement";
-import TextInput from './components/report/fields/TextInput'
-import DateTimeInput from './components/report/fields/DateTimeInput'
-import DateInput from "./components/report/fields/DateInput";
-import TextArea from './components/report/fields/TextArea'
-import SelectInput from './components/report/fields/SelectInput'
-
-// Single source of truth for required fields - updated for ski patrol
-const REQUIRED_FIELDS = [
-  "dateOfIncident",
-  "timeOfIncident",
-  "location",
-  "patientName",
-  "patientAge",
-  "patientBirthdate",
-  "patientGender",
-  "patientWeight",
-  "patientHeight",
-  "patientPhoneNumber",
-  "guestType",
-  "injuryDescription",
-  "patrollerName",
-  "signature",
-];
-
-// Shared utility function for calculating completion percentage
-const calculateReportCompletion = (report) => {
-  const completedFields = REQUIRED_FIELDS.filter(field => {
-    const value = report[field]
-    return value && value.trim() !== ''
-  })
-
-  return Math.round((completedFields.length / REQUIRED_FIELDS.length) * 100)
-}
+import FormRenderer from "./components/report/FormRenderer";
+import PrintRenderer from "./components/report/print/PrintRenderer";
+import { useFormData } from "./hooks/useFormData";
+import { useFormValidation } from "./hooks/useFormValidation";
+import { ACCIDENT_REPORT_SCHEMA } from "./config/formSchema";
 
 function Report() {
-  const [reports, setReports] = useState([])
-  const [currentView, setCurrentView] = useState('list') // 'list' or 'form'
-  const [activeReport, setActiveReport] = useState(null)
+  const [reports, setReports] = useState([]);
+  const [currentView, setCurrentView] = useState("list"); // 'list' or 'form'
+  const [activeReport, setActiveReport] = useState(null);
 
   // Load reports from localStorage on mount
   useEffect(() => {
-    const savedReports = localStorage.getItem('accidentReports')
+    const savedReports = localStorage.getItem("accidentReports");
     if (savedReports) {
       try {
-        setReports(JSON.parse(savedReports))
+        setReports(JSON.parse(savedReports));
       } catch (error) {
-        console.error('Error loading reports:', error)
+        console.error("Error loading reports:", error);
       }
     }
-  }, [])
+  }, []);
 
   // Save reports to localStorage whenever they change
   useEffect(() => {
     if (reports.length > 0) {
-      localStorage.setItem('accidentReports', JSON.stringify(reports))
+      localStorage.setItem("accidentReports", JSON.stringify(reports));
     }
-  }, [reports])
+  }, [reports]);
 
-  // Generate unique ID in format YYYYMMDD-<9 random alphanumeric characters>
+  // Generate unique ID in format YYYYMMDD-<7 random alphanumeric characters>
   const generateId = () => {
-    const now = new Date()
-    const year = now.getFullYear()
-    const month = String(now.getMonth() + 1).padStart(2, '0')
-    const day = String(now.getDate()).padStart(2, '0')
-    const datePrefix = `${year}${month}${day}`
-    
-    // Generate 9 random alphanumeric characters
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    const datePrefix = `${year}${month}${day}`;
+
     const randomChars = Math.random().toString(36).substr(2, 7).toUpperCase();
-    
-    return `RPT-${datePrefix}-${randomChars}`
-  }
+
+    return `RPT-${datePrefix}-${randomChars}`;
+  };
 
   // Create new report
   const createNewReport = () => {
+    const reportId = generateId();
     const newReport = {
-      id: generateId(),
+      id: reportId,
+      reportId: reportId, // Add reportId for the form field
+      reportNumber: reportId,
       dateCreated: new Date().toISOString(),
       dateOfIncident: new Date().toISOString().split("T")[0],
       timeOfIncident: "",
       location: "Chicopee Ski Club",
-      description: "",
-      reporterName: "",
-      reporterContact: "",
-      signature: "",
-      signatureDate: "",
       status: "in progress",
     };
-    setActiveReport(newReport)
-    setCurrentView('form')
-  }
+    setActiveReport(newReport);
+    setCurrentView("form");
+  };
 
   // Open existing report
   const openReport = (report) => {
-    setActiveReport(report)
-    setCurrentView('form')
-  }
+    setActiveReport(report);
+    setCurrentView("form");
+  };
 
   // Save report
   const saveReport = (updatedReport) => {
-    setReports(prevReports => {
-      const existingIndex = prevReports.findIndex(r => r.id === updatedReport.id)
+    setReports((prevReports) => {
+      const existingIndex = prevReports.findIndex(
+        (r) => r.id === updatedReport.id,
+      );
       if (existingIndex >= 0) {
-        // Update existing report
-        const newReports = [...prevReports]
-        newReports[existingIndex] = updatedReport
-        return newReports
+        const newReports = [...prevReports];
+        newReports[existingIndex] = updatedReport;
+        return newReports;
       } else {
-        // Add new report
-        return [...prevReports, updatedReport]
+        return [...prevReports, updatedReport];
       }
-    })
-  }
+    });
+  };
 
   // Delete report
   const deleteReport = (reportId) => {
-    if (window.confirm('Are you sure you want to delete this report?')) {
-      setReports(prevReports => prevReports.filter(r => r.id !== reportId))
-      setCurrentView('list')
-      setActiveReport(null)
+    if (window.confirm("Are you sure you want to delete this report?")) {
+      setReports((prevReports) => prevReports.filter((r) => r.id !== reportId));
+      setCurrentView("list");
+      setActiveReport(null);
     }
-  }
+  };
 
   // Back to list
   const backToList = () => {
-    setCurrentView('list')
-    setActiveReport(null)
-  }
+    setCurrentView("list");
+    setActiveReport(null);
+  };
 
   return (
     <div className="min-h-screen py-6 px-4 text-left">
@@ -156,21 +123,39 @@ function Report() {
 // Report List View Component
 function ReportListView({ reports, onCreateNew, onOpenReport }) {
   const formatDate = (isoString) => {
-    const date = new Date(isoString)
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
+    const date = new Date(isoString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
 
   const getStatusColor = (status) => {
     return status === "completed"
       ? "bg-green-100 text-green-800"
       : "bg-yellow-100 text-yellow-800";
-  }
+  };
+
+  // Calculate completion percentage for a report
+  const calculateCompletion = (report) => {
+    const requiredFields = ACCIDENT_REPORT_SCHEMA.sections
+      .flatMap((section) => section.fields)
+      .filter((field) => field.required)
+      .map((field) => field.name);
+
+    const completed = requiredFields.filter((fieldName) => {
+      const value = report[fieldName];
+      if (!value) return false;
+      if (typeof value === "string" && value.trim() === "") return false;
+      if (Array.isArray(value) && value.length === 0) return false;
+      return true;
+    });
+
+    return Math.round((completed.length / requiredFields.length) * 100);
+  };
 
   return (
     <div className="bg-white rounded-2xl shadow-sm p-6">
@@ -219,7 +204,7 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
           {reports.map((report) => {
-            const completionPercentage = calculateReportCompletion(report);
+            const completionPercentage = calculateCompletion(report);
             return (
               <div
                 key={report.id}
@@ -248,7 +233,6 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
                   Created: {formatDate(report.dateCreated)}
                 </div>
 
-                {/* Completion Progress */}
                 <div className="my-3">
                   <div className="flex justify-between items-center mb-1">
                     <span className="text-xs font-semibold text-gray-600">
@@ -280,110 +264,74 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
 
 // Report Form View Component
 function ReportFormView({ report, onSave, onBack, onDelete }) {
-  const [formData, setFormData] = useState(() => ({
-    ...report,
-    // Initialize new ski patrol fields if they don't exist
-    patientName: report.patientName || "",
-    patientAge: report.patientAge || "",
-    patientBirthdate: report.patientBirthdate || "",
-    patientGender: report.patientGender || "",
-    patientWeight: report.patientWeight || "",
-    patientHeight: report.patientHeight || "",
-    patientPhoneNumber: report.patientPhoneNumber || "",
-    guestType: report.guestType || "",
-    injuryType: report.injuryType || "",
-    injuryDescription: report.injuryDescription || "",
-    bodyPart: report.bodyPart || "",
-    injurySeverity: report.injurySeverity || "",
-    treatmentProvided: report.treatmentProvided || "",
-    weatherConditions: report.weatherConditions || "",
-    snowConditions: report.snowConditions || "",
-    visibility: report.visibility || "",
-    trailDifficulty: report.trailDifficulty || "",
-    patrollerName: report.patrollerName || "",
-  }));
-  const [touched, setTouched] = useState({})
+  // Use custom hooks for form management
+  const { formData, touched, handleChange, handleBlur, markAllTouched } =
+    useFormData(report);
+
+  const {
+    errors,
+    setErrors,
+    validate,
+    validateOnBlur,
+    calculateCompletion,
+    getIncompleteFields,
+  } = useFormValidation(formData, ACCIDENT_REPORT_SCHEMA);
 
   // Auto-save whenever formData changes
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      onSave(formData)
-    }, 500) // Debounce auto-save by 500ms
+      onSave(formData);
+    }, 500); // Debounce auto-save by 500ms
 
-    return () => clearTimeout(timeoutId)
-  }, [formData, onSave])
+    return () => clearTimeout(timeoutId);
+  }, [formData, onSave]);
 
-  // Calculate completion status using shared utility
-  const completionPercentage = calculateReportCompletion(formData)
-  
-  // Calculate pending count for display
-  const completedFields = REQUIRED_FIELDS.filter(field => {
-    const value = formData[field]
-    return value && value.trim() !== ''
-  })
-  
-  const pendingCount = REQUIRED_FIELDS.length - completedFields.length
-
-  const handleChange = (e) => {
-    const { name, value } = e.target
-    
-    setFormData(prev => {
-      const updates = {
-        ...prev,
-        [name]: value
-      }
-      
-      // Auto-fill signature date when signature is entered
-      if (name === 'signature' && value.trim() !== '' && !prev.signatureDate) {
-        updates.signatureDate = new Date().toISOString().split('T')[0]
-      }
-      
-      return updates
-    })
-  }
-
-  const handleBlur = (fieldName) => {
-    setTouched(prev => ({
-      ...prev,
-      [fieldName]: true
-    }))
-  }
+  // Calculate completion metrics
+  const completionPercentage = calculateCompletion();
+  const incompleteFields = getIncompleteFields();
+  const pendingCount = incompleteFields.length;
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    // Mark all fields as touched for validation display
-    const allTouched = {}
-    REQUIRED_FIELDS.forEach(field => {
-      allTouched[field] = true
-    })
-    setTouched(allTouched)
-  }
+    e.preventDefault();
+    markAllTouched();
+    const isValid = validate();
+
+    if (isValid) {
+      console.log("Form is valid and ready to submit");
+    }
+  };
 
   const handleStatusChange = (newStatus) => {
-    const updatedData = { ...formData, status: newStatus }
-    setFormData(updatedData)
-  }
+    onSave({ ...formData, status: newStatus });
+  };
 
-  const isFieldValid = (fieldName) => {
-    const value = formData[fieldName]
-    return value && value.trim() !== ''
-  }
+  const handleFieldChange = (e) => {
+    const { name } = e.target;
+    // Clear error for this field when it changes
+    if (errors[name]) {
+      setErrors((prev) => {
+        const { [name]: removed, ...rest } = prev;
+        return rest;
+      });
+    }
+    handleChange(e);
+  };
 
-  const showError = (fieldName) => {
-    return touched[fieldName] && !isFieldValid(fieldName)
-  }
+  const handleFieldBlur = (fieldName) => {
+    handleBlur(fieldName);
+    validateOnBlur(fieldName);
+  };
 
   const handlePrint = () => {
-    window.print()
-  }
+    window.print();
+  };
 
   return (
     <div>
+      {/* Screen version - visible on screen only */}
       <div className="bg-white rounded-2xl shadow-sm p-8">
-        {/* Report Header */}
         <ReportHeader reportId={formData.id} onBack={onBack} />
 
-        {/* Form Status Panel */}
         <FormStatusPanel
           status={formData.status}
           onStatusChange={handleStatusChange}
@@ -395,375 +343,25 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         />
 
         <form onSubmit={handleSubmit}>
-          {/* Incident Details Section */}
-          <FormSection title="Incident Details">
-            <FormFieldElement label="Report ID">
-              <span className="text-red-700 p-2">{formData.id}</span>
-            </FormFieldElement>
-            <div className="grid grid-cols-1 lg:grid-cols-2">
-              <div>
-                <FormFieldElement label="Location" required>
-                  <TextInput
-                    id="location"
-                    name="location"
-                    value={formData.location}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("location")}
-                    required
-                    placeholder="e.g., Main Street Run, Lift 3"
-                    showError={showError("location")}
-                  />
-                </FormFieldElement>
-              </div>
-              <FormFieldElement label="Date & Time" required>
-                <DateTimeInput
-                  dateId="dateOfIncident"
-                  dateName="dateOfIncident"
-                  dateValue={formData.dateOfIncident}
-                  timeId="timeOfIncident"
-                  timeName="timeOfIncident"
-                  timeValue={formData.timeOfIncident}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  showDateError={showError("dateOfIncident")}
-                  showTimeError={showError("timeOfIncident")}
-                />
-              </FormFieldElement>
-            </div>
-          </FormSection>
+          <FormRenderer
+            schema={ACCIDENT_REPORT_SCHEMA}
+            formData={formData}
+            onChange={handleFieldChange}
+            onBlur={handleFieldBlur}
+            touched={touched}
+            errors={errors}
+          />
 
-          {/* Patient Information Section */}
-          <FormSection title="Patient Information">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              <FormFieldElement label="Patient Name" required>
-                <TextInput
-                  id="patientName"
-                  name="patientName"
-                  value={formData.patientName}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientName")}
-                  required
-                  placeholder="Full name"
-                  showError={showError("patientName")}
-                />
-              </FormFieldElement>
-              <div className="flex">
-                <FormFieldElement label="Date of Birth" required>
-                  <DateInput
-                    id="patientBirthdate"
-                    name="patientBirthdate"
-                    value={formData.patientBirthdate}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("patientBirthdate")}
-                    required
-                    placeholder="Date of Birth"
-                    showError={showError("patientBirthdate")}
-                  />
-                </FormFieldElement>
-                <FormFieldElement label="Age" required>
-                  <TextInput
-                    id="patientAge"
-                    name="patientAge"
-                    value={formData.patientAge}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("patientAge")}
-                    required
-                    placeholder="Age"
-                    showError={showError("patientAge")}
-                  />
-                </FormFieldElement>
-              </div>
-              <FormFieldElement label="Phone #">
-                <TextInput
-                  id="patientPhoneNumber"
-                  name="patientPhoneNumber"
-                  value={formData.patientPhoneNumber}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientPhoneNumber")}
-                  required
-                  placeholder="Phone number"
-                  showError={showError("patientPhoneNumber")}
-                />
-              </FormFieldElement>
-              <FormFieldElement label="Gender">
-                <SelectInput
-                  id="patientGender"
-                  name="patientGender"
-                  value={formData.patientGender}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("patientGender")}
-                  options={[
-                    { value: "male", label: "Male" },
-                    { value: "female", label: "Female" },
-                    { value: "non-binary", label: "Non-Binary" },
-                  ]}
-                  placeholder="Select gender"
-                  required
-                  showError={showError("patientGender")}
-                />
-              </FormFieldElement>
-              <div className="flex">
-                <FormFieldElement label="Weight" required>
-                  <TextInput
-                    id="patientWeight"
-                    name="patientWeight"
-                    value={formData.patientWeight}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("patientWeight")}
-                    required
-                    placeholder="Weight"
-                    showError={showError("patientWeight")}
-                  />
-                </FormFieldElement>
-                <FormFieldElement label="Height" required>
-                  <TextInput
-                    id="patientHeight"
-                    name="patientHeight"
-                    value={formData.patientHeight}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("patientHeight")}
-                    required
-                    placeholder="Height"
-                    showError={showError("patientHeight")}
-                  />
-                </FormFieldElement>
-              </div>
-
-              <FormFieldElement label="Guest Type">
-                <SelectInput
-                  id="guestType"
-                  name="guestType"
-                  value={formData.guestType}
-                  onChange={handleChange}
-                  onBlur={() => handleBlur("guestType")}
-                  options={[
-                    { value: "day-ticket", label: "Day Ticket" },
-                    { value: "season-pass", label: "Season Pass" },
-                    { value: "card-holder", label: "Card Holder" },
-                    { value: "staff", label: "Staff" },
-                    { value: "staff-off-duty", label: "Staff (Off Duty)" },
-                    { value: "other", label: "Other" },
-                  ]}
-                  placeholder="Select guest type"
-                  required
-                  showError={showError("guestType")}
-                />
-              </FormFieldElement>
-            </div>
-          </FormSection>
-
-          {/* Patient Injuries Section */}
-          <FormSection title="Patient Injuries">
-            <FormFieldElement label="Injury Type">
-              <SelectInput
-                id="injuryType"
-                name="injuryType"
-                value={formData.injuryType}
-                onChange={handleChange}
-                onBlur={() => handleBlur("injuryType")}
-                options={[
-                  { value: "fracture", label: "Fracture" },
-                  { value: "sprain", label: "Sprain/Strain" },
-                  { value: "laceration", label: "Laceration" },
-                  { value: "head", label: "Head Injury" },
-                  { value: "other", label: "Other" },
-                ]}
-                placeholder="Select injury type"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Description" required>
-              <TextArea
-                id="injuryDescription"
-                name="injuryDescription"
-                value={formData.injuryDescription}
-                onChange={handleChange}
-                onBlur={() => handleBlur("injuryDescription")}
-                required
-                placeholder="Detailed description of the injury and how it occurred..."
-                rows={4}
-                showError={showError("injuryDescription")}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Body Part Affected">
-              <TextInput
-                id="bodyPart"
-                name="bodyPart"
-                value={formData.bodyPart}
-                onChange={handleChange}
-                onBlur={() => handleBlur("bodyPart")}
-                placeholder="e.g., Left knee, Right wrist"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Severity">
-              <SelectInput
-                id="injurySeverity"
-                name="injurySeverity"
-                value={formData.injurySeverity}
-                onChange={handleChange}
-                onBlur={() => handleBlur("injurySeverity")}
-                options={[
-                  { value: "minor", label: "Minor" },
-                  { value: "moderate", label: "Moderate" },
-                  { value: "severe", label: "Severe" },
-                ]}
-                placeholder="Select severity"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Treatment Provided">
-              <TextArea
-                id="treatmentProvided"
-                name="treatmentProvided"
-                value={formData.treatmentProvided}
-                onChange={handleChange}
-                onBlur={() => handleBlur("treatmentProvided")}
-                placeholder="First aid and treatment provided..."
-                rows={3}
-                showError={false}
-              />
-            </FormFieldElement>
-          </FormSection>
-
-          {/* Ski Conditions Section */}
-          <FormSection title="Ski Conditions">
-            <FormFieldElement label="Weather">
-              <SelectInput
-                id="weatherConditions"
-                name="weatherConditions"
-                value={formData.weatherConditions}
-                onChange={handleChange}
-                onBlur={() => handleBlur("weatherConditions")}
-                options={[
-                  { value: "clear", label: "Clear" },
-                  { value: "cloudy", label: "Cloudy" },
-                  { value: "snowing", label: "Snowing" },
-                  { value: "fog", label: "Fog" },
-                ]}
-                placeholder="Select weather"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Snow Conditions">
-              <SelectInput
-                id="snowConditions"
-                name="snowConditions"
-                value={formData.snowConditions}
-                onChange={handleChange}
-                onBlur={() => handleBlur("snowConditions")}
-                options={[
-                  { value: "powder", label: "Powder" },
-                  { value: "packed", label: "Packed" },
-                  { value: "icy", label: "Icy" },
-                  { value: "slushy", label: "Slushy" },
-                ]}
-                placeholder="Select snow conditions"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Visibility">
-              <SelectInput
-                id="visibility"
-                name="visibility"
-                value={formData.visibility}
-                onChange={handleChange}
-                onBlur={() => handleBlur("visibility")}
-                options={[
-                  { value: "excellent", label: "Excellent" },
-                  { value: "good", label: "Good" },
-                  { value: "fair", label: "Fair" },
-                  { value: "poor", label: "Poor" },
-                ]}
-                placeholder="Select visibility"
-                showError={false}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Trail Difficulty">
-              <SelectInput
-                id="trailDifficulty"
-                name="trailDifficulty"
-                value={formData.trailDifficulty}
-                onChange={handleChange}
-                onBlur={() => handleBlur("trailDifficulty")}
-                options={[
-                  { value: "green", label: "Green Circle (Beginner)" },
-                  { value: "blue", label: "Blue Square (Intermediate)" },
-                  { value: "black", label: "Black Diamond (Advanced)" },
-                  {
-                    value: "double-black",
-                    label: "Double Black Diamond (Expert)",
-                  },
-                ]}
-                placeholder="Select trail difficulty"
-                showError={false}
-              />
-            </FormFieldElement>
-          </FormSection>
-
-          {/* Patroller Information Section */}
-          <FormSection title="Patroller Information">
-            <FormFieldElement label="Patroller Name" required>
-              <TextInput
-                id="patrollerName"
-                name="patrollerName"
-                value={formData.patrollerName}
-                onChange={handleChange}
-                onBlur={() => handleBlur("patrollerName")}
-                required
-                placeholder="Full name"
-                showError={showError("patrollerName")}
-              />
-            </FormFieldElement>
-
-            <FormFieldElement label="Signature" required>
-              <TextInput
-                id="signature"
-                name="signature"
-                value={formData.signature}
-                onChange={handleChange}
-                onBlur={() => handleBlur("signature")}
-                required
-                placeholder="Type your full name to sign"
-                showError={showError("signature")}
-                className="font-serif italic text-lg"
-              />
-            </FormFieldElement>
-
-            {formData.signature && formData.signatureDate && (
-              <FormFieldElement label="">
-                <div className="flex-1">
-                  <p className="text-sm text-gray-600">
-                    Signed on:{" "}
-                    {new Date(formData.signatureDate).toLocaleDateString(
-                      "en-US",
-                      {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      },
-                    )}
-                  </p>
-                </div>
-              </FormFieldElement>
-            )}
-          </FormSection>
-
-          {/* Auto-save indicator */}
-          <div className="flex justify-between items-center pt-4 border-t border-gray-200 no-print">
+          <div className="flex justify-between items-center pt-4 border-t border-gray-200">
             <div className="text-sm text-gray-500 italic">
               Changes are automatically saved
             </div>
           </div>
         </form>
       </div>
+
+      {/* Print version - hidden on screen, visible when printing */}
+      <PrintRenderer schema={ACCIDENT_REPORT_SCHEMA} formData={formData} />
     </div>
   );
 }

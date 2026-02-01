@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Report from './Report.jsx'
 import Navbar from './components/Navbar.jsx'
 import './index.css'
+import "./styles/print.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
