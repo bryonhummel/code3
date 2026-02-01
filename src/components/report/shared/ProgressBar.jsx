@@ -81,11 +81,11 @@ function ProgressBar({
         {/* Threshold marker - shows where requiredByPatient would be 100% */}
         {completionMetrics.overallPercentage !== 100 && (
           <div
-            className="absolute top-0 h-full w-0.5 bg-blue-300 shadow-md"
+            className="absolute top-0 h-full w-0 bg-blue-300 shadow-md"
             style={{
               left: `${completionMetrics.requiredThresholdPercentage}%`,
             }}
-            title={`Required fields threshold: ${completionMetrics.requiredThresholdPercentage}%`}
+            title={`Patient info fields threshold: ${completionMetrics.requiredThresholdPercentage}%`}
           >
             {/* Small triangle marker at top */}
             <div className="absolute -top-1 -left-1 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-blue-300" />
