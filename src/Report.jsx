@@ -309,7 +309,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
   }, [formData, unavailableFields]);
 
   // Calculate completion metrics
-  const completionPercentage = calculateCompletion();
+  const completionMetrics = calculateCompletion();
   const incompleteFields = getIncompleteFields();
   const pendingCount = incompleteFields.length;
 
@@ -379,7 +379,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
         <FormStatusPanel
           status={formData.status}
           onStatusChange={handleStatusChange}
-          completionPercentage={completionPercentage}
+          completionMetrics={completionMetrics}
           pendingCount={pendingCount}
           onPrint={handlePrint}
           onDelete={() => onDelete(formData.id)}

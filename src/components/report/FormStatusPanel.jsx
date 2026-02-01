@@ -57,17 +57,19 @@ const REMINDER_RULES = [
   }
 ]
 
-function FormStatusPanel({ 
-  status, 
-  onStatusChange, 
-  completionPercentage, 
+function FormStatusPanel({
+  status,
+  onStatusChange,
+  completionMetrics,
   pendingCount,
   onPrint,
   onDelete,
-  formData
+  formData,
 }) {
   // Check which reminders should be displayed
-  const activeReminders = REMINDER_RULES.filter(rule => rule.condition(formData))
+  const activeReminders = REMINDER_RULES.filter((rule) =>
+    rule.condition(formData),
+  );
 
   return (
     <div className="bg-gray-50 rounded-lg p-6 mb-6 border border-gray-200 no-print">
@@ -101,33 +103,76 @@ function FormStatusPanel({
         </button>
       </div>
 
-      {/* Progress Bar */}
+      {/* Stacked Progress Bar */}
       <div className="mb-4">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-semibold text-gray-700">
             Form Completion
           </span>
           <span className="text-sm font-semibold text-gray-700">
-            {completionPercentage}%
+            {completionMetrics.overallPercentage}%
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+
+        {/* Stacked progress bar container */}
+        <div className="relative w-full bg-gray-200 rounded-full h-3 overflow-visible">
+          {/* Blue bar - requiredByPatient fields */}
           <div
-            className={`h-full transition-all duration-300 ${
-              completionPercentage === 100 ? "bg-green-500" : "bg-blue-500"
-            }`}
-            style={{ width: `${completionPercentage}%` }}
+            className="absolute top-0 left-0 h-full bg-blue-300 transition-all duration-300 rounded-l-full"
+            style={{ width: `${completionMetrics.requiredPercentage}%` }}
           />
+
+          {/* Dark gray bar - non-required fields */}
+          <div
+            className="absolute top-0 h-full bg-gray-400 transition-all duration-300"
+            style={{
+              left: `${completionMetrics.requiredPercentage}%`,
+              width: `${completionMetrics.nonRequiredPercentage}%`,
+              borderTopRightRadius:
+                completionMetrics.overallPercentage === 100 ? "9999px" : "0",
+              borderBottomRightRadius:
+                completionMetrics.overallPercentage === 100 ? "9999px" : "0",
+            }}
+          />
+
+          {/* Threshold marker - shows where requiredByPatient would be 100% */}
+          <div
+            className="absolute top-0 h-full w-0.5 bg-blue-300 shadow-md"
+            style={{
+              left: `${completionMetrics.requiredThresholdPercentage}%`,
+            }}
+            title={`Required fields threshold: ${completionMetrics.requiredThresholdPercentage}%`}
+          >
+            {/* Small triangle marker at top */}
+            <div className="absolute -top-1 -left-1 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[6px] border-t-blue-300" />
+            {/* Small triangle marker at bottom */}
+            <div className="absolute -bottom-1 -left-1 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-b-[6px] border-b-blue-300" />
+          </div>
         </div>
-        {pendingCount > 0 && (
-          <p className="text-sm text-gray-600 mt-2">
-            {pendingCount} required field{pendingCount !== 1 ? "s" : ""}{" "}
-            remaining
-          </p>
-        )}
-        {completionPercentage === 100 && (
+
+        {/* Progress details */}
+        <div className="flex justify-between items-center mt-2 text-xs text-gray-600">
+          <div className="flex gap-4">
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-blue-300 rounded-sm" />
+              <span>
+                Patient Info: {completionMetrics.completedRequired}/
+                {completionMetrics.totalRequired}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-gray-400 rounded-sm" />
+              <span>
+                Patroller Info: {completionMetrics.completedNonRequired}/
+                {completionMetrics.totalNonRequired}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {completionMetrics.overallPercentage === 100 && (
           <p className="text-sm text-green-600 mt-2 font-semibold">
-            ✓ All required fields completed
+            ✓ All fields completed
           </p>
         )}
       </div>
