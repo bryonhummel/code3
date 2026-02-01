@@ -3,293 +3,294 @@
 export const ACCIDENT_REPORT_SCHEMA = {
   sections: [
     {
-      id: 'incident-details',
-      title: 'Incident Details',
-      printTitle: 'INCIDENT DETAILS',
+      id: "incident-details",
+      title: "Incident Details",
+      printTitle: "INCIDENT DETAILS",
       fields: [
         {
-          name: 'reportId',
-          type: 'readonly',
-          label: 'Report ID',
+          name: "reportId",
+          type: "readonly",
+          label: "Report ID",
           required: false,
-          printable: true
+          printable: true,
         },
         {
-          name: 'location',
-          type: 'text',
-          label: 'Location',
-          placeholder: 'e.g., Main Street Run, Lift 3',
+          name: "location",
+          type: "text",
+          label: "Location",
+          placeholder: "e.g., Main Street Run, Lift 3",
           required: true,
           maxLength: 100,
           printable: true,
           validation: {
-            type: 'required',
-            message: 'Location is required'
-          }
+            type: "required",
+            message: "Location is required",
+          },
         },
         {
-          name: 'dateOfIncident',
-          type: 'date',
-          label: 'Date of Incident',
+          name: "dateOfIncident",
+          type: "date",
+          label: "Date of Incident",
           required: true,
-          printable: true
+          printable: true,
         },
         {
-          name: 'timeOfIncident',
-          type: 'time',
-          label: 'Time of Incident',
+          name: "timeOfIncident",
+          type: "time",
+          label: "Time of Incident",
           required: true,
-          printable: true
-        }
-      ]
+          printable: true,
+        },
+      ],
     },
     {
-      id: 'patient-info',
-      title: 'Patient Information',
-      printTitle: 'PATIENT INFORMATION',
+      id: "patient-info",
+      title: "Patient Information",
+      printTitle: "PATIENT INFORMATION",
       fields: [
         {
-          name: 'patientName',
-          type: 'text',
-          label: 'Patient Name',
-          placeholder: 'Full name',
+          name: "patientName",
+          type: "text",
+          label: "Patient Name",
+          placeholder: "Full name",
           required: true,
           maxLength: 100,
-          printable: true
+          printable: true,
         },
         {
-          name: 'patientBirthdate',
-          type: 'date',
-          label: 'Date of Birth',
+          name: "patientBirthdate",
+          type: "date",
+          label: "Date of Birth",
           required: true,
-          printable: true
+          printable: true,
         },
         {
-          name: 'patientAge',
-          type: 'number',
-          label: 'Age',
-          placeholder: 'Age',
+          name: "patientAge",
+          type: "number",
+          label: "Age",
+          placeholder: "Age",
           required: true,
           min: 0,
           max: 120,
-          printable: true
+          printable: true,
         },
         {
-          name: 'patientPhoneNumber',
-          type: 'text',
-          label: 'Phone Number',
-          placeholder: '(555) 123-4567',
+          name: "patientPhoneNumber",
+          type: "text",
+          label: "Phone Number",
+          placeholder: "(555) 123-4567",
           required: true,
           maxLength: 20,
           printable: true,
           validation: {
-            type: 'phone',
-            message: 'Please enter a valid phone number'
-          }
+            type: "phone",
+            message: "Please enter a valid phone number",
+          },
         },
         {
-          name: 'patientGender',
-          type: 'radio',
-          label: 'Gender',
+          name: "patientGender",
+          type: "radio",
+          label: "Gender",
           required: true,
           options: [
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-            { value: 'non-binary', label: 'Non-Binary' }
+            { value: "male", label: "Male" },
+            { value: "female", label: "Female" },
+            { value: "non-binary", label: "Non-Binary" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'patientWeight',
-          type: 'number',
-          label: 'Weight (lbs)',
-          placeholder: 'Weight',
+          name: "patientWeight",
+          type: "number",
+          label: "Weight (lbs)",
+          placeholder: "Weight",
           required: true,
           min: 0,
           max: 500,
-          printable: true
+          printable: true,
         },
         {
-          name: 'patientHeight',
-          type: 'text',
-          label: 'Height',
-          placeholder: 'e.g., 5\'10"',
+          name: "patientHeight",
+          type: "text",
+          label: "Height",
+          placeholder: "e.g., 5'10\"",
           required: true,
           maxLength: 20,
-          printable: true
+          printable: true,
         },
         {
-          name: 'guestType',
-          type: 'radio',
-          label: 'Guest Type',
+          name: "guestType",
+          type: "radio",
+          label: "Guest Type",
           required: true,
           options: [
-            { value: 'day-ticket', label: 'Day Ticket' },
-            { value: 'season-pass', label: 'Season Pass' },
-            { value: 'card-holder', label: 'Card Holder' },
-            { value: 'staff', label: 'Staff' },
-            { value: 'staff-off-duty', label: 'Staff (Off Duty)' },
-            { value: 'other', label: 'Other' }
+            { value: "day-ticket", label: "Day Ticket" },
+            { value: "season-pass", label: "Season Pass" },
+            { value: "card-holder", label: "Card Holder" },
+            { value: "staff", label: "Staff" },
+            { value: "staff-off-duty", label: "Staff (Off Duty)" },
+            { value: "other", label: "Other" },
           ],
-          printable: true
-        }
-      ]
+          printable: true,
+        },
+      ],
     },
     {
-      id: 'injuries',
-      title: 'Patient Injuries',
-      printTitle: 'INJURIES & TREATMENT',
+      id: "injuries",
+      title: "Patient Injuries",
+      printTitle: "INJURIES & TREATMENT",
       fields: [
         {
-          name: 'injuryTypes',
-          type: 'checkbox',
-          label: 'Injury Type(s)',
+          name: "injuryTypes",
+          type: "checkbox",
+          label: "Injury Type(s)",
           required: false,
           options: [
-            { value: 'fracture', label: 'Fracture' },
-            { value: 'sprain', label: 'Sprain/Strain' },
-            { value: 'laceration', label: 'Laceration' },
-            { value: 'head', label: 'Head Injury' },
-            { value: 'other', label: 'Other' }
+            { value: "fracture", label: "Fracture" },
+            { value: "sprain", label: "Sprain/Strain" },
+            { value: "laceration", label: "Laceration" },
+            { value: "head", label: "Head Injury" },
+            { value: "other", label: "Other" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'bodyPart',
-          type: 'text',
-          label: 'Body Part Affected',
-          placeholder: 'e.g., Left knee, Right wrist',
+          name: "bodyPart",
+          type: "text",
+          label: "Body Part Affected",
+          placeholder: "e.g., Left knee, Right wrist",
           required: false,
           maxLength: 100,
-          printable: true
+          printable: true,
         },
         {
-          name: 'injurySeverity',
-          type: 'radio',
-          label: 'Severity',
+          name: "injurySeverity",
+          type: "radio",
+          label: "Severity",
           required: false,
           options: [
-            { value: 'minor', label: 'Minor' },
-            { value: 'moderate', label: 'Moderate' },
-            { value: 'severe', label: 'Severe' }
+            { value: "minor", label: "Minor" },
+            { value: "moderate", label: "Moderate" },
+            { value: "severe", label: "Severe" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'injuryDescription',
-          type: 'textarea',
-          label: 'Injury Description',
-          placeholder: 'Detailed description of the injury and how it occurred...',
+          name: "injuryDescription",
+          type: "textarea",
+          label: "Injury Description",
+          placeholder:
+            "Detailed description of the injury and how it occurred...",
           required: true,
-          maxLength: 1000,
+          maxLength: 500,
           rows: 4,
           printable: true,
-          fullWidth: true
+          fullWidth: true,
         },
         {
-          name: 'treatmentProvided',
-          type: 'textarea',
-          label: 'Treatment Provided',
-          placeholder: 'First aid and treatment provided...',
+          name: "treatmentProvided",
+          type: "textarea",
+          label: "Treatment Provided",
+          placeholder: "First aid and treatment provided...",
           required: false,
-          maxLength: 1000,
+          maxLength: 500,
           rows: 3,
           printable: true,
-          fullWidth: true
-        }
-      ]
+          fullWidth: true,
+        },
+      ],
     },
     {
-      id: 'conditions',
-      title: 'Ski Conditions',
-      printTitle: 'SKI CONDITIONS',
+      id: "conditions",
+      title: "Ski Conditions",
+      printTitle: "SKI CONDITIONS",
       fields: [
         {
-          name: 'weatherConditions',
-          type: 'radio',
-          label: 'Weather',
+          name: "weatherConditions",
+          type: "radio",
+          label: "Weather",
           required: false,
           options: [
-            { value: 'clear', label: 'Clear' },
-            { value: 'cloudy', label: 'Cloudy' },
-            { value: 'snowing', label: 'Snowing' },
-            { value: 'fog', label: 'Fog' }
+            { value: "clear", label: "Clear" },
+            { value: "cloudy", label: "Cloudy" },
+            { value: "snowing", label: "Snowing" },
+            { value: "fog", label: "Fog" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'snowConditions',
-          type: 'radio',
-          label: 'Snow Conditions',
+          name: "snowConditions",
+          type: "radio",
+          label: "Snow Conditions",
           required: false,
           options: [
-            { value: 'powder', label: 'Powder' },
-            { value: 'packed', label: 'Packed' },
-            { value: 'icy', label: 'Icy' },
-            { value: 'slushy', label: 'Slushy' }
+            { value: "powder", label: "Powder" },
+            { value: "packed", label: "Packed" },
+            { value: "icy", label: "Icy" },
+            { value: "slushy", label: "Slushy" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'visibility',
-          type: 'radio',
-          label: 'Visibility',
+          name: "visibility",
+          type: "radio",
+          label: "Visibility",
           required: false,
           options: [
-            { value: 'excellent', label: 'Excellent' },
-            { value: 'good', label: 'Good' },
-            { value: 'fair', label: 'Fair' },
-            { value: 'poor', label: 'Poor' }
+            { value: "excellent", label: "Excellent" },
+            { value: "good", label: "Good" },
+            { value: "fair", label: "Fair" },
+            { value: "poor", label: "Poor" },
           ],
-          printable: true
+          printable: true,
         },
         {
-          name: 'trailDifficulty',
-          type: 'radio',
-          label: 'Trail Difficulty',
+          name: "trailDifficulty",
+          type: "radio",
+          label: "Trail Difficulty",
           required: false,
           options: [
-            { value: 'green', label: 'Green Circle (Beginner)' },
-            { value: 'blue', label: 'Blue Square (Intermediate)' },
-            { value: 'black', label: 'Black Diamond (Advanced)' },
-            { value: 'double-black', label: 'Double Black Diamond (Expert)' }
+            { value: "green", label: "Green Circle (Beginner)" },
+            { value: "blue", label: "Blue Square (Intermediate)" },
+            { value: "black", label: "Black Diamond (Advanced)" },
+            { value: "double-black", label: "Double Black Diamond (Expert)" },
           ],
-          printable: true
-        }
-      ]
+          printable: true,
+        },
+      ],
     },
     {
-      id: 'patroller-info',
-      title: 'Patroller Information',
-      printTitle: 'PATROLLER SIGNATURE',
+      id: "patroller-info",
+      title: "Patroller Information",
+      printTitle: "PATROLLER SIGNATURE",
       fields: [
         {
-          name: 'patrollerName',
-          type: 'text',
-          label: 'Patroller Name',
-          placeholder: 'Full name',
+          name: "patrollerName",
+          type: "text",
+          label: "Patroller Name",
+          placeholder: "Full name",
           required: true,
           maxLength: 100,
-          printable: true
+          printable: true,
         },
         {
-          name: 'signature',
-          type: 'signature',
-          label: 'Signature',
+          name: "signature",
+          type: "signature",
+          label: "Signature",
           required: true,
           printable: true,
-          fullWidth: true
+          fullWidth: true,
         },
         {
-          name: 'signatureDate',
-          type: 'readonly',
-          label: 'Signature Date',
+          name: "signatureDate",
+          type: "readonly",
+          label: "Signature Date",
           required: false,
-          printable: true
-        }
-      ]
-    }
-  ]
+          printable: true,
+        },
+      ],
+    },
+  ],
 };
 
 // Helper function to get all required fields
