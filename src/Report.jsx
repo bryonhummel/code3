@@ -11,6 +11,7 @@ function Report() {
   const [reports, setReports] = useState([]);
   const [currentView, setCurrentView] = useState("list"); // 'list' or 'form'
   const [activeReport, setActiveReport] = useState(null);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   // Load reports from localStorage on mount
   useEffect(() => {
@@ -22,14 +23,16 @@ function Report() {
         console.error("Error loading reports:", error);
       }
     }
+    setIsInitialLoad(false);
   }, []);
 
-  // Save reports to localStorage whenever they change
+  // Save reports to localStorage whenever they change (but not on initial load)
   useEffect(() => {
-    if (reports.length > 0) {
-      localStorage.setItem("accidentReports", JSON.stringify(reports));
+    if (isInitialLoad) {
+      return;
     }
-  }, [reports]);
+    localStorage.setItem("accidentReports", JSON.stringify(reports));
+  }, [reports, isInitialLoad]);
 
   // Generate unique ID in format YYYYMMDD-<7 random alphanumeric characters>
   const generateId = () => {
@@ -300,7 +303,8 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     }, 500); // Debounce auto-save by 500ms
 
     return () => clearTimeout(timeoutId);
-  }, [formData, unavailableFields, onSave]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData, unavailableFields]);
 
   // Calculate completion metrics
   const completionPercentage = calculateCompletion();
@@ -313,7 +317,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     const isValid = validate();
 
     if (isValid) {
-      console.log("Form is valid and ready to submit");
+      // Form is valid
     }
   };
 

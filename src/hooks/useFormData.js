@@ -1,29 +1,34 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
 export function useFormData(initialData = {}) {
   const [formData, setFormData] = useState(initialData);
   const [touched, setTouched] = useState({});
 
+  // Sync formData when initialData changes (e.g., when opening a different report)
+  useEffect(() => {
+    setFormData(initialData);
+  }, [initialData]);
+
   const handleChange = useCallback((e) => {
     const { name, value, type } = e.target;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   }, []);
 
   const handleBlur = useCallback((fieldName) => {
-    setTouched(prev => ({ 
-      ...prev, 
-      [fieldName]: true 
+    setTouched((prev) => ({
+      ...prev,
+      [fieldName]: true,
     }));
   }, []);
 
   const setFieldValue = useCallback((fieldName, value) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [fieldName]: value
+      [fieldName]: value,
     }));
   }, []);
 
@@ -35,7 +40,7 @@ export function useFormData(initialData = {}) {
   const markAllTouched = useCallback(() => {
     const allFields = Object.keys(formData);
     const allTouched = {};
-    allFields.forEach(field => {
+    allFields.forEach((field) => {
       allTouched[field] = true;
     });
     setTouched(allTouched);
@@ -50,6 +55,6 @@ export function useFormData(initialData = {}) {
     handleBlur,
     setFieldValue,
     resetForm,
-    markAllTouched
+    markAllTouched,
   };
 }
