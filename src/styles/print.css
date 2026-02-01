@@ -100,6 +100,11 @@
     margin-bottom: 2px;
   }
 
+  .print-field-unavailable {
+    text-decoration: line-through;
+    color: #666;
+  }
+
   .print-field-value {
     font-size: 9pt;
     color: #000;

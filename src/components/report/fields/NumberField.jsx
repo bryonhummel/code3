@@ -3,18 +3,20 @@ import ValidationMessage from '../shared/ValidationMessage';
 
 function NumberField({
   name,
-  value = '',
+  value = "",
   onChange,
   onBlur,
   label,
-  placeholder = '',
+  placeholder = "",
   required = false,
   min,
   max,
   showError = false,
-  errorMessage = 'This field is required',
+  errorMessage = "This field is required",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const handleBlur = (e) => {
     if (onBlur) {
@@ -23,7 +25,13 @@ function NumberField({
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <div className="relative">
         <input
           type="number"
@@ -38,8 +46,8 @@ function NumberField({
           required={required}
           disabled={disabled}
           className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-            showError ? 'border-red-500' : 'border-gray-300'
-          } ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''} ${className}`}
+            showError ? "border-red-500" : "border-gray-300"
+          } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""} ${className}`}
         />
       </div>
       {showError && <ValidationMessage message={errorMessage} type="error" />}
@@ -48,8 +56,8 @@ function NumberField({
           {min !== undefined && max !== undefined
             ? `Range: ${min} - ${max}`
             : min !== undefined
-            ? `Min: ${min}`
-            : `Max: ${max}`}
+              ? `Min: ${min}`
+              : `Max: ${max}`}
         </div>
       )}
     </FieldWrapper>

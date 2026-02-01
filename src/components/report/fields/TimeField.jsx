@@ -3,15 +3,17 @@ import ValidationMessage from '../shared/ValidationMessage';
 
 function TimeField({
   name,
-  value = '',
+  value = "",
   onChange,
   onBlur,
   label,
   required = false,
   showError = false,
-  errorMessage = 'This field is required',
+  errorMessage = "This field is required",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const handleBlur = (e) => {
     if (onBlur) {
@@ -20,7 +22,13 @@ function TimeField({
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <input
         type="time"
         id={name}
@@ -31,8 +39,8 @@ function TimeField({
         required={required}
         disabled={disabled}
         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors ${
-          showError ? 'border-red-500' : 'border-gray-300'
-        } ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''} ${className}`}
+          showError ? "border-red-500" : "border-gray-300"
+        } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""} ${className}`}
       />
       {showError && <ValidationMessage message={errorMessage} type="error" />}
     </FieldWrapper>

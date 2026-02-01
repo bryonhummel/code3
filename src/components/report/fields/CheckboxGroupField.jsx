@@ -10,27 +10,29 @@ function CheckboxGroupField({
   options = [],
   required = false,
   showError = false,
-  errorMessage = 'Please select at least one option',
+  errorMessage = "Please select at least one option",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const handleCheckboxChange = (optionValue) => {
     const currentValues = Array.isArray(value) ? value : [];
     const newValues = currentValues.includes(optionValue)
-      ? currentValues.filter(v => v !== optionValue)
+      ? currentValues.filter((v) => v !== optionValue)
       : [...currentValues, optionValue];
-    
+
     // Create synthetic event to match expected onChange signature
     const syntheticEvent = {
       target: {
         name: name,
         value: newValues,
-        type: 'checkbox'
-      }
+        type: "checkbox",
+      },
     };
-    
+
     onChange(syntheticEvent);
-    
+
     // Trigger blur for validation
     if (onBlur) {
       setTimeout(() => onBlur(name), 0);
@@ -42,16 +44,22 @@ function CheckboxGroupField({
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <div className={`space-y-2 ${className}`}>
         {options.map((option) => (
           <label
             key={option.value}
             className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer ${
               isChecked(option.value)
-                ? 'bg-blue-50 border-blue-500'
-                : 'bg-white border-gray-300 hover:bg-gray-50'
-            } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                ? "bg-blue-50 border-blue-500"
+                : "bg-white border-gray-300 hover:bg-gray-50"
+            } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <input
               type="checkbox"

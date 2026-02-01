@@ -3,16 +3,18 @@ import ValidationMessage from '../shared/ValidationMessage';
 
 function RadioGroupField({
   name,
-  value = '',
+  value = "",
   onChange,
   onBlur,
   label,
   options = [],
   required = false,
   showError = false,
-  errorMessage = 'Please select an option',
+  errorMessage = "Please select an option",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const handleChange = (e) => {
     onChange(e);
@@ -21,16 +23,22 @@ function RadioGroupField({
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <div className={`space-y-2 ${className}`}>
         {options.map((option) => (
           <label
             key={option.value}
             className={`flex items-center p-2 rounded-lg border transition-colors cursor-pointer ${
               value === option.value
-                ? 'bg-blue-50 border-blue-500'
-                : 'bg-white border-gray-300 hover:bg-gray-50'
-            } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                ? "bg-blue-50 border-blue-500"
+                : "bg-white border-gray-300 hover:bg-gray-50"
+            } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             <input
               type="radio"

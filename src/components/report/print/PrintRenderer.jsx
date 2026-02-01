@@ -1,28 +1,31 @@
 import PrintSection from './PrintSection';
 import PrintField from './PrintField';
 
-function PrintRenderer({ schema, formData }) {
+function PrintRenderer({ schema, formData, unavailableFields = [] }) {
   return (
     <div className="print-renderer">
       <div className="print-header">
         <h1 className="print-title">Ski Patrol Accident Report</h1>
         <div className="print-report-number">
-          Report #{formData.reportNumber || '—'}
+          Report #{formData.reportNumber || "—"}
         </div>
       </div>
 
-      {schema.sections.map(section => (
+      {schema.sections.map((section) => (
         <PrintSection key={section.id} title={section.title}>
           <div className="print-fields-grid">
-            {section.fields.map(field => (
-              <div 
+            {section.fields.map((field) => (
+              <div
                 key={field.name}
-                className={field.fullWidth ? 'print-field-full' : 'print-field-normal'}
+                className={
+                  field.fullWidth ? "print-field-full" : "print-field-normal"
+                }
               >
                 <PrintField
                   label={field.label}
                   value={formData[field.name]}
                   type={field.type}
+                  isUnavailable={unavailableFields.includes(field.name)}
                 />
               </div>
             ))}
@@ -32,7 +35,8 @@ function PrintRenderer({ schema, formData }) {
 
       <div className="print-footer">
         <div className="print-footer-text">
-          Generated on {new Date().toLocaleDateString()} at {new Date().toLocaleTimeString()}
+          Generated on {new Date().toLocaleDateString()} at{" "}
+          {new Date().toLocaleTimeString()}
         </div>
       </div>
     </div>

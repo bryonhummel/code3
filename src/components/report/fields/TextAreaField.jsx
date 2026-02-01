@@ -3,18 +3,20 @@ import ValidationMessage from '../shared/ValidationMessage';
 
 function TextAreaField({
   name,
-  value = '',
+  value = "",
   onChange,
   onBlur,
   label,
-  placeholder = '',
+  placeholder = "",
   required = false,
   maxLength,
   rows = 4,
   showError = false,
-  errorMessage = 'This field is required',
+  errorMessage = "This field is required",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const handleBlur = (e) => {
     if (onBlur) {
@@ -23,7 +25,13 @@ function TextAreaField({
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <textarea
         id={name}
         name={name}
@@ -36,8 +44,8 @@ function TextAreaField({
         required={required}
         disabled={disabled}
         className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors resize-y ${
-          showError ? 'border-red-500' : 'border-gray-300'
-        } ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''} ${className}`}
+          showError ? "border-red-500" : "border-gray-300"
+        } ${disabled ? "bg-gray-100 cursor-not-allowed" : ""} ${className}`}
       />
       {showError && <ValidationMessage message={errorMessage} type="error" />}
       {maxLength && (

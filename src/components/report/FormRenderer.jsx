@@ -8,29 +8,35 @@ import RadioGroupField from './fields/RadioGroupField';
 import CheckboxGroupField from './fields/CheckboxGroupField';
 import SignatureField from './fields/SignatureField';
 
-function FormRenderer({ 
-  schema, 
-  formData, 
-  onChange, 
-  onBlur, 
-  touched, 
-  errors 
+function FormRenderer({
+  schema,
+  formData,
+  onChange,
+  onBlur,
+  touched,
+  errors,
+  unavailableFields = [],
+  onToggleAvailability,
 }) {
   const renderField = (field) => {
+    const isUnavailable = unavailableFields.includes(field.name);
+
     const commonProps = {
       name: field.name,
-      value: formData[field.name] || (field.type === 'checkbox' ? [] : ''),
+      value: formData[field.name] || (field.type === "checkbox" ? [] : ""),
       onChange,
       onBlur,
       label: field.label,
       required: field.required,
       showError: touched[field.name] && !!errors[field.name],
       errorMessage: errors[field.name],
-      disabled: field.type === 'readonly'
+      disabled: field.type === "readonly" || isUnavailable,
+      isUnavailable,
+      onToggleAvailability: () => onToggleAvailability(field.name),
     };
 
     switch (field.type) {
-      case 'text':
+      case "text":
         return (
           <TextField
             {...commonProps}
@@ -39,7 +45,7 @@ function FormRenderer({
           />
         );
 
-      case 'textarea':
+      case "textarea":
         return (
           <TextAreaField
             {...commonProps}
@@ -49,7 +55,7 @@ function FormRenderer({
           />
         );
 
-      case 'number':
+      case "number":
         return (
           <NumberField
             {...commonProps}
@@ -59,45 +65,29 @@ function FormRenderer({
           />
         );
 
-      case 'date':
-        return (
-          <DateField {...commonProps} />
-        );
+      case "date":
+        return <DateField {...commonProps} />;
 
-      case 'time':
-        return (
-          <TimeField {...commonProps} />
-        );
+      case "time":
+        return <TimeField {...commonProps} />;
 
-      case 'radio':
-        return (
-          <RadioGroupField
-            {...commonProps}
-            options={field.options}
-          />
-        );
+      case "radio":
+        return <RadioGroupField {...commonProps} options={field.options} />;
 
-      case 'checkbox':
-        return (
-          <CheckboxGroupField
-            {...commonProps}
-            options={field.options}
-          />
-        );
+      case "checkbox":
+        return <CheckboxGroupField {...commonProps} options={field.options} />;
 
-      case 'signature':
-        return (
-          <SignatureField {...commonProps} />
-        );
+      case "signature":
+        return <SignatureField {...commonProps} />;
 
-      case 'readonly':
+      case "readonly":
         return (
           <div className="py-2">
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               {field.label}
             </label>
             <div className="text-gray-900 font-mono">
-              {formData[field.name] || '—'}
+              {formData[field.name] || "—"}
             </div>
           </div>
         );
@@ -110,13 +100,13 @@ function FormRenderer({
 
   return (
     <div className="form-renderer space-y-6">
-      {schema.sections.map(section => (
+      {schema.sections.map((section) => (
         <FormSection key={section.id} title={section.title}>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {section.fields.map(field => (
-              <div 
-                key={field.name} 
-                className={field.fullWidth ? 'col-span-full' : ''}
+            {section.fields.map((field) => (
+              <div
+                key={field.name}
+                className={field.fullWidth ? "col-span-full" : ""}
               >
                 {renderField(field)}
               </div>

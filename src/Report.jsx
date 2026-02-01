@@ -146,7 +146,12 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
       .filter((field) => field.required)
       .map((field) => field.name);
 
+    const unavailableFields = report.unavailableFields || [];
+
     const completed = requiredFields.filter((fieldName) => {
+      // If field is marked as unavailable, consider it complete
+      if (unavailableFields.includes(fieldName)) return true;
+
       const value = report[fieldName];
       if (!value) return false;
       if (typeof value === "string" && value.trim() === "") return false;
@@ -264,6 +269,11 @@ function ReportListView({ reports, onCreateNew, onOpenReport }) {
 
 // Report Form View Component
 function ReportFormView({ report, onSave, onBack, onDelete }) {
+  // Track which fields are marked as unavailable
+  const [unavailableFields, setUnavailableFields] = useState(
+    report.unavailableFields || [],
+  );
+
   // Use custom hooks for form management
   const { formData, touched, handleChange, handleBlur, markAllTouched } =
     useFormData(report);
@@ -275,16 +285,16 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     validateOnBlur,
     calculateCompletion,
     getIncompleteFields,
-  } = useFormValidation(formData, ACCIDENT_REPORT_SCHEMA);
+  } = useFormValidation(formData, ACCIDENT_REPORT_SCHEMA, unavailableFields);
 
-  // Auto-save whenever formData changes
+  // Auto-save whenever formData or unavailableFields changes
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      onSave(formData);
+      onSave({ ...formData, unavailableFields });
     }, 500); // Debounce auto-save by 500ms
 
     return () => clearTimeout(timeoutId);
-  }, [formData, onSave]);
+  }, [formData, unavailableFields, onSave]);
 
   // Calculate completion metrics
   const completionPercentage = calculateCompletion();
@@ -326,6 +336,24 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
     window.print();
   };
 
+  // Toggle field availability
+  const toggleFieldAvailability = (fieldName) => {
+    setUnavailableFields((prev) => {
+      if (prev.includes(fieldName)) {
+        // Remove from unavailable list
+        return prev.filter((name) => name !== fieldName);
+      } else {
+        // Add to unavailable list, clear the field value, and clear any errors
+        handleChange({ target: { name: fieldName, value: "" } });
+        setErrors((prevErrors) => {
+          const { [fieldName]: removed, ...rest } = prevErrors;
+          return rest;
+        });
+        return [...prev, fieldName];
+      }
+    });
+  };
+
   return (
     <div>
       {/* Screen version - visible on screen only */}
@@ -350,6 +378,8 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
             onBlur={handleFieldBlur}
             touched={touched}
             errors={errors}
+            unavailableFields={unavailableFields}
+            onToggleAvailability={toggleFieldAvailability}
           />
 
           <div className="flex justify-between items-center pt-4 border-t border-gray-200">
@@ -361,7 +391,11 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
       </div>
 
       {/* Print version - hidden on screen, visible when printing */}
-      <PrintRenderer schema={ACCIDENT_REPORT_SCHEMA} formData={formData} />
+      <PrintRenderer
+        schema={ACCIDENT_REPORT_SCHEMA}
+        formData={formData}
+        unavailableFields={unavailableFields}
+      />
     </div>
   );
 }

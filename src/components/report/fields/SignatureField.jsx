@@ -4,15 +4,17 @@ import ValidationMessage from '../shared/ValidationMessage';
 
 function SignatureField({
   name,
-  value = '',
+  value = "",
   onChange,
   onBlur,
   label,
   required = false,
   showError = false,
-  errorMessage = 'Signature is required',
+  errorMessage = "Signature is required",
   disabled = false,
-  className = ''
+  className = "",
+  isUnavailable = false,
+  onToggleAvailability,
 }) {
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -22,8 +24,8 @@ function SignatureField({
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
-    
+    const ctx = canvas.getContext("2d");
+
     // Set canvas size
     canvas.width = canvas.offsetWidth;
     canvas.height = 150;
@@ -38,64 +40,58 @@ function SignatureField({
       img.src = value;
     } else {
       // Clear canvas and set background
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = "#ffffff";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
   }, [value]);
 
   const startDrawing = (e) => {
     if (disabled) return;
-    
+
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const rect = canvas.getBoundingClientRect();
-    
+
     setIsDrawing(true);
     ctx.beginPath();
-    ctx.moveTo(
-      e.clientX - rect.left,
-      e.clientY - rect.top
-    );
+    ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
   };
 
   const draw = (e) => {
     if (!isDrawing || disabled) return;
-    
+
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const rect = canvas.getBoundingClientRect();
-    
-    ctx.lineTo(
-      e.clientX - rect.left,
-      e.clientY - rect.top
-    );
-    ctx.strokeStyle = '#000000';
+
+    ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+    ctx.strokeStyle = "#000000";
     ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     ctx.stroke();
   };
 
   const stopDrawing = () => {
     if (!isDrawing) return;
-    
+
     setIsDrawing(false);
     setHasSignature(true);
-    
+
     // Save signature as data URL
     const canvas = canvasRef.current;
-    const signatureData = canvas.toDataURL('image/png');
-    
+    const signatureData = canvas.toDataURL("image/png");
+
     // Create synthetic event
     const syntheticEvent = {
       target: {
         name: name,
-        value: signatureData
-      }
+        value: signatureData,
+      },
     };
-    
+
     onChange(syntheticEvent);
-    
+
     if (onBlur) {
       onBlur(name);
     }
@@ -103,30 +99,38 @@ function SignatureField({
 
   const clearSignature = () => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    
-    ctx.fillStyle = '#ffffff';
+    const ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     setHasSignature(false);
-    
+
     // Clear the value
     const syntheticEvent = {
       target: {
         name: name,
-        value: ''
-      }
+        value: "",
+      },
     };
-    
+
     onChange(syntheticEvent);
   };
 
   return (
-    <FieldWrapper label={label} required={required} name={name}>
+    <FieldWrapper
+      label={label}
+      required={required}
+      name={name}
+      isUnavailable={isUnavailable}
+      onToggleAvailability={onToggleAvailability}
+    >
       <div className={`signature-field ${className}`}>
-        <div className={`border-2 rounded-lg overflow-hidden ${
-          showError ? 'border-red-500' : 'border-gray-300'
-        } ${disabled ? 'opacity-50' : ''}`}>
+        <div
+          className={`border-2 rounded-lg overflow-hidden ${
+            showError ? "border-red-500" : "border-gray-300"
+          } ${disabled ? "opacity-50" : ""}`}
+        >
           <canvas
             ref={canvasRef}
             onMouseDown={startDrawing}
@@ -134,10 +138,10 @@ function SignatureField({
             onMouseUp={stopDrawing}
             onMouseLeave={stopDrawing}
             className="w-full cursor-crosshair bg-white"
-            style={{ touchAction: 'none' }}
+            style={{ touchAction: "none" }}
           />
         </div>
-        
+
         <div className="flex justify-between items-center mt-2">
           <button
             type="button"
@@ -148,11 +152,11 @@ function SignatureField({
             Clear Signature
           </button>
           <span className="text-xs text-gray-500">
-            {hasSignature ? 'Signature captured' : 'Sign above'}
+            {hasSignature ? "Signature captured" : "Sign above"}
           </span>
         </div>
       </div>
-      
+
       {showError && <ValidationMessage message={errorMessage} type="error" />}
     </FieldWrapper>
   );
