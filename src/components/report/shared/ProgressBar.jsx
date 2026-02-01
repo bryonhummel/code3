@@ -66,7 +66,7 @@ function ProgressBar({
         {/* Dark gray bar - non-required fields */}
         {completionMetrics.overallPercentage !== 100 && (
           <div
-            className="absolute top-0 h-full bg-gray-400 transition-all duration-300"
+            className={`absolute top-0 h-full bg-gray-400 transition-all duration-300 ${completionMetrics.requiredPercentage === 0 ? "rounded-l-full" : ""}`}
             style={{
               left: `${completionMetrics.requiredPercentage}%`,
               width: `${completionMetrics.nonRequiredPercentage}%`,
