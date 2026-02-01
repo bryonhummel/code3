@@ -38,10 +38,14 @@ function ProgressBar({
       {/* Header with title and percentage */}
       {showPercentage && (
         <div className="flex justify-between items-center mb-2">
-          <span className={`${textSizeClasses[size]} font-semibold text-gray-700`}>
+          <span
+            className={`${textSizeClasses[size]} font-semibold text-gray-700`}
+          >
             Form Completion
           </span>
-          <span className={`${textSizeClasses[size]} font-semibold ${completionMetrics.overallPercentage === 100 ? "text-green-600" : "text-gray-700"}`}>
+          <span
+            className={`${textSizeClasses[size]} font-semibold ${completionMetrics.overallPercentage === 100 ? "text-green-600" : "text-gray-700"}`}
+          >
             {completionMetrics.overallPercentage}%
           </span>
         </div>
@@ -49,7 +53,7 @@ function ProgressBar({
 
       {/* Stacked progress bar container */}
       <div
-        className={`relative w-full ${completionMetrics.overallPercentage === 100 ? 'bg-green-600' : 'bg-gray-200'} rounded-full ${sizeClasses[size]} overflow-visible`}
+        className={`relative w-full ${completionMetrics.overallPercentage === 100 ? "bg-green-600" : "bg-gray-200"} rounded-full ${sizeClasses[size]} overflow-visible`}
       >
         {/* Blue bar - requiredByPatient fields */}
         {completionMetrics.overallPercentage !== 100 && (
@@ -96,14 +100,18 @@ function ProgressBar({
         <div className="flex justify-between items-center mt-2 text-gray-400">
           <div className="flex gap-4">
             <div className="flex items-center gap-1">
-              <div className={`${legendIconClasses[size]} bg-blue-300 rounded-sm`} />
+              <div
+                className={`${legendIconClasses[size]} bg-blue-300 rounded-sm`}
+              />
               <span className={legendSizeClasses[size]}>
                 Patient Info: {completionMetrics.completedRequired}/
                 {completionMetrics.totalRequired}
               </span>
             </div>
             <div className="flex items-center gap-1">
-              <div className={`${legendIconClasses[size]} bg-gray-400 rounded-sm`} />
+              <div
+                className={`${legendIconClasses[size]} bg-gray-400 rounded-sm`}
+              />
               <span className={legendSizeClasses[size]}>
                 Patroller Info: {completionMetrics.completedNonRequired}/
                 {completionMetrics.totalNonRequired}
@@ -112,7 +120,6 @@ function ProgressBar({
           </div>
         </div>
       )}
-
     </div>
   );
 }
