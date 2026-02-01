@@ -82,7 +82,7 @@ function SignatureField({
     const canvas = canvasRef.current;
     const signatureData = canvas.toDataURL("image/png");
 
-    // Create synthetic event
+    // Create synthetic event for signature
     const syntheticEvent = {
       target: {
         name: name,
@@ -92,9 +92,18 @@ function SignatureField({
 
     onChange(syntheticEvent);
 
-    if (onBlur) {
-      onBlur(name);
-    }
+    // Auto-update signature date
+    const currentDate = new Date().toISOString().split("T")[0];
+    const dateEvent = {
+      target: {
+        name: "signatureDate",
+        value: currentDate,
+      },
+    };
+    onChange(dateEvent);
+
+    // Don't call onBlur here - let the user finish signing
+    // onBlur will be called when they click outside the canvas
   };
 
   const clearSignature = () => {
@@ -106,7 +115,7 @@ function SignatureField({
 
     setHasSignature(false);
 
-    // Clear the value
+    // Clear the signature value
     const syntheticEvent = {
       target: {
         name: name,
@@ -115,7 +124,23 @@ function SignatureField({
     };
 
     onChange(syntheticEvent);
-  };
+
+    // Clear the signature date
+    const dateEvent = {
+      target: {
+        name: "signatureDate",
+        value: "",
+      },
+    };
+    onChange(dateEvent);
+
+    // Trigger validation after clearing
+    if (onBlur) {
+      setTimeout(() => {
+        onBlur(name);
+      }, 100);
+    }
+  };;
 
   return (
     <FieldWrapper
@@ -130,6 +155,13 @@ function SignatureField({
           className={`border-2 rounded-lg overflow-hidden ${
             showError ? "border-red-500" : "border-gray-300"
           } ${disabled ? "opacity-50" : ""}`}
+          onBlur={() => {
+            // Trigger validation when user leaves the signature area
+            if (onBlur) {
+              onBlur(name);
+            }
+          }}
+          tabIndex={0}
         >
           <canvas
             ref={canvasRef}

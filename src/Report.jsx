@@ -275,8 +275,14 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
   );
 
   // Use custom hooks for form management
-  const { formData, touched, handleChange, handleBlur, markAllTouched } =
-    useFormData(report);
+  const {
+    formData,
+    setFormData,
+    touched,
+    handleChange,
+    handleBlur,
+    markAllTouched,
+  } = useFormData(report);
 
   const {
     errors,
@@ -312,8 +318,12 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
   };
 
   const handleStatusChange = (newStatus) => {
-    onSave({ ...formData, status: newStatus });
-  };
+    // Update local formData state
+    const updatedData = { ...formData, status: newStatus, unavailableFields };
+    setFormData(updatedData);
+    // Save to parent component
+    onSave(updatedData);
+  };;
 
   const handleFieldChange = (e) => {
     const { name } = e.target;
