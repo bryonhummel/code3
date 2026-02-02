@@ -10,6 +10,27 @@ body {
   max-width: 1280px;
 }
 
+/* Fix for sticky elements when keyboard is displayed on mobile/tablet */
+@supports (height: 100dvh) {
+  /* Use dynamic viewport height which accounts for browser UI changes like keyboard */
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+/* Ensure sticky elements work properly on iOS and Android */
+@media (max-width: 1024px) {
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    /* Force GPU acceleration for better performance */
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
 /* Print Styles */
 @media print {
   /* Hide elements that shouldn't be printed */
