@@ -1,7 +1,7 @@
 #root {
   margin: 0 auto;
   /* padding: 2rem; */
-  @apply px-2 sm:px-6;
+  /* @apply px-0 sm:px-6; */
   text-align: center;
 }
 

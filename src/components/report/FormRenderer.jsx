@@ -94,11 +94,11 @@ function FormRenderer({
 
       case "readonly":
         return (
-          <div className="py-2">
+          <div className="py-2 px-3">
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               {field.label}
             </label>
-            <div className="text-gray-900 font-mono">
+            <div className="text-gray-900 font-mono px-4">
               {formData[field.name] || "—"}
             </div>
           </div>

@@ -61,7 +61,7 @@ function App() {
     )
   } else {
     return (
-      <div className='grid lg:grid-cols-2 py-6 gap-6'>
+      <div className='grid lg:grid-cols-2 px-2 py-6 gap-6'>
         <NewCode onClick={handleNewCode}/>
         {
           codes.map((code) => (

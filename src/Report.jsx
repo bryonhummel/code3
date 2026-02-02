@@ -417,7 +417,7 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
       />
 
       {/* Screen version - visible on screen only */}
-      <div className="bg-white rounded-2xl shadow-sm p-8 mt-6">
+      <div className="bg-white rounded-2xl shadow-sm p-3 sm:p-8 mt-6">
         <ReportHeader reportId={formData.id} onBack={onBack} />
 
         <form onSubmit={handleSubmit}>
