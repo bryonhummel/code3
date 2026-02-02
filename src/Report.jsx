@@ -58,7 +58,7 @@ function Report() {
       dateCreated: new Date().toISOString(),
       dateOfIncident: new Date().toISOString().split("T")[0],
       timeOfIncident: "",
-      location: "Chicopee Ski Club",
+      resort: "Chicopee Ski Club",
       status: "in progress",
     };
     setActiveReport(newReport);
@@ -405,19 +405,20 @@ function ReportFormView({ report, onSave, onBack, onDelete }) {
 
   return (
     <div>
-      {/* Screen version - visible on screen only */}
-      <div className="bg-white rounded-2xl shadow-sm p-8">
-        <ReportHeader reportId={formData.id} onBack={onBack} />
+      {/* FormStatusPanel - positioned below navbar */}
+      <FormStatusPanel
+        status={formData.status}
+        onStatusChange={handleStatusChange}
+        completionMetrics={completionMetrics}
+        pendingCount={pendingCount}
+        onPrint={handlePrint}
+        onDelete={() => onDelete(formData.id)}
+        formData={formData}
+      />
 
-        <FormStatusPanel
-          status={formData.status}
-          onStatusChange={handleStatusChange}
-          completionMetrics={completionMetrics}
-          pendingCount={pendingCount}
-          onPrint={handlePrint}
-          onDelete={() => onDelete(formData.id)}
-          formData={formData}
-        />
+      {/* Screen version - visible on screen only */}
+      <div className="bg-white rounded-2xl shadow-sm p-8 mt-6">
+        <ReportHeader reportId={formData.id} onBack={onBack} />
 
         <form onSubmit={handleSubmit}>
           <FormRenderer
