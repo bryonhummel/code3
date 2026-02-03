@@ -365,10 +365,18 @@ function Code3(props) {
         setCode3State(newState)
     }
 
-    return ( 
+    function handleNotesChange(event) {
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        var newState = persistedState != null ? JSON.parse(persistedState) : {}
+        newState.notes = event.target.value
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
+        setCode3State(newState)
+    }
+
+    return (
         <div id={props.id} className='flex-1 border-t border-x border-gray-200 rounded-t-2xl bg-white pb-1'>
             { code3State?.run?.name == null && <TimelineToolbar handleRunClick={handleRunClick}/> }
-            { code3State?.run?.name != null && <Timeline runInfo={code3State?.run} 
+            { code3State?.run?.name != null && <Timeline runInfo={code3State?.run}
                 onSceneTs={code3State?.onSceneTs}
                 sceneClearTs={code3State?.sceneClearTs}
                 atPatrolTs={code3State?.atPatrolTs}
@@ -382,6 +390,17 @@ function Code3(props) {
                 handleAtPatrolClick={handleAtPatrolClick}
                 handleEmsCalledClick={handleEmsCalledClick}
                 handleEmsArrivedClick={handleEmsArrivedClick} /> }
+            { code3State?.run?.name != null &&
+                <div className="px-10 pb-6">
+                    <textarea
+                        value={code3State?.notes || ''}
+                        onChange={handleNotesChange}
+                        className="mt-1 block w-full border border-gray-200 rounded-md p-1"
+                        rows="2"
+                        placeholder = "Notes..."
+                    />
+                </div>
+            }
         </div>
      );
 }
