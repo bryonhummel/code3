@@ -206,6 +206,11 @@ function Timeline(props) {
             text: "Transport from Scene",
             handleOnClick: props.handleSceneClearClick,
         },
+        "atPatrolTs": {
+            timestamp: props.atPatrolTs,
+            text: "Arrived at Patrol Room",
+            handleOnClick: props.handleAtPatrolClick,
+        },
         "emsCalledTs": {
             timestamp: props.emsCalledTs,
             text: "EMS Called",
@@ -224,10 +229,11 @@ function Timeline(props) {
     var entries = {
         "onSceneTs": props?.onSceneTs ? props.onSceneTs.replaceAll(':',"") : 10000001,
         "sceneClearTs": props?.sceneClearTs ? props.sceneClearTs.replaceAll(':',"") : 10000002,
+        "atPatrolTs": props?.atPatrolTs ? props.atPatrolTs.replaceAll(':',"") : 10000003,
     }
     if (props?.emsCalledTs) {
-        entries["emsCalledTs"] = props?.emsCalledTs ? props.emsCalledTs.replaceAll(':',"") : 10000003
-        entries["emsArrivedTs"] = props?.emsArrivedTs ? props.emsArrivedTs.replaceAll(':',"") : 10000004
+        entries["emsCalledTs"] = props?.emsCalledTs ? props.emsCalledTs.replaceAll(':',"") : 10000004
+        entries["emsArrivedTs"] = props?.emsArrivedTs ? props.emsArrivedTs.replaceAll(':',"") : 10000005
     }
     var orderedEntries = Object.entries(entries).sort((a,b) => a[1] - b[1]).map(el=>el[0])
 
@@ -320,6 +326,14 @@ function Code3(props) {
         setCode3State(newState)
     }
 
+    function handleAtPatrolClick(){
+        const persistedState = window.localStorage.getItem("code3_"+props.codeId)
+        var newState = persistedState != null ? JSON.parse(persistedState) : {}
+        newState.atPatrolTs = getTimestamp()
+        window.localStorage.setItem("code3_"+props.codeId, JSON.stringify(newState))
+        setCode3State(newState)
+    }
+
     function handleEmsCalledClick(){
         const persistedState = window.localStorage.getItem("code3_"+props.codeId)
         var newState = persistedState != null ? JSON.parse(persistedState) : {}
@@ -357,6 +371,7 @@ function Code3(props) {
             { code3State?.run?.name != null && <Timeline runInfo={code3State?.run} 
                 onSceneTs={code3State?.onSceneTs}
                 sceneClearTs={code3State?.sceneClearTs}
+                atPatrolTs={code3State?.atPatrolTs}
                 tagList={code3State?.tagList != null ? code3State?.tagList : [] }
                 emsCalledTs={code3State?.emsCalledTs}
                 emsArrivedTs={code3State?.emsArrivedTs}
@@ -364,6 +379,7 @@ function Code3(props) {
                 handleSceneClearClick={handleSceneClearClick}
                 handleTagListToggle={handleTagListToggle}
                 handleEditRunClick={handleEditRunClick}
+                handleAtPatrolClick={handleAtPatrolClick}
                 handleEmsCalledClick={handleEmsCalledClick}
                 handleEmsArrivedClick={handleEmsArrivedClick} /> }
         </div>
