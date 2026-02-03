@@ -74,7 +74,7 @@ function FormStatusPanel({
   const hasWarnings = activeReminders.length > 0;
 
   return (
-    <div className="bg-white border-b border-gray-200 rounded-2xl sticky top-[73px] z-30 no-print shadow-sm">
+    <div className="bg-white border-b border-gray-200 rounded-2xl sticky top-0 z-30 no-print shadow-sm">
       {/* Collapsed View - Always visible single row */}
       {!isExpanded && (
         <div className="max-w-7xl mx-auto px-4">

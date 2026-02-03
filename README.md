@@ -11,5 +11,6 @@ Currently, two official plugins are available:
 ## Usage
 ```bash
 npm run dev
+npm run dev-host   # accessible from other devices on network
 npm run deploy  # https://bryonhummel.github.io/code3/
 ```
